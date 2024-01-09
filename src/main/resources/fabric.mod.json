@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "socksproxyclient",
+  "version": "${version}",
+  "name": "SocksProxyClient",
+  "description": "Use SOCKS proxy to connect to Minecraft server.",
+  "authors": [
+    "CrimsonEdgeHope"
+  ],
+  "license": "WTFPL",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient"
+    ]
+  },
+  "mixins": [
+    "socksproxyclient.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "minecraft": "~1.20.1",
+    "java": ">=17"
+  }
+}
