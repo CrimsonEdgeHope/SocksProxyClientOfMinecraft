@@ -1,15 +1,18 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 
-import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ProxyConfig;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.main.Main;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+@Environment(EnvType.CLIENT)
 @Mixin(Main.class)
 public class MainMixin {
     @Inject(at = @At(value = "INVOKE",
@@ -21,7 +24,7 @@ public class MainMixin {
         OptionSpec<String> proxyUser = optionParser.accepts("proxyUser").withRequiredArg().defaultsTo("");
         OptionSpec<String> proxyPass = optionParser.accepts("proxyPass").withRequiredArg().defaultsTo("");
         OptionSet optionSet = optionParser.parse(args);
-        SocksProxyClient.Auth.setUsername(optionSet.valueOf(proxyUser));
-        SocksProxyClient.Auth.setPassword(optionSet.valueOf(proxyPass));
+        ProxyConfig.setUsername(optionSet.valueOf(proxyUser));
+        ProxyConfig.setPassword(optionSet.valueOf(proxyPass));
     }
 }

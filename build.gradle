@@ -45,10 +45,19 @@ remapJar {
 	inputFile = tasks.shadowJar.archiveFile
 }
 
+repositories {
+	maven { url "https://maven.shedaniel.me/" }
+	maven { url "https://maven.terraformersmc.com/releases/" }
+}
+
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modApi("me.shedaniel.cloth:cloth-config-fabric:11.1.106") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+	modApi "com.terraformersmc:modmenu:7.1.0"
 	shadow(implementation("io.netty:netty-handler-proxy:4.1.97.Final"))
 }
 

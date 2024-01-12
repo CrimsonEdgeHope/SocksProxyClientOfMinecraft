@@ -12,6 +12,9 @@
   "entrypoints": {
     "client": [
       "crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient"
+    ],
+    "modmenu": [
+      "crimsonedgehope.minecraft.fabric.socksproxyclient.modmenu.ModMenuEntry"
     ]
   },
   "mixins": [
@@ -20,6 +23,10 @@
   "depends": {
     "fabricloader": ">=0.14.21",
     "minecraft": "~1.20.1",
-    "java": ">=17"
+    "java": ">=17",
+    "cloth-config": "~11.1.106"
+  },
+  "suggests": {
+    "modmenu": "~7.1.0"
   }
 }
