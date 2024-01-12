@@ -8,6 +8,7 @@
     "CrimsonEdgeHope"
   ],
   "license": "WTFPL",
+  "icon": "assets/socksproxyclient/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
