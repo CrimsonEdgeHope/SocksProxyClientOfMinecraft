@@ -4,7 +4,7 @@
   "package": "crimsonedgehope.minecraft.fabric.socksproxyclient.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "ClientConnectionChannelMixin",
+    "ClientConnectionMixin",
     "MainMixin"
   ],
   "injectors": {
