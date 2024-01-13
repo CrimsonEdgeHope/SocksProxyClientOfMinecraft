@@ -21,7 +21,7 @@ jar {
 	from("LICENSE") {
 		rename { "${it}_${project.base.archivesName.get()}"}
 	}
-	archiveClassifier.set("dev")
+	archiveClassifier.set("shadow")
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -36,13 +36,14 @@ sourcesJar {
 
 shadowJar {
 	configurations = [ project.configurations.shadow ]
-	archiveClassifier.set("dev")
-	// relocate "io.netty.handler", "crimsonedgehope.minecraft.fabric.socksproxyclient.shadow.io.netty.handler"
+	archiveClassifier.set("shadow")
+	relocate "io.netty.handler", "crimsonedgehope.minecraft.fabric.socksproxyclient.shadow.io.netty.handler"
 }
 
 remapJar {
 	dependsOn(shadowJar)
 	inputFile = tasks.shadowJar.archiveFile
+	archiveClassifier.set("local")
 }
 
 repositories {

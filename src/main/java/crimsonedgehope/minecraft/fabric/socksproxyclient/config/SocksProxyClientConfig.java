@@ -1,5 +1,6 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
 
+import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
@@ -10,8 +11,14 @@ public final class SocksProxyClientConfig implements ConfigData {
     @ConfigEntry.Gui.EnumHandler
     private Socks socksVersion = Socks.VERSION_5;
 
-    public int getVersion() {
+    private boolean proxyLoopback = false;
+
+    public int getSocksVersion() {
         return socksVersion.ver;
+    }
+
+    public boolean shouldProxyLookback() {
+        return proxyLoopback;
     }
 
     enum Socks {
@@ -29,5 +36,9 @@ public final class SocksProxyClientConfig implements ConfigData {
         if (socksVersion != Socks.VERSION_4 && socksVersion != Socks.VERSION_5) {
             socksVersion = Socks.VERSION_5;
         }
+    }
+
+    public static SocksProxyClientConfig get() {
+        return AutoConfig.getConfigHolder(SocksProxyClientConfig.class).getConfig();
     }
 }

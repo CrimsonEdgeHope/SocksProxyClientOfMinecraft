@@ -1,7 +1,5 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
 
-import me.shedaniel.autoconfig.AutoConfig;
-
 public final class ProxyConfig {
     private ProxyConfig() {}
 
@@ -25,6 +23,10 @@ public final class ProxyConfig {
     }
 
     public static int getSocksVersion() {
-        return AutoConfig.getConfigHolder(SocksProxyClientConfig.class).getConfig().getVersion();
+        return SocksProxyClientConfig.get().getSocksVersion();
+    }
+
+    public static boolean shouldProxyLoopback() {
+        return SocksProxyClientConfig.get().shouldProxyLookback();
     }
 }

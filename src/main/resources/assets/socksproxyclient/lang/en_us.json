@@ -2,5 +2,6 @@
   "modmenu.descriptionTranslation.socksproxyclient": "Use SOCKS proxy to connect to Minecraft server.",
 
   "text.autoconfig.SocksProxyClient.title": "SocksProxyClient config",
-  "text.autoconfig.SocksProxyClient.option.socksVersion": "Socks proxy version"
+  "text.autoconfig.SocksProxyClient.option.socksVersion": "Socks proxy version",
+  "text.autoconfig.SocksProxyClient.option.proxyLoopback": "Proxy loopback connection"
 }
