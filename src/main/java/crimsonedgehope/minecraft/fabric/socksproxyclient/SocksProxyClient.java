@@ -9,13 +9,12 @@ import org.slf4j.LoggerFactory;
 
 public class SocksProxyClient implements ClientModInitializer {
 
-	public static final String MOD_ID = "socksproxyclient";
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static final Logger LOGGER = LoggerFactory.getLogger(SocksProxyClient.class);
 
 	@Override
 	public void onInitializeClient() {
-		LOGGER.info("SocksProxyClient...");
 		AutoConfig.register(SocksProxyClientConfig.class, GsonConfigSerializer::new);
+		LOGGER.info("SocksProxyClient on.");
 	}
 
 }

@@ -8,6 +8,10 @@
     "CrimsonEdgeHope"
   ],
   "license": "WTFPL",
+  "contact": {
+    "homepage": "https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft",
+    "issues": "https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/issues"
+  },
   "icon": "assets/socksproxyclient/icon.png",
   "environment": "client",
   "entrypoints": {
@@ -26,8 +30,5 @@
     "minecraft": "~1.20.1",
     "java": ">=17",
     "cloth-config": "~11.1.106"
-  },
-  "suggests": {
-    "modmenu": "~7.1.0"
   }
 }
