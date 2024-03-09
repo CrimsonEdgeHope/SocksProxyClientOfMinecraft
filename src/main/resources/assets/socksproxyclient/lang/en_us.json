@@ -3,5 +3,10 @@
 
   "text.autoconfig.SocksProxyClient.title": "SocksProxyClient config",
   "text.autoconfig.SocksProxyClient.option.socksVersion": "Socks proxy version",
-  "text.autoconfig.SocksProxyClient.option.proxyLoopback": "Proxy loopback connection"
+  "text.autoconfig.SocksProxyClient.option.proxyLoopback": "Loopback connection through proxy",
+  "text.autoconfig.SocksProxyClient.option.proxyLoopback.@Tooltip": "This applies to connection to Minecraft server.",
+  "text.autoconfig.SocksProxyClient.option.proxyResourcePackDownloading": "Resource pack downloading through proxy",
+
+  "text.autoconfig.SocksProxyClient.category.proxy": "Proxy",
+  "text.autoconfig.SocksProxyClient.category.miscellaneous": "Miscellaneous"
 }

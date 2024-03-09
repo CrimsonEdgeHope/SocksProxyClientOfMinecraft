@@ -24,7 +24,6 @@ public class MainMixin {
         OptionSpec<String> proxyUser = optionParser.accepts("proxyUser").withRequiredArg().defaultsTo("");
         OptionSpec<String> proxyPass = optionParser.accepts("proxyPass").withRequiredArg().defaultsTo("");
         OptionSet optionSet = optionParser.parse(args);
-        ProxyConfig.setUsername(optionSet.valueOf(proxyUser));
-        ProxyConfig.setPassword(optionSet.valueOf(proxyPass));
+        ProxyConfig.loadGameParam(optionSet.valueOf(proxyUser), optionSet.valueOf(proxyPass));
     }
 }
