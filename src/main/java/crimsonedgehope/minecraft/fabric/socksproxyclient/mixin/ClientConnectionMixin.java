@@ -2,6 +2,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ProxyConfig;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.SocksProxyClientConfig;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
@@ -29,6 +30,8 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
+import static crimsonedgehope.minecraft.fabric.socksproxyclient.config.SocksProxyClientConfig.ProxyOption;
+
 @Environment(EnvType.CLIENT)
 @Mixin(ClientConnection.class)
 public class ClientConnectionMixin {
@@ -44,12 +47,6 @@ public class ClientConnectionMixin {
         locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true
     )
     private static void injected(InetSocketAddress address, boolean useEpoll, final ClientConnection connection, CallbackInfoReturnable<ChannelFuture> cir, Class class_, Lazy lazy) {
-        Proxy proxy = ProxyConfig.getProxy();
-        if (proxy == null) {
-            LOGGER.debug("No SOCKS proxy configured.");
-            return;
-        }
-
         InetAddress inetAddress = address.getAddress();
         if (inetAddress == null) {
             LOGGER.debug("Remote address is null");
@@ -60,15 +57,29 @@ public class ClientConnectionMixin {
         int port = address.getPort();
         String ipPort = String.format("%s:%s", ip, port);
 
-        LOGGER.debug(String.format("Remote address %s", ipPort));
+        LOGGER.debug(String.format("Remote: %s", ipPort));
 
-        if (inetAddress.isLoopbackAddress() && !ProxyConfig.shouldProxyLoopback()) {
-            LOGGER.info(String.format("Remote host %s on port %d is loopback, not imposing proxy.", hostnameIP, port));
+        Proxy proxy = ProxyConfig.getProxy();
+        if (proxy == null && !SocksProxyClientConfig.get().useProxy()) {
+            LOGGER.info("No proxy.");
             return;
         }
 
-        String s1 = ProxyConfig.getUsername();
-        String s2 = ProxyConfig.getPassword();
+        if (inetAddress.isLoopbackAddress()) {
+            proxy = ProxyConfig.getProxy(SocksProxyClientConfig.get().getProxyLoopbackOption());
+            if (proxy == null) {
+                LOGGER.info(String.format("Remote host %s on port %d is loopback, not imposing proxy.", hostnameIP, port));
+                return;
+            }
+        }
+
+        final Proxy proxy0 = proxy;
+        if (proxy0 == null) {
+            LOGGER.info(String.format("No proxy to be used on %s on port %d", hostnameIP, port));
+            return;
+        }
+        String username = ProxyConfig.getCredential().getUsername();
+        String password = ProxyConfig.getCredential().getPassword();
 
         cir.cancel();
         cir.setReturnValue((new Bootstrap()).group((EventLoopGroup)lazy.get()).handler(new ChannelInitializer<>() {
@@ -82,13 +93,13 @@ public class ClientConnectionMixin {
                 ChannelPipeline channelPipeline = channel.pipeline().addLast("timeout", new ReadTimeoutHandler(30));
                 switch (ProxyConfig.getSocksVersion()) {
                     case 4:
-                        LOGGER.debug(String.format("Using Socks4 on %s", hostnameIP));
-                        channelPipeline.addFirst("socks", new Socks4ProxyHandler(proxy.address(), s1));
+                        LOGGER.info(String.format("Using Socks4 on %s", hostnameIP));
+                        channelPipeline.addFirst("socks", new Socks4ProxyHandler(proxy0.address(), username));
                         break;
                     case 5:
                     default:
-                        LOGGER.debug(String.format("Using Socks5 on %s", hostnameIP));
-                        channelPipeline.addFirst("socks", new Socks5ProxyHandler(proxy.address(), s1, s2));
+                        LOGGER.info(String.format("Using Socks5 on %s", hostnameIP));
+                        channelPipeline.addFirst("socks", new Socks5ProxyHandler(proxy0.address(), username, password));
                         break;
                 }
                 ClientConnection.addHandlers(channelPipeline, NetworkSide.CLIENTBOUND);

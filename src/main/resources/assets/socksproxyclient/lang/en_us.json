@@ -2,10 +2,15 @@
   "modmenu.descriptionTranslation.socksproxyclient": "Use SOCKS proxy to connect to Minecraft server.",
 
   "text.autoconfig.SocksProxyClient.title": "SocksProxyClient config",
+  "text.autoconfig.SocksProxyClient.option.useProxy": "Use proxy",
+  "text.autoconfig.SocksProxyClient.option.useProxy.@Tooltip": "This also affects the proxying loopback option.",
   "text.autoconfig.SocksProxyClient.option.socksVersion": "Socks proxy version",
-  "text.autoconfig.SocksProxyClient.option.proxyLoopback": "Loopback connection through proxy",
-  "text.autoconfig.SocksProxyClient.option.proxyLoopback.@Tooltip": "This applies to connection to Minecraft server.",
-  "text.autoconfig.SocksProxyClient.option.proxyResourcePackDownloading": "Resource pack downloading through proxy",
+  "text.autoconfig.SocksProxyClient.option.proxyLoopbackOption": "Loopback connection through proxy",
+  "text.autoconfig.SocksProxyClient.option.proxyLoopbackOption.@Tooltip": "This applies to connection to Minecraft server.",
+  "text.autoconfig.SocksProxyClient.option.useProxyHostFromGameParam": "Use proxy host and port from game parameters",
+  "text.autoconfig.SocksProxyClient.option.useProxyHostFromGameParam.@Tooltip": "This does not affect the proxying loopback option.",
+  "text.autoconfig.SocksProxyClient.option.proxyHost": "Custom proxy host",
+  "text.autoconfig.SocksProxyClient.option.proxyPort": "Custom proxy port",
 
   "text.autoconfig.SocksProxyClient.category.proxy": "Proxy",
   "text.autoconfig.SocksProxyClient.category.miscellaneous": "Miscellaneous"

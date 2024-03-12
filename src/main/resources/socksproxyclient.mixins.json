@@ -5,8 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "ClientConnectionMixin",
-    "MainMixin",
-    "NetworkUtilsMixin"
+    "MainMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -9,15 +9,11 @@ import org.slf4j.LoggerFactory;
 
 public class SocksProxyClient implements ClientModInitializer {
 
-	private static Logger LOGGER;
-	private static String LOGGER_NAME;
-
-	public static final String PROXY_CONFIG_CATEGORY = "proxy";
-	public static final String MISCELLANEOUS_CONFIG_CATEGORY = "miscellaneous";
+	private static final String LOGGER_NAME = "SocksProxyClient";
+	private static final Logger LOGGER = LoggerFactory.getLogger(LOGGER_NAME);
 
 	@Override
 	public void onInitializeClient() {
-		LOGGER_NAME = this.getClass().getSimpleName();
 		initConfig();
 		logger().info("SocksProxyClient on.");
 		logger().debug("SocksProxyClient debug logging on.");
@@ -28,9 +24,6 @@ public class SocksProxyClient implements ClientModInitializer {
 	}
 
 	public static Logger logger() {
-		if (LOGGER == null) {
-			LOGGER = LoggerFactory.getLogger(LOGGER_NAME);
-		}
 		return LOGGER;
 	}
 

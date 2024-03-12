@@ -1,5 +1,5 @@
 plugins {
-	id "fabric-loom" version "1.4-SNAPSHOT"
+	id "fabric-loom" version "1.5-SNAPSHOT"
 	id "java-library"
 	id "com.github.johnrengelman.shadow" version "8.1.1"
 }
@@ -57,6 +57,9 @@ dependencies {
 	}
 	modApi "com.terraformersmc:modmenu:7.1.0"
 	shadow(implementation("io.netty:netty-handler-proxy:4.1.97.Final"))
+
+	compileOnly "org.projectlombok:lombok:1.18.30"
+	annotationProcessor "org.projectlombok:lombok:1.18.30"
 }
 
 processResources {
