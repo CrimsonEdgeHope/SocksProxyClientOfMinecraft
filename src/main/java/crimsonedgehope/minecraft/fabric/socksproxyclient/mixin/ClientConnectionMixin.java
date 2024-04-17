@@ -29,6 +29,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
+@SuppressWarnings("unchecked")
 @Environment(EnvType.CLIENT)
 @Mixin(ClientConnection.class)
 public class ClientConnectionMixin {
@@ -57,28 +58,25 @@ public class ClientConnectionMixin {
 
         LOGGER.debug("Remote IP {}", ipPort);
 
-        Proxy proxy = ProxyConfig.getProxy();
-        if (proxy == null && !ProxyConfig.useProxy()) {
-            LOGGER.info("No proxy for IP {}", ipPort);
-            return;
-        }
+        Proxy proxy;
+        ProxyConfig.Credential credential;
 
         if (inetAddress.isLoopbackAddress()) {
-            proxy = ProxyConfig.getProxy(ProxyConfig.proxyLoopbackOption());
-            if (proxy == null) {
-                LOGGER.info("Remote IP {} is loopback, not imposing proxy.", ipPort);
-                return;
-            }
+            proxy = ProxyConfig.getProxyForLoopback();
+            credential = ProxyConfig.getProxyCredentialForLoopback();
+        } else {
+            proxy = ProxyConfig.getProxy();
+            credential = ProxyConfig.getProxyCredential();
         }
 
-        final Proxy proxy0 = proxy;
-        if (proxy0 == null) {
+        if (proxy == null) {
+            LOGGER.info("No proxy for IP {}", ipPort);
             LOGGER.info("No proxy for host {}:{}", hostnameIP, port);
             return;
         }
 
-        final String username = ProxyConfig.getCredential().getUsername();
-        final String password = ProxyConfig.getCredential().getPassword();
+        final Proxy proxy0 = proxy;
+        final ProxyConfig.Credential credential0 = credential;
 
         cir.cancel();
         cir.setReturnValue((new Bootstrap()).group((EventLoopGroup)lazy.get()).handler(new ChannelInitializer<>() {
@@ -92,13 +90,15 @@ public class ClientConnectionMixin {
                 ChannelPipeline channelPipeline = channel.pipeline().addLast("timeout", new ReadTimeoutHandler(30));
                 switch (ProxyConfig.getSocksVersion()) {
                     case 4:
-                        LOGGER.info("Using Socks4 proxy on {}:{}", hostnameIP, port);
-                        channelPipeline.addFirst("socks", new Socks4ProxyHandler(proxy0.address(), username));
+                        LOGGER.info("Using Socks4 proxy for {}:{}", hostnameIP, port);
+                        channelPipeline.addFirst("socks",
+                                new Socks4ProxyHandler(proxy0.address(), credential0.getUsername()));
                         break;
                     case 5:
                     default:
-                        LOGGER.info("Using Socks5 proxy on {}:{}", hostnameIP, port);
-                        channelPipeline.addFirst("socks", new Socks5ProxyHandler(proxy0.address(), username, password));
+                        LOGGER.info("Using Socks5 proxy for {}:{}", hostnameIP, port);
+                        channelPipeline.addFirst("socks",
+                                new Socks5ProxyHandler(proxy0.address(), credential0.getUsername(), credential0.getPassword()));
                         break;
                 }
                 ClientConnection.addHandlers(channelPipeline, NetworkSide.CLIENTBOUND);

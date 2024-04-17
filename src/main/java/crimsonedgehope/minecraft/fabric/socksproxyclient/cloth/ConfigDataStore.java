@@ -13,6 +13,8 @@ import java.util.Map;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ConfigDataStore {
 
+    public static final String MAIN = "SocksProxyClientConfigData";
+
     private static final Object object = new Object();
 
     private static final Map<String, ConfigHolder> configs = new HashMap<>();
@@ -23,11 +25,20 @@ public final class ConfigDataStore {
     }
 
     public static void init() {
-        clothAutoConfigReg(SocksProxyClientConfigData.ENTRY, SocksProxyClientConfigData.class);
-        getHolder(SocksProxyClientConfigData.ENTRY).registerSaveListener(
+        clothAutoConfigReg(MAIN, SocksProxyClientConfigData.class);
+        getHolder(MAIN).registerLoadListener(
                 (configHolder, configData) ->
-                        SocksProxyClientConfigData.updateCredential((SocksProxyClientConfigData) configData)
+                    SocksProxyClientConfigData.updateCustomCredential((SocksProxyClientConfigData) configData)
         );
+        getHolder(MAIN).registerSaveListener(
+                (configHolder, configData) ->
+                        SocksProxyClientConfigData.updateCustomCredential((SocksProxyClientConfigData) configData)
+        );
+        getHolder(MAIN).registerSaveListener(
+                (configHolder, configData) ->
+                        SocksProxyClientConfigData.validate((SocksProxyClientConfigData) configData)
+        );
+        getHolder(MAIN).save();
     }
 
     public static ConfigHolder getHolder(final String entry) {

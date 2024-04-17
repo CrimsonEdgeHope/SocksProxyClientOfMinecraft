@@ -43,7 +43,7 @@ public class MainMixin {
         String proxyUser = optionSet.valueOf(proxyUserOption);
         String proxyPass = optionSet.valueOf(proxyPassOption);
 
-        ProxyConfig.setCredential(proxyUser, proxyPass);
+        ProxyConfig.setCustomCredential(proxyUser, proxyPass);
         ProxyConfig.setCredentialFromGameParam(proxyUser, proxyPass);
 
         SocksProxyClient.logger().debug(String.format("proxyUser: %s", proxyUser));

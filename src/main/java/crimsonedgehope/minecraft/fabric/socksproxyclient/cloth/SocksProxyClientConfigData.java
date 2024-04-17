@@ -1,22 +1,22 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.cloth;
 
+import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ProxyConfig;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
-import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 import net.minecraft.util.ActionResult;
 
 import static me.shedaniel.autoconfig.annotation.ConfigEntry.*;
 import static me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.*;
+import static net.minecraft.util.ActionResult.FAIL;
 import static net.minecraft.util.ActionResult.PASS;
 import static net.minecraft.util.ActionResult.SUCCESS;
 
 @Config(name = "SocksProxyClient")
 public final class SocksProxyClientConfigData implements ConfigData {
-
-    public static final String ENTRY = "SocksProxyClientConfigData";
 
     public enum Socks {
         SOCKS4,
@@ -24,9 +24,9 @@ public final class SocksProxyClientConfigData implements ConfigData {
     }
 
     public enum ProxyOption {
-        GAME,   /* Proxy host from game param */
-        CUSTOM, /* User-applied proxy host    */
-        NONE
+        GAME,   /* Use proxyHost from game param */
+        CUSTOM, /* User-applied proxy host in proxyHost field */
+        NONE    /* Don't use proxy */
     }
 
     @Category(ProxyConfig.CATEGORY)
@@ -35,18 +35,16 @@ public final class SocksProxyClientConfigData implements ConfigData {
     @Accessors(fluent = true)
     private boolean useProxy = true;
 
-    @Comment("Valid value: SOCKS4, SOCKS5")
     @Category(ProxyConfig.CATEGORY)
     @EnumHandler(option = EnumHandler.EnumDisplayOption.BUTTON)
     @Getter
     private Socks socksVersion = Socks.SOCKS5;
 
-    @Comment("Valid value: GAME, CUSTOM, NONE")
     @Category(ProxyConfig.CATEGORY)
     @EnumHandler(option = EnumHandler.EnumDisplayOption.BUTTON)
-    @Tooltip
+    @Tooltip(count = 4)
     @Getter
-    private ProxyOption proxyLoopbackOption = ProxyOption.NONE;
+    private ProxyOption loopbackProxyOption = ProxyOption.NONE;
 
     @Category(ProxyConfig.CATEGORY)
     @Tooltip
@@ -56,49 +54,62 @@ public final class SocksProxyClientConfigData implements ConfigData {
 
     @Category(ProxyConfig.CATEGORY)
     @Getter
+    @Setter
     private String proxyHost = "localhost";
 
     @Category(ProxyConfig.CATEGORY)
     @Getter
-    private Integer proxyPort = 8080;
+    @Setter
+    private Integer proxyPort = 1080;
 
     @Override
     public void validatePostLoad() throws ValidationException {
-        if (socksVersion != Socks.SOCKS4 && socksVersion != Socks.SOCKS5) {
-            socksVersion = Socks.SOCKS5;
-        }
-        if (proxyHost.isEmpty()) {
-            proxyHost = "localhost";
-        }
-        if (proxyPort <= 0 || proxyPort >= 65535) {
-            throw new ValidationException("Invalid proxy port!");
+        if (validate(this).equals(FAIL)) {
+            throw new ValidationException("");
         }
     }
 
-    public static ActionResult updateCredential(SocksProxyClientConfigData configData) {
+    public static ActionResult validate(SocksProxyClientConfigData configData) {
+        if (configData.getSocksVersion() != Socks.SOCKS4 && configData.getSocksVersion() != Socks.SOCKS5) {
+            return FAIL;
+        }
+
+        if (configData.getProxyHost().isEmpty()) {
+            configData.setProxyHost("localhost");
+            updateCustomCredential(configData);
+        }
+
+        if (configData.getProxyPort() <= 0 || configData.getProxyPort() >= 65535) {
+            return FAIL;
+        }
+
+        return PASS;
+    }
+
+    public static ActionResult updateCustomCredential(SocksProxyClientConfigData configData) {
         int k;
         int at;
 
+        SocksProxyClient.logger().debug("Retrieve custom proxy credential from proxyHost field");
+
         at = configData.getProxyHost().indexOf("@");
         if (at == -1) {
-            ProxyConfig.setCredential(
-                    ProxyConfig.getCredentialFromGameParam().getUsername(),
-                    ProxyConfig.getCredentialFromGameParam().getPassword()
-            );
+            ProxyConfig.setCustomCredential(null, null);
             return PASS;
         }
 
         String c = configData.getProxyHost().substring(0, at);
         k = c.indexOf(":");
         if (k == -1) {
-            ProxyConfig.setCredential(c, null);
-            return SUCCESS;
+            ProxyConfig.setCustomCredential(c, null);
+            return PASS;
         }
 
         String u = configData.getProxyHost().substring(0, k);
         String p = configData.getProxyHost().substring(k, at);
-        ProxyConfig.setCredential(u, p);
 
-        return SUCCESS;
+        ProxyConfig.setCustomCredential(u, p);
+
+        return PASS;
     }
 }

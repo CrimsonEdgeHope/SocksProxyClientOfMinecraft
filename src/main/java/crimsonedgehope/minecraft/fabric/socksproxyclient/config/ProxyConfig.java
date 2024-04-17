@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.resource.ServerResourcePackProvider;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -23,43 +22,86 @@ public final class ProxyConfig {
     public static final String CATEGORY = "proxy";
     private static final Logger LOGGER = SocksProxyClient.logger();
 
-    public static boolean useProxy() {
-        return config().useProxy();
-    }
-
-    public static ProxyOption proxyLoopbackOption() {
-        return config().getProxyLoopbackOption();
-    }
-
+    @Nullable
     public static Proxy getProxy() {
-        if (!config().useProxy()) {
-            return getProxy(ProxyOption.NONE);
-        }
-        if (config().useProxyHostFromGameParam()) {
-            return getProxy(ProxyOption.GAME);
-        }
-        return getProxy(ProxyOption.CUSTOM);
+        return getProxy(config().useProxy());
     }
 
-    public static Proxy getProxy(ProxyOption option) {
-        switch (option) {
-            case GAME -> {
-                LOGGER.debug("getProxy: GAME case");
-                Proxy proxy = MinecraftClient.getInstance().getNetworkProxy();
-                if (proxy.address() == null || proxy.type() != Proxy.Type.SOCKS) {
-                    return null;
-                }
-                return proxy;
-            }
-            case CUSTOM -> {
-                LOGGER.debug("getProxy: CUSTOM case");
-                return new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(config().getProxyHost(), config().getProxyPort()));
-            }
-            default -> {
-                LOGGER.debug("getProxy: NONE case");
+    public static Proxy getProxy(boolean useProxy) {
+        return getProxy(useProxy, config().useProxyHostFromGameParam());
+    }
+
+    public static Proxy getProxy(ProxyOption proxyOption) {
+        return getProxy(config().useProxy(), proxyOption);
+    }
+
+    public static Proxy getProxyForLoopback() {
+        return getProxy(loopbackProxyOption());
+    }
+
+    public static Proxy getProxy(boolean useProxy, ProxyOption proxyOption) {
+        return switch (proxyOption) {
+            case GAME -> getProxy(useProxy, true);
+            case CUSTOM -> getProxy(useProxy, false);
+            case NONE -> getProxy(false);
+        };
+    }
+
+    @Nullable
+    public static Proxy getProxy(
+            boolean useProxy,
+            boolean useProxyHostFromGameParam
+    ) {
+
+        LOGGER.debug("useProxy {}, useProxyHostFromGameParam {}", useProxy, useProxyHostFromGameParam);
+
+        if (!useProxy) {
+            return null;
+        }
+
+        Proxy proxy;
+
+        if (useProxyHostFromGameParam) {
+            proxy = MinecraftClient.getInstance().getNetworkProxy();
+            if (!proxy.type().equals(Proxy.Type.SOCKS)) {
                 return null;
             }
+            LOGGER.debug("Use proxyHost from game parameters.");
+            return proxy;
         }
+
+        proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(config().getProxyHost(), config().getProxyPort()));
+        LOGGER.debug("Use custom proxyHost field.");
+
+        return proxy;
+    }
+
+    public static Credential getProxyCredential() {
+        return getProxyCredential(config().useProxyHostFromGameParam());
+    }
+
+    public static Credential getProxyCredential(ProxyOption proxyOption) {
+        return switch (proxyOption) {
+            case GAME -> getProxyCredential(true);
+            case CUSTOM -> getProxyCredential(false);
+            case NONE -> new Credential(null, null);
+        };
+    }
+
+    public static Credential getProxyCredential(boolean useProxyHostFromGameParam) {
+        LOGGER.debug("getProxyCredential: useProxyHostFromGameParam {}", useProxyHostFromGameParam);
+        if (useProxyHostFromGameParam) {
+            return getCredentialFromGameParam();
+        }
+        return getCustomCredential();
+    }
+
+    public static Credential getProxyCredentialForLoopback() {
+        return getProxyCredential(loopbackProxyOption());
+    }
+
+    public static ProxyOption loopbackProxyOption() {
+        return config().getLoopbackProxyOption();
     }
 
     @Getter
@@ -70,7 +112,7 @@ public final class ProxyConfig {
     }
 
     @Getter
-    private static Credential credential;
+    private static Credential customCredential;
     @Getter
     private static Credential credentialFromGameParam;
 
@@ -78,8 +120,8 @@ public final class ProxyConfig {
         credentialFromGameParam = new Credential(username, password);
     }
 
-    public static void setCredential(@Nullable String username, @Nullable String password) {
-        credential = new Credential(username, password);
+    public static void setCustomCredential(@Nullable String username, @Nullable String password) {
+        customCredential = new Credential(username, password);
     }
 
     public static int getSocksVersion() {
@@ -90,6 +132,6 @@ public final class ProxyConfig {
     }
 
     private static SocksProxyClientConfigData config() {
-        return (SocksProxyClientConfigData) ConfigDataStore.get(SocksProxyClientConfigData.ENTRY);
+        return (SocksProxyClientConfigData) ConfigDataStore.get(ConfigDataStore.MAIN);
     }
 }
