@@ -2,7 +2,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.modmenu;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.SocksProxyClientConfig;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.cloth.SocksProxyClientConfigData;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -12,6 +12,6 @@ public final class ModMenuEntry implements ModMenuApi {
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return parent -> AutoConfig.getConfigScreen(SocksProxyClientConfig.class, parent).get();
+        return parent -> AutoConfig.getConfigScreen(SocksProxyClientConfigData.class, parent).get();
     }
 }

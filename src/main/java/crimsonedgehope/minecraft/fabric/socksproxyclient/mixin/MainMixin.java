@@ -39,10 +39,14 @@ public class MainMixin {
         OptionSpec<String> proxyUserOption = optionParser.accepts("proxyUser").withRequiredArg().defaultsTo("");
         OptionSpec<String> proxyPassOption = optionParser.accepts("proxyPass").withRequiredArg().defaultsTo("");
         OptionSet optionSet = optionParser.parse(args);
+
         String proxyUser = optionSet.valueOf(proxyUserOption);
         String proxyPass = optionSet.valueOf(proxyPassOption);
-        ProxyConfig.loadGameParam(proxyUser, proxyPass);
-        SocksProxyClient.logger().debug(String.format("Proxy user: %s", proxyUser));
-        SocksProxyClient.logger().debug(String.format("Proxy pass: %s", proxyPass.isEmpty() ? "Not set" : "******"));
+
+        ProxyConfig.setCredential(proxyUser, proxyPass);
+        ProxyConfig.setCredentialFromGameParam(proxyUser, proxyPass);
+
+        SocksProxyClient.logger().debug(String.format("proxyUser: %s", proxyUser));
+        SocksProxyClient.logger().debug(String.format("proxyPass: %s", proxyPass.isEmpty() ? "Not set" : "******"));
     }
 }

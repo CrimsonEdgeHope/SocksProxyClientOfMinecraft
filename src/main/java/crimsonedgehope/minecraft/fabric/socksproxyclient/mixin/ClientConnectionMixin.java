@@ -2,7 +2,6 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ProxyConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.SocksProxyClientConfig;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
@@ -30,8 +29,6 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
-import static crimsonedgehope.minecraft.fabric.socksproxyclient.config.SocksProxyClientConfig.ProxyOption;
-
 @Environment(EnvType.CLIENT)
 @Mixin(ClientConnection.class)
 public class ClientConnectionMixin {
@@ -49,37 +46,39 @@ public class ClientConnectionMixin {
     private static void injected(InetSocketAddress address, boolean useEpoll, final ClientConnection connection, CallbackInfoReturnable<ChannelFuture> cir, Class class_, Lazy lazy) {
         InetAddress inetAddress = address.getAddress();
         if (inetAddress == null) {
-            LOGGER.debug("Remote address is null");
+            LOGGER.error("Remote address is null!!!");
             return;
         }
-        String hostnameIP = inetAddress.toString();
-        String ip = inetAddress.getHostAddress();
-        int port = address.getPort();
-        String ipPort = String.format("%s:%s", ip, port);
 
-        LOGGER.debug(String.format("Remote: %s", ipPort));
+        final String hostnameIP = inetAddress.toString();
+        final String ip = inetAddress.getHostAddress();
+        final int port = address.getPort();
+        final String ipPort = String.format("%s:%s", ip, port);
+
+        LOGGER.debug("Remote IP {}", ipPort);
 
         Proxy proxy = ProxyConfig.getProxy();
-        if (proxy == null && !SocksProxyClientConfig.get().useProxy()) {
-            LOGGER.info("No proxy.");
+        if (proxy == null && !ProxyConfig.useProxy()) {
+            LOGGER.info("No proxy for IP {}", ipPort);
             return;
         }
 
         if (inetAddress.isLoopbackAddress()) {
-            proxy = ProxyConfig.getProxy(SocksProxyClientConfig.get().getProxyLoopbackOption());
+            proxy = ProxyConfig.getProxy(ProxyConfig.proxyLoopbackOption());
             if (proxy == null) {
-                LOGGER.info(String.format("Remote host %s on port %d is loopback, not imposing proxy.", hostnameIP, port));
+                LOGGER.info("Remote IP {} is loopback, not imposing proxy.", ipPort);
                 return;
             }
         }
 
         final Proxy proxy0 = proxy;
         if (proxy0 == null) {
-            LOGGER.info(String.format("No proxy to be used on %s on port %d", hostnameIP, port));
+            LOGGER.info("No proxy for host {}:{}", hostnameIP, port);
             return;
         }
-        String username = ProxyConfig.getCredential().getUsername();
-        String password = ProxyConfig.getCredential().getPassword();
+
+        final String username = ProxyConfig.getCredential().getUsername();
+        final String password = ProxyConfig.getCredential().getPassword();
 
         cir.cancel();
         cir.setReturnValue((new Bootstrap()).group((EventLoopGroup)lazy.get()).handler(new ChannelInitializer<>() {
@@ -87,18 +86,18 @@ public class ClientConnectionMixin {
                 try {
                     channel.config().setOption(ChannelOption.TCP_NODELAY, true);
                 } catch (ChannelException ex) {
-
+                    // NO-OP
                 }
 
                 ChannelPipeline channelPipeline = channel.pipeline().addLast("timeout", new ReadTimeoutHandler(30));
                 switch (ProxyConfig.getSocksVersion()) {
                     case 4:
-                        LOGGER.info(String.format("Using Socks4 on %s", hostnameIP));
+                        LOGGER.info("Using Socks4 proxy on {}:{}", hostnameIP, port);
                         channelPipeline.addFirst("socks", new Socks4ProxyHandler(proxy0.address(), username));
                         break;
                     case 5:
                     default:
-                        LOGGER.info(String.format("Using Socks5 on %s", hostnameIP));
+                        LOGGER.info("Using Socks5 proxy on {}:{}", hostnameIP, port);
                         channelPipeline.addFirst("socks", new Socks5ProxyHandler(proxy0.address(), username, password));
                         break;
                 }
