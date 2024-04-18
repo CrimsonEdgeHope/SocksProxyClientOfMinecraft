@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "socksproxyclient",
-  "version": "${version}",
+  "version": "${mod_version}",
   "name": "SocksProxyClient",
   "description": "Use SOCKS proxy to connect to Minecraft server.",
   "authors": [
@@ -26,8 +26,11 @@
     "socksproxyclient.mixins.json"
   ],
   "depends": {
-    "minecraft": "~1.20.1",
+    "minecraft": "${minecraft_version}",
     "java": ">=17",
-    "cloth-config": "~11.1.106"
+    "cloth-config": "~${cloth_config_version}"
+  },
+  "recommends": {
+    "modmenu": "~${modmenu_version}"
   }
 }
