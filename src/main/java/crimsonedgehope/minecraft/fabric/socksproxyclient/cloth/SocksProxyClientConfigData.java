@@ -33,7 +33,7 @@ public final class SocksProxyClientConfigData implements ConfigData {
     @Tooltip
     @Getter
     @Accessors(fluent = true)
-    private boolean useProxy = true;
+    private boolean useProxy = false;
 
     @Category(ProxyConfig.CATEGORY)
     @EnumHandler(option = EnumHandler.EnumDisplayOption.BUTTON)
