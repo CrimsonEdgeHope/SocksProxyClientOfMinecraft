@@ -13,7 +13,6 @@ import static me.shedaniel.autoconfig.annotation.ConfigEntry.*;
 import static me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.*;
 import static net.minecraft.util.ActionResult.FAIL;
 import static net.minecraft.util.ActionResult.PASS;
-import static net.minecraft.util.ActionResult.SUCCESS;
 
 @Config(name = "SocksProxyClient")
 public final class SocksProxyClientConfigData implements ConfigData {
@@ -41,18 +40,13 @@ public final class SocksProxyClientConfigData implements ConfigData {
     private Socks socksVersion = Socks.SOCKS5;
 
     @Category(ProxyConfig.CATEGORY)
-    @EnumHandler(option = EnumHandler.EnumDisplayOption.BUTTON)
-    @Tooltip(count = 4)
-    @Getter
-    private ProxyOption loopbackProxyOption = ProxyOption.NONE;
-
-    @Category(ProxyConfig.CATEGORY)
-    @Tooltip
+    @Tooltip(count = 3)
     @Getter
     @Accessors(fluent = true)
     private boolean useProxyHostFromGameParam = true;
 
     @Category(ProxyConfig.CATEGORY)
+    @Tooltip
     @Getter
     @Setter
     private String proxyHost = "localhost";
@@ -61,6 +55,12 @@ public final class SocksProxyClientConfigData implements ConfigData {
     @Getter
     @Setter
     private Integer proxyPort = 1080;
+
+    @Category(ProxyConfig.CATEGORY)
+    @EnumHandler(option = EnumHandler.EnumDisplayOption.BUTTON)
+    @Tooltip(count = 4)
+    @Getter
+    private ProxyOption loopbackProxyOption = ProxyOption.NONE;
 
     @Override
     public void validatePostLoad() throws ValidationException {
@@ -80,7 +80,7 @@ public final class SocksProxyClientConfigData implements ConfigData {
         }
 
         if (configData.getProxyPort() <= 0 || configData.getProxyPort() >= 65535) {
-            return FAIL;
+            configData.setProxyPort(1080);
         }
 
         return PASS;

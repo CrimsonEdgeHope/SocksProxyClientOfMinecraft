@@ -3,17 +3,20 @@
 
   "text.autoconfig.SocksProxyClient.title": "SocksProxyClient config",
   "text.autoconfig.SocksProxyClient.option.useProxy": "Use proxy",
-  "text.autoconfig.SocksProxyClient.option.useProxy.@Tooltip": "This option takes precedence over \"Loopback through proxy\"",
+  "text.autoconfig.SocksProxyClient.option.useProxy.@Tooltip": "This option takes precedence over \"Loopback IP through proxy\".",
   "text.autoconfig.SocksProxyClient.option.socksVersion": "Socks proxy version",
-  "text.autoconfig.SocksProxyClient.option.loopbackProxyOption": "Loopback through proxy",
+  "text.autoconfig.SocksProxyClient.option.useProxyHostFromGameParam": "Use game parameters",
+  "text.autoconfig.SocksProxyClient.option.useProxyHostFromGameParam.@Tooltip[0]": "proxyHost and proxyPort game parameters will be used.",
+  "text.autoconfig.SocksProxyClient.option.useProxyHostFromGameParam.@Tooltip[1]": "Proxy credential from proxyUser and proxyPass game parameters will be used.",
+  "text.autoconfig.SocksProxyClient.option.useProxyHostFromGameParam.@Tooltip[2]": "This option does NOT override \"Loopback IP through proxy\".",
+  "text.autoconfig.SocksProxyClient.option.proxyHost": "Custom proxy host",
+  "text.autoconfig.SocksProxyClient.option.proxyHost.@Tooltip": "Fill this field in \"username:password@host\" format to use custom proxy credential instead of the one from game parameters.",
+  "text.autoconfig.SocksProxyClient.option.proxyPort": "Custom proxy port",
+  "text.autoconfig.SocksProxyClient.option.loopbackProxyOption": "Loopback IP through proxy",
   "text.autoconfig.SocksProxyClient.option.loopbackProxyOption.@Tooltip[0]": "This applies to connection to Minecraft server.",
   "text.autoconfig.SocksProxyClient.option.loopbackProxyOption.@Tooltip[1]": "NONE: Don't use proxy",
-  "text.autoconfig.SocksProxyClient.option.loopbackProxyOption.@Tooltip[2]": "GAME: Use proxyHost and proxyPort from game parameters",
-  "text.autoconfig.SocksProxyClient.option.loopbackProxyOption.@Tooltip[3]": "CUSTOM: Use proxy host and port from this config",
-  "text.autoconfig.SocksProxyClient.option.useProxyHostFromGameParam": "Use proxyHost and proxyPort from game parameters",
-  "text.autoconfig.SocksProxyClient.option.useProxyHostFromGameParam.@Tooltip": "This option does NOT override \"Loopback through proxy\"",
-  "text.autoconfig.SocksProxyClient.option.proxyHost": "Custom proxy host",
-  "text.autoconfig.SocksProxyClient.option.proxyPort": "Custom proxy port",
+  "text.autoconfig.SocksProxyClient.option.loopbackProxyOption.@Tooltip[2]": "GAME: Use game parameters",
+  "text.autoconfig.SocksProxyClient.option.loopbackProxyOption.@Tooltip[3]": "CUSTOM: Use this config",
 
   "text.autoconfig.SocksProxyClient.category.proxy": "Proxy"
 }
