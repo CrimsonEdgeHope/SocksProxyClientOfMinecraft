@@ -1,6 +1,6 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient;
 
-import crimsonedgehope.minecraft.fabric.socksproxyclient.cloth.ConfigDataStore;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralProxyConfig;
 import net.fabricmc.api.ClientModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,7 @@ public class SocksProxyClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		ConfigDataStore.init();
+		GeneralProxyConfig.INSTANCE.load();
 
 		logger().info("SocksProxyClient on.");
 		logger().debug("SocksProxyClient debug logging on.");

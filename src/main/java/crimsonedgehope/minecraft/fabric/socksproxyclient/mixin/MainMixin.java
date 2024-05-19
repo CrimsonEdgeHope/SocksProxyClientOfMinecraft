@@ -2,7 +2,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ProxyConfig;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralProxyConfig;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
@@ -43,8 +43,8 @@ public class MainMixin {
         String proxyUser = optionSet.valueOf(proxyUserOption);
         String proxyPass = optionSet.valueOf(proxyPassOption);
 
-        ProxyConfig.setCustomCredential(proxyUser, proxyPass);
-        ProxyConfig.setCredentialFromGameParam(proxyUser, proxyPass);
+        GeneralProxyConfig.setCustomCredential(proxyUser, proxyPass);
+        GeneralProxyConfig.setCredentialFromGameParam(proxyUser, proxyPass);
 
         SocksProxyClient.logger().debug(String.format("proxyUser: %s", proxyUser));
         SocksProxyClient.logger().debug(String.format("proxyPass: %s", proxyPass.isEmpty() ? "Not set" : "******"));

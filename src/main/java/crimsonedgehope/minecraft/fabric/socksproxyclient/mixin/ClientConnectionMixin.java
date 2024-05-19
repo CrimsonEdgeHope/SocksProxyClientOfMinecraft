@@ -1,7 +1,7 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ProxyConfig;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralProxyConfig;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
@@ -20,6 +20,7 @@ import net.minecraft.network.NetworkSide;
 import net.minecraft.util.Lazy;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -33,6 +34,7 @@ import java.net.Proxy;
 @Environment(EnvType.CLIENT)
 @Mixin(ClientConnection.class)
 public class ClientConnectionMixin {
+    @Unique
     private static final Logger LOGGER = SocksProxyClient.logger();
 
     @Inject(
@@ -51,32 +53,27 @@ public class ClientConnectionMixin {
             return;
         }
 
-        final String hostnameIP = inetAddress.toString();
-        final String ip = inetAddress.getHostAddress();
-        final int port = address.getPort();
-        final String ipPort = String.format("%s:%s", ip, port);
-
-        LOGGER.debug("Remote IP {}", ipPort);
-
         Proxy proxy;
-        ProxyConfig.Credential credential;
+        GeneralProxyConfig.Credential credential;
 
         if (inetAddress.isLoopbackAddress()) {
-            proxy = ProxyConfig.getProxyForLoopback();
-            credential = ProxyConfig.getProxyCredentialForLoopback();
+            proxy = GeneralProxyConfig.getProxyForLoopback();
+            credential = GeneralProxyConfig.getProxyCredentialForLoopback();
         } else {
-            proxy = ProxyConfig.getProxy();
-            credential = ProxyConfig.getProxyCredential();
+            proxy = GeneralProxyConfig.getProxy();
+            credential = GeneralProxyConfig.getProxyCredential();
         }
 
+        LOGGER.debug("Remote Minecraft server {}", address);
+
         if (proxy == null) {
-            LOGGER.info("No proxy for IP {}", ipPort);
-            LOGGER.info("No proxy for host {}:{}", hostnameIP, port);
+            LOGGER.info("No proxy on host {}", address);
             return;
         }
 
         final Proxy proxy0 = proxy;
-        final ProxyConfig.Credential credential0 = credential;
+        final GeneralProxyConfig.Credential credential0 = credential;
+        final InetSocketAddress sa = (InetSocketAddress) proxy0.address();
 
         cir.cancel();
         cir.setReturnValue((new Bootstrap()).group((EventLoopGroup)lazy.get()).handler(new ChannelInitializer<>() {
@@ -88,15 +85,15 @@ public class ClientConnectionMixin {
                 }
 
                 ChannelPipeline channelPipeline = channel.pipeline().addLast("timeout", new ReadTimeoutHandler(30));
-                switch (ProxyConfig.getSocksVersion()) {
+                switch (GeneralProxyConfig.getSocksVersion()) {
                     case 4:
-                        LOGGER.info("Using Socks4 proxy for {}:{}", hostnameIP, port);
+                        LOGGER.info("Using Socks4 proxy {} on {}", sa, address);
                         channelPipeline.addFirst("socks",
                                 new Socks4ProxyHandler(proxy0.address(), credential0.getUsername()));
                         break;
                     case 5:
                     default:
-                        LOGGER.info("Using Socks5 proxy for {}:{}", hostnameIP, port);
+                        LOGGER.info("Using Socks5 proxy {} on {}", sa, address);
                         channelPipeline.addFirst("socks",
                                 new Socks5ProxyHandler(proxy0.address(), credential0.getUsername(), credential0.getPassword()));
                         break;
