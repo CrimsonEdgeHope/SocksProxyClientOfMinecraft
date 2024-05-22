@@ -7,15 +7,15 @@
 <img src="https://i.postimg.cc/85ccwZSY/cloth-config-api-badge.png" alt="Requires Cloth Config API" width="149" height="50" />
 
 Modern Minecraft Java client relies on Netty to connect to multiplayer servers,
-and provides some game parameters to use a SOCKS proxy:
+and takes in these game parameters:
 
-- `proxyHost` Remote proxy hostname or IP
+- `proxyHost` Remote proxy hostname or pure IP address
 - `proxyPort` Remote proxy port
 - `proxyUser` Proxy username
 - `proxyPass` Proxy password
 
-Unfortunately, vanilla client applies such setting to communication with Minecraft authentication service
-(and presumably downloading resource packs from remote servers) only.
-Worse, it doesn't even run with required Netty libraries that enable SOCKS Proxy functionality.
+This simple mod proxies **Minecraft server traffic** through designated SOCKS proxy as desired.
 
-This simple mod utilizes designated SOCKS proxy when joining and playing on multiplayer servers.
+## Questions to be resolved
+- Is the YggdrasilAuthenticationService affected?
+- Is downloading server resource packs affected?

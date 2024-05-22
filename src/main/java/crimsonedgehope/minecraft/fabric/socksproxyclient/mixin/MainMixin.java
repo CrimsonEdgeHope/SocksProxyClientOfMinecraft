@@ -47,6 +47,6 @@ public class MainMixin {
         GeneralProxyConfig.setCredentialFromGameParam(proxyUser, proxyPass);
 
         SocksProxyClient.logger().debug(String.format("proxyUser: %s", proxyUser));
-        SocksProxyClient.logger().debug(String.format("proxyPass: %s", proxyPass.isEmpty() ? "Not set" : "******"));
+        SocksProxyClient.logger().debug("proxyPass: ******");
     }
 }
