@@ -4,8 +4,11 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeyUtil;
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SocksProxyClientConfigEntry<T> {
     @NotNull @Getter
@@ -22,27 +25,46 @@ public class SocksProxyClientConfigEntry<T> {
 
     @NotNull @Getter
     private final String translateKey;
-    @Nullable @Getter
-    private final String description;
+
+    public Text getTranslatableText() {
+        return Text.translatable(translateKey);
+    }
+
+    @Getter
+    private final int desiredLinesOfDescription;
+
+    public List<Text> getDescriptionTranslatableText() {
+        ArrayList<Text> r = new ArrayList<>();
+        if (desiredLinesOfDescription > 0) {
+            String key = TranslateKeyUtil.item(translateKey, "tooltip");
+            if (desiredLinesOfDescription > 1) {
+                for (int i = 1; i <= desiredLinesOfDescription; ++i) {
+                    r.add(TranslateKeyUtil.itemAsText(key, String.valueOf(i)));
+                }
+            } else {
+                r.add(Text.translatable(key));
+            }
+        }
+        return r;
+    }
 
     public SocksProxyClientConfigEntry(
             @NotNull Class<? extends SocksProxyClientConfig> configClass,
             @NotNull String entry,
             T defaultValue
     ) {
-        this(configClass, entry, defaultValue, null);
+        this(configClass, entry, defaultValue, 0);
     }
 
     public SocksProxyClientConfigEntry(
             @NotNull Class<? extends SocksProxyClientConfig> configClass,
             @NotNull String entry,
             T defaultValue,
-            @Nullable String description
+            int linesOfDescription
     ) {
         this.entry = entry;
         this.defaultValue = defaultValue;
         this.value = this.defaultValue;
-        this.description = description;
         this.configClass = configClass;
         try {
             this.category = (String) this.configClass.getDeclaredField("CATEGORY").get(null);
@@ -53,5 +75,6 @@ public class SocksProxyClientConfigEntry<T> {
             this.category = this.configClass.getSimpleName();
         }
         this.translateKey = TranslateKeyUtil.configItem(this.category, this.entry);
+        this.desiredLinesOfDescription = linesOfDescription;
     }
 }

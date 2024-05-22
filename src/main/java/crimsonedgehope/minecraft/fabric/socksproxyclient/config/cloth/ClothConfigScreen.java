@@ -26,18 +26,18 @@ public final class ClothConfigScreen {
     private static ClothAccess cloth;
 
     public static Screen getScreen(Screen parentScreen) {
-        cloth = new ClothAccess(parentScreen, Text.translatable(TranslateKeyUtil.configItem()));
+        cloth = new ClothAccess(parentScreen, TranslateKeyUtil.configItemAsText());
 
         ConfigBuilder builder = cloth.getConfigBuilder();
 
         ConfigEntryBuilder entryBuilder = cloth.configEntryBuilder();
         ConfigCategory generalCategory =
-                cloth.configCategory(Text.translatable(TranslateKeyUtil.configItem(GeneralProxyConfig.CATEGORY)));
+                cloth.configCategory(TranslateKeyUtil.configItemAsText(GeneralProxyConfig.CATEGORY));
 
         builder.setSavingRunnable(GeneralProxyConfig.INSTANCE::save);
 
         BooleanListEntry useProxy = entryBuilder.startBooleanToggle(
-                        Text.translatable(GeneralProxyConfig.useProxy.getTranslateKey()),
+                        GeneralProxyConfig.useProxy.getTranslatableText(),
                         GeneralProxyConfig.useProxy.getValue()
                 )
                 .setDefaultValue(GeneralProxyConfig.useProxy.getDefaultValue())
@@ -46,7 +46,7 @@ public final class ClothConfigScreen {
         generalCategory.addEntry(useProxy);
 
         EnumListEntry useProxyFrom = entryBuilder.startEnumSelector(
-                        Text.translatable(GeneralProxyConfig.useProxyFrom.getTranslateKey()),
+                        GeneralProxyConfig.useProxyFrom.getTranslatableText(),
                         GeneralProxyConfig.SocksSelection.class,
                         GeneralProxyConfig.useProxyFrom.getValue()
                 )
@@ -57,7 +57,7 @@ public final class ClothConfigScreen {
         generalCategory.addEntry(useProxyFrom);
 
         EnumListEntry socksVersion = entryBuilder.startEnumSelector(
-                        Text.translatable(GeneralProxyConfig.socksVersion.getTranslateKey()),
+                        GeneralProxyConfig.socksVersion.getTranslatableText(),
                         GeneralProxyConfig.SocksVersion.class,
                         GeneralProxyConfig.socksVersion.getValue()
                 )
@@ -68,7 +68,7 @@ public final class ClothConfigScreen {
         generalCategory.addEntry(socksVersion);
 
         StringListEntry customProxyHost = entryBuilder.startStrField(
-                        Text.translatable(GeneralProxyConfig.customProxyHost.getTranslateKey()),
+                        GeneralProxyConfig.customProxyHost.getTranslatableText(),
                         GeneralProxyConfig.customProxyHost.getValue()
                 )
                 .setRequirement(Requirement.all(
@@ -88,7 +88,7 @@ public final class ClothConfigScreen {
         generalCategory.addEntry(customProxyHost);
 
         IntegerListEntry customProxyPort = entryBuilder.startIntField(
-                        Text.translatable(GeneralProxyConfig.customProxyPort.getTranslateKey()),
+                        GeneralProxyConfig.customProxyPort.getTranslatableText(),
                         GeneralProxyConfig.customProxyPort.getValue()
                 )
                 .setRequirement(Requirement.all(
@@ -107,7 +107,7 @@ public final class ClothConfigScreen {
         generalCategory.addEntry(customProxyPort);
 
         StringListEntry customProxyUsername = entryBuilder.startStrField(
-                        Text.translatable(GeneralProxyConfig.customProxyUsername.getTranslateKey()),
+                        GeneralProxyConfig.customProxyUsername.getTranslatableText(),
                         GeneralProxyConfig.customProxyUsername.getValue()
                 )
                 .setRequirement(Requirement.all(
@@ -123,7 +123,7 @@ public final class ClothConfigScreen {
         generalCategory.addEntry(customProxyUsername);
 
         StringListEntry customProxyPassword = entryBuilder.startStrField(
-                        Text.translatable(GeneralProxyConfig.customProxyPassword.getTranslateKey()),
+                        GeneralProxyConfig.customProxyPassword.getTranslatableText(),
                         GeneralProxyConfig.customProxyPassword.getValue()
                 )
                 .setRequirement(Requirement.all(
@@ -140,7 +140,7 @@ public final class ClothConfigScreen {
         generalCategory.addEntry(customProxyPassword);
 
         BooleanListEntry imposeProxyOnLoopback = entryBuilder.startBooleanToggle(
-                        Text.translatable(GeneralProxyConfig.imposeProxyOnLoopback.getTranslateKey()),
+                        GeneralProxyConfig.imposeProxyOnLoopback.getTranslatableText(),
                         GeneralProxyConfig.imposeProxyOnLoopback.getValue()
                 )
                 .setRequirement(Requirement.isTrue(useProxy))
