@@ -4,18 +4,10 @@
 &nbsp;![Environment: Client](https://img.shields.io/badge/environment-client-1976d2?style=for-the-badge)
 &nbsp;![Minecraft version: 1.20.1](https://img.shields.io/badge/minecraft%20version-1.20.1-1976d2?style=for-the-badge)
 
-<img src="https://i.postimg.cc/85ccwZSY/cloth-config-api-badge.png" alt="Requires Cloth Config API" width="149" height="50" />
+<!--<img src="https://i.postimg.cc/85ccwZSY/cloth-config-api-badge.png" alt="Requires Cloth Config API" width="149" height="50" />-->
 
 Modern Minecraft Java client relies on Netty to connect to multiplayer servers,
-and takes in these game parameters:
-
-- `proxyHost` Remote proxy hostname or pure IP address
-- `proxyPort` Remote proxy port
-- `proxyUser` Proxy username
-- `proxyPass` Proxy password
-
-This simple mod proxies **Minecraft server traffic** through designated SOCKS proxy as desired.
+and this simple mod proxies **Minecraft server traffic** through designated SOCKS proxy as desired.
 
 ## Questions to be resolved
-- Is the YggdrasilAuthenticationService affected?
 - Is downloading server resource packs affected?
