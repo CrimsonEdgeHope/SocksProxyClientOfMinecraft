@@ -27,13 +27,9 @@ import java.net.SocketAddress;
 @Mixin(ClientConnection.class)
 public class ClientConnectionMixin {
     @Unique
-    private static final Logger LOGGER = SocksProxyClient.logger();
+    private static final Logger LOGGER = SocksProxyClient.LOGGER;
     @Unique
     private static InetSocketAddress REMOTE;
-    @Unique
-    private static Proxy PROXY_SELECTION;
-    @Unique
-    private static GeneralProxyConfig.Credential PROXY_CREDENTIAL;
 
     @Inject(
             method = "connect(Ljava/net/InetSocketAddress;ZLnet/minecraft/network/ClientConnection;)Lio/netty/channel/ChannelFuture;",
@@ -41,26 +37,7 @@ public class ClientConnectionMixin {
     )
     private static void injected(InetSocketAddress address, boolean useEpoll, ClientConnection connection, CallbackInfoReturnable<ChannelFuture> cir) {
         REMOTE = address;
-        InetAddress inetAddress = address.getAddress();
-        if (inetAddress == null) {
-            PROXY_SELECTION = null;
-            LOGGER.error("Remote address is null!!!");
-            return;
-        }
-
-        if (inetAddress.isLoopbackAddress()) {
-            PROXY_SELECTION = GeneralProxyConfig.getProxyForLoopback();
-            PROXY_CREDENTIAL = GeneralProxyConfig.getProxyCredentialForLoopback();
-        } else {
-            PROXY_SELECTION = GeneralProxyConfig.getProxy();
-            PROXY_CREDENTIAL = GeneralProxyConfig.getProxyCredential();
-        }
-
-        LOGGER.debug("Remote Minecraft server {}", address);
-
-        if (PROXY_SELECTION == null) {
-            LOGGER.info("No proxy on host {}", address);
-        }
+        LOGGER.debug("Remote Minecraft server {}", address.getAddress());
     }
 
     @Inject(
@@ -71,22 +48,37 @@ public class ClientConnectionMixin {
         if (REMOTE == null) {
             return;
         }
-        if (PROXY_SELECTION != null) {
-            InetAddress address = REMOTE.getAddress();
-            SocketAddress sa = PROXY_SELECTION.address();
-            switch (GeneralProxyConfig.getSocksVersion()) {
-                case 4:
-                    LOGGER.info("Using Socks4 proxy {} on {}", sa, address);
-                    pipeline.addFirst("socks",
-                            new Socks4ProxyHandler(PROXY_SELECTION.address(), PROXY_CREDENTIAL.getUsername()));
-                    break;
-                case 5:
-                default:
-                    LOGGER.info("Using Socks5 proxy {} on {}", sa, address);
-                    pipeline.addFirst("socks",
-                            new Socks5ProxyHandler(PROXY_SELECTION.address(), PROXY_CREDENTIAL.getUsername(), PROXY_CREDENTIAL.getPassword()));
-                    break;
-            }
+        InetAddress address = REMOTE.getAddress();
+
+        Proxy proxySelection;
+        if (address.isLoopbackAddress()) {
+            proxySelection = GeneralProxyConfig.getProxyForLoopback();
+        } else {
+            proxySelection = GeneralProxyConfig.getProxy();
+        }
+
+        if (proxySelection == null) {
+            LOGGER.info("No proxy on host {}", address);
+            return;
+        }
+
+        GeneralProxyConfig.Credential proxyCredential = GeneralProxyConfig.getProxyCredential();
+
+        final SocketAddress sa = proxySelection.address();
+        switch (GeneralProxyConfig.getSocksVersion()) {
+            case 4:
+                LOGGER.info("Using Socks4 proxy {} on {}", sa, address);
+                pipeline.addFirst("socks",
+                        new Socks4ProxyHandler(sa, proxyCredential.getUsername()));
+                break;
+            case 5:
+                LOGGER.info("Using Socks5 proxy {} on {}", sa, address);
+                pipeline.addFirst("socks",
+                        new Socks5ProxyHandler(sa, proxyCredential.getUsername(), proxyCredential.getPassword()));
+                break;
+            default:
+                LOGGER.info("No proxy on host {}", address);
+                break;
         }
     }
 }

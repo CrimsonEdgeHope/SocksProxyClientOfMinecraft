@@ -69,7 +69,7 @@ public class SocksProxyClientConfigEntry<T> {
         try {
             this.category = (String) this.configClass.getDeclaredField("CATEGORY").get(null);
         } catch (Exception e) {
-            SocksProxyClient.logger().error("", e);
+            SocksProxyClient.LOGGER.error("CATEGORY static field missing or inaccessible?!", e);
         }
         if (this.category == null) {
             this.category = this.configClass.getSimpleName();

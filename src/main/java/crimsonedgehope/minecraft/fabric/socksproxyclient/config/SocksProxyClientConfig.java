@@ -7,6 +7,7 @@ import com.google.gson.stream.JsonReader;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import lombok.Getter;
 import net.fabricmc.loader.api.FabricLoader;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.FileReader;
@@ -16,6 +17,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 public abstract class SocksProxyClientConfig {
+
+    protected static final Logger LOGGER = SocksProxyClient.LOGGER;
 
     protected static Path configPathDir() {
         Path path = FabricLoader.getInstance().getConfigDir().resolve("socksproxyclient");
@@ -42,14 +45,14 @@ public abstract class SocksProxyClientConfig {
     }
 
     public void load() {
-        SocksProxyClient.logger().info("Reading config file " + this.configFile.getName());
+        LOGGER.info("Reading config file " + this.configFile.getName());
         if (!this.configFile.exists()) {
             writeFile(defaultEntries());
         }
         try {
             readFile();
         } catch (Exception e) {
-            SocksProxyClient.logger().info("Error reading config file " + this.configFile.getName());
+            LOGGER.info("Error reading config file " + this.configFile.getName());
         }
     }
 
@@ -71,7 +74,7 @@ public abstract class SocksProxyClientConfig {
             load();
             return;
         }
-        SocksProxyClient.logger().info("Reading config json " + this.configFile.getName());
+        LOGGER.info("Reading config json " + this.configFile.getName());
         try {
             for (String key : defaults.keySet()) {
                 if (!object.has(key)) {
@@ -81,18 +84,18 @@ public abstract class SocksProxyClientConfig {
                 }
             }
         } catch (Exception e) {
-            SocksProxyClient.logger().error("Error reading config json " + this.configFile.getName(), e);
+            LOGGER.error("Error reading config json " + this.configFile.getName(), e);
         }
         fromJsonObject(object);
     }
 
     private void writeFile(JsonObject entries) {
         try (FileWriter writer = new FileWriter(this.configFile, false)) {
-            SocksProxyClient.logger().info("Writing config to file " + this.configFile.getName());
+            LOGGER.info("Writing config to file " + this.configFile.getName());
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             writer.write(gson.toJson(entries));
         } catch (Exception e) {
-            SocksProxyClient.logger().error("Error writing config to file " + this.configFile.getName(), e);
+            LOGGER.error("Error writing config to file " + this.configFile.getName(), e);
         }
     }
 }

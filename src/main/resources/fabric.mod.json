@@ -23,15 +23,19 @@
     ]
   },
   "mixins": [
-    "socksproxyclient.mixins.json"
+    "socksproxyclient.mixins.json",
+    "socksproxyclient.proxy.mixins.json"
   ],
   "depends": {
     "fabricloader": "~${fabricloader_version}",
     "minecraft": "${minecraft_version}",
-    "java": ">=17",
-    "cloth-config": "~${cloth_config_version}"
+    "java": ">=17"
   },
   "recommends": {
+    "cloth-config": "~${cloth_config_version}",
     "modmenu": "~${modmenu_version}"
+  },
+  "conflicts": {
+    "viafabricplus": ">=2.7.7"
   }
 }

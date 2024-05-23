@@ -2,6 +2,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.config.cloth;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralProxyConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeyUtil;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpToSocksServer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
@@ -41,20 +42,16 @@ public final class ClothConfigScreen {
                         GeneralProxyConfig.useProxy.getValue()
                 )
                 .setDefaultValue(GeneralProxyConfig.useProxy.getDefaultValue())
-                .setSaveConsumer(GeneralProxyConfig.useProxy::setValue)
+                .setSaveConsumer(v -> {
+                    GeneralProxyConfig.useProxy.setValue(v);
+                    if (v) {
+                        HttpToSocksServer.INSTANCE.fire();
+                    } else {
+                        HttpToSocksServer.INSTANCE.cease();
+                    }
+                })
                 .build();
         generalCategory.addEntry(useProxy);
-
-        EnumListEntry useProxyFrom = entryBuilder.startEnumSelector(
-                        GeneralProxyConfig.useProxyFrom.getTranslatableText(),
-                        GeneralProxyConfig.SocksSelection.class,
-                        GeneralProxyConfig.useProxyFrom.getValue()
-                )
-                .setRequirement(Requirement.isTrue(useProxy))
-                .setDefaultValue(GeneralProxyConfig.useProxyFrom.getDefaultValue())
-                .setSaveConsumer(GeneralProxyConfig.useProxyFrom::setValue)
-                .build();
-        generalCategory.addEntry(useProxyFrom);
 
         EnumListEntry socksVersion = entryBuilder.startEnumSelector(
                         GeneralProxyConfig.socksVersion.getTranslatableText(),
@@ -71,10 +68,7 @@ public final class ClothConfigScreen {
                         GeneralProxyConfig.customProxyHost.getTranslatableText(),
                         GeneralProxyConfig.customProxyHost.getValue()
                 )
-                .setRequirement(Requirement.all(
-                        Requirement.isTrue(useProxy),
-                        Requirement.isValue(useProxyFrom, GeneralProxyConfig.SocksSelection.CUSTOM)
-                ))
+                .setRequirement(Requirement.isTrue(useProxy))
                 .setErrorSupplier(s -> {
                     Optional<Text> r = Optional.of(Text.empty());
                     if (s.isEmpty()) {
@@ -91,10 +85,7 @@ public final class ClothConfigScreen {
                         GeneralProxyConfig.customProxyPort.getTranslatableText(),
                         GeneralProxyConfig.customProxyPort.getValue()
                 )
-                .setRequirement(Requirement.all(
-                        Requirement.isTrue(useProxy),
-                        Requirement.isValue(useProxyFrom, GeneralProxyConfig.SocksSelection.CUSTOM)
-                ))
+                .setRequirement(Requirement.isTrue(useProxy))
                 .setErrorSupplier(v -> {
                     if (v <= 0 || v >= 65536) {
                         return Optional.of(Text.empty());
@@ -110,10 +101,7 @@ public final class ClothConfigScreen {
                         GeneralProxyConfig.customProxyUsername.getTranslatableText(),
                         GeneralProxyConfig.customProxyUsername.getValue()
                 )
-                .setRequirement(Requirement.all(
-                        Requirement.isTrue(useProxy),
-                        Requirement.isValue(useProxyFrom, GeneralProxyConfig.SocksSelection.CUSTOM)
-                ))
+                .setRequirement(Requirement.isTrue(useProxy))
                 .setDefaultValue(GeneralProxyConfig.customProxyUsername.getDefaultValue())
                 .setSaveConsumer(v -> {
                     GeneralProxyConfig.customProxyUsername.setValue(v);
@@ -128,7 +116,6 @@ public final class ClothConfigScreen {
                 )
                 .setRequirement(Requirement.all(
                         Requirement.isTrue(useProxy),
-                        Requirement.isValue(useProxyFrom, GeneralProxyConfig.SocksSelection.CUSTOM),
                         Requirement.isValue(socksVersion, GeneralProxyConfig.SocksVersion.SOCKS5)
                 ))
                 .setDefaultValue(GeneralProxyConfig.customProxyPassword.getDefaultValue())

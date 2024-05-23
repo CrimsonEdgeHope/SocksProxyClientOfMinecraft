@@ -5,7 +5,10 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "ClientConnectionMixin",
-    "MainMixin"
+    "HttpAuthenticationServiceMixin",
+    "MainMixin",
+    "MinecraftClientMixin",
+    "YggdrasilAuthenticationServiceMixin"
   ],
   "injectors": {
     "defaultRequire": 1
