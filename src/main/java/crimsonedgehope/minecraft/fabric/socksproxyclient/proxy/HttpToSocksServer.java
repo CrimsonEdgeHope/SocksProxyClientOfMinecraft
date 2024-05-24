@@ -13,6 +13,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -20,8 +21,10 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.HttpMethod;
+import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpRequestDecoder;
+import io.netty.handler.codec.http.HttpRequestEncoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
@@ -88,8 +91,9 @@ public class HttpToSocksServer {
                                 public void initChannel(SocketChannel channel) {
                                     channel.pipeline()
                                             .addLast("http_res_enc", new HttpResponseEncoder())
+                                            .addLast("http_aggre", new HttpObjectAggregator(262144000))
                                             .addLast("http_req_dec", new HttpRequestDecoder())
-                                            .addLast(new HttpProxyClientInboundHandler());
+                                            .addLast("opentunnel", new HttpProxyClientInboundHandler());
                                 }
                             })
                             .bind(host, port).sync();
@@ -127,7 +131,7 @@ public class HttpToSocksServer {
         private Channel remote;
         private Channel client;
 
-        private boolean isHTTPS = false;
+        private boolean connectMethod = false;
         private HttpVersion httpVersion;
         private String remoteHttpHost = null;
         private int remoteHttpPort = -1;
@@ -143,7 +147,7 @@ public class HttpToSocksServer {
         @Override
         public void channelRead0(ChannelHandlerContext ctx, HttpRequest msg) {
             if (!parsed) {
-                isHTTPS = msg.method().equals(HttpMethod.CONNECT);
+                connectMethod = msg.method().equals(HttpMethod.CONNECT);
                 httpVersion = msg.protocolVersion();
 
                 int k;
@@ -152,7 +156,7 @@ public class HttpToSocksServer {
 
                 k = remoteHttpHost.indexOf(":");
                 if (k == -1) {
-                    if (isHTTPS) {
+                    if (connectMethod) {
                         remoteHttpPort = 443;
                     } else {
                         remoteHttpPort = 80;
@@ -188,39 +192,18 @@ public class HttpToSocksServer {
                         .channel(client.getClass())
                         .handler(new ChannelInitializer<SocketChannel>() {
                             @Override
-                            public void initChannel(@NotNull SocketChannel channel) throws Exception {
+                            public void initChannel(@NotNull SocketChannel channel) {
                                 channel.pipeline().addFirst(handler);
                             }
-                        });
+                        })
+                        .option(ChannelOption.TCP_NODELAY, true)
+                        .option(ChannelOption.SO_KEEPALIVE, true);
                 ChannelFuture future = b.connect(remoteHttpHost, remoteHttpPort);
                 future.addListener(f -> {
                     if (f.isSuccess()) {
+                        LOGGER.warn(msg.toString());
                         remote = future.channel();
-                        client.pipeline().addFirst(new SimpleChannelInboundHandler<ByteBuf>() {
-                            @Override
-                            public void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-                                remote.writeAndFlush(msg.retain()).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
-                            }
-
-                            @Override
-                            public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-                                LOGGER.error("Error in client channel!", cause);
-                                shutOffActiveChannel(ctx.channel());
-                            }
-                        });
-                        remote.pipeline().addLast(new SimpleChannelInboundHandler<ByteBuf>() {
-                            @Override
-                            public void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-                                client.writeAndFlush(msg.retain()).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
-                            }
-
-                            @Override
-                            public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-                                LOGGER.error("Error in remote channel!", cause);
-                                shutOffActiveChannel(ctx.channel());
-                            }
-                        });
-                        if (isHTTPS) {
+                        if (connectMethod) {
                             client.writeAndFlush(
                                     new DefaultFullHttpResponse(
                                             httpVersion,
@@ -228,23 +211,35 @@ public class HttpToSocksServer {
                                     )
                             ).addListener(f0 -> {
                                 if (f0.isSuccess()) {
-                                    client.pipeline().remove("http_res_enc");
-                                    client.pipeline().remove("http_req_dec");
-                                    client.pipeline().remove(this);
+                                    channelRemoval();
+                                    channelTakeover();
+                                    LOGGER.info("Open tunnel to remote {}:{}", remoteHttpHost, remoteHttpPort);
                                 }
-                            }).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+                            }).addListeners(
+                                    ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE,
+                                    ChannelFutureListener.CLOSE_ON_FAILURE
+                            );
                         } else {
-                            client.pipeline().remove("http_res_enc");
-                            client.pipeline().remove("http_req_dec");
-                            client.pipeline().remove(this);
+                            remote.pipeline().addLast("temp_http_req_enc", new HttpRequestEncoder());
+                            remote.writeAndFlush(msg).addListener(f0 -> {
+                                if (f0.isSuccess()) {
+                                    remote.pipeline().remove("temp_http_req_enc");
+                                    channelRemoval();
+                                    channelTakeover();
+                                    LOGGER.info("Open tunnel to remote {}:{}", remoteHttpHost, remoteHttpPort);
+                                }
+                            }).addListeners(
+                                    ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE,
+                                    ChannelFutureListener.CLOSE_ON_FAILURE
+                            );
                         }
-
-                        LOGGER.info("Open tunnel to remote {}:{}", remoteHttpHost, remoteHttpPort);
                     } else {
-                        ((ByteBuf) msg).release();
                         shutOffActiveChannel(client);
                     }
-                });
+                }).addListeners(
+                        ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE,
+                        ChannelFutureListener.CLOSE_ON_FAILURE
+                );
                 remote = future.channel();
                 client = client.closeFuture().addListener(f -> {
                     if (f.isDone()) {
@@ -260,6 +255,53 @@ public class HttpToSocksServer {
             } else {
                 ctx.fireChannelRead(msg);
             }
+        }
+
+        private void channelRemoval() {
+            client.pipeline().remove("http_res_enc");
+            client.pipeline().remove("http_aggre");
+            client.pipeline().remove("http_req_dec");
+        }
+
+        private void channelTakeover() {
+            clientChannelTakeover();
+            remoteChannelTakeover();
+        }
+
+        private void clientChannelTakeover() {
+            client.pipeline().addLast(new SimpleChannelInboundHandler<ByteBuf>() {
+                @Override
+                public void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) {
+                    remote.writeAndFlush(msg.retain()).addListeners(
+                            ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE,
+                            ChannelFutureListener.CLOSE_ON_FAILURE
+                    );
+                }
+
+                @Override
+                public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+                    LOGGER.error("Error in client channel!", cause);
+                    shutOffActiveChannel(ctx.channel());
+                }
+            });
+        }
+
+        private void remoteChannelTakeover() {
+            remote.pipeline().addLast(new SimpleChannelInboundHandler<ByteBuf>() {
+                @Override
+                public void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) {
+                    client.writeAndFlush(msg.retain()).addListeners(
+                            ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE,
+                            ChannelFutureListener.CLOSE_ON_FAILURE
+                    );
+                }
+
+                @Override
+                public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+                    LOGGER.error("Error in remote channel!", cause);
+                    shutOffActiveChannel(ctx.channel());
+                }
+            });
         }
 
         @Override

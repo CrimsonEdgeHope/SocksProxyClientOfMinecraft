@@ -8,6 +8,8 @@
     "HttpAuthenticationServiceMixin",
     "MainMixin",
     "MinecraftClientMixin",
+    "PlayerSkinTextureMixin",
+    "ServerResourcePackProviderMixin",
     "YggdrasilAuthenticationServiceMixin"
   ],
   "injectors": {

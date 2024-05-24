@@ -8,6 +8,3 @@
 
 Modern Minecraft Java client relies on Netty to connect to multiplayer servers,
 and this simple mod proxies **Minecraft server traffic** through designated SOCKS proxy as desired.
-
-## Questions to be resolved
-- Is downloading server resource packs affected?
