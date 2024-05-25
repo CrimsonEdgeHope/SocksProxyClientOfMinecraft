@@ -19,7 +19,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.http.DefaultFullHttpResponse;
+import io.netty.handler.codec.http.DefaultHttpResponse;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequest;
@@ -90,7 +90,6 @@ public class HttpToSocksServer {
                                 @Override
                                 public void initChannel(SocketChannel channel) {
                                     channel.pipeline()
-                                            .addLast("http_res_enc", new HttpResponseEncoder())
                                             .addLast("http_aggre", new HttpObjectAggregator(262144000))
                                             .addLast("http_req_dec", new HttpRequestDecoder())
                                             .addLast("opentunnel", new HttpProxyClientInboundHandler());
@@ -139,9 +138,8 @@ public class HttpToSocksServer {
         private boolean parsed = false;
 
         @Override
-        public void channelActive(@NotNull ChannelHandlerContext ctx) throws Exception {
+        public void channelActive(@NotNull ChannelHandlerContext ctx) {
             this.client = ctx.channel();
-            this.client.config().setAutoRead(true);
         }
 
         @Override
@@ -170,6 +168,7 @@ public class HttpToSocksServer {
             }
 
             if (remote == null) {
+                boolean noResolver = true;
                 ChannelHandler handler;
                 Proxy proxySelection = GeneralProxyConfig.getProxy();
                 GeneralProxyConfig.Credential proxyCredential = GeneralProxyConfig.getProxyCredential();
@@ -185,8 +184,11 @@ public class HttpToSocksServer {
                     default:
                         LOGGER.debug("http. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
                         handler = new ChannelDuplexHandler();
+                        noResolver = false;
                         break;
                 }
+
+                this.client.config().setAutoRead(false);
 
                 Bootstrap b = new Bootstrap().group(client.eventLoop())
                         .channel(client.getClass())
@@ -198,19 +200,24 @@ public class HttpToSocksServer {
                         })
                         .option(ChannelOption.TCP_NODELAY, true)
                         .option(ChannelOption.SO_KEEPALIVE, true);
+                if (noResolver) {
+                    b = b.disableResolver();
+                }
                 ChannelFuture future = b.connect(remoteHttpHost, remoteHttpPort);
                 future.addListener(f -> {
                     if (f.isSuccess()) {
-                        LOGGER.warn(msg.toString());
                         remote = future.channel();
+                        this.client.config().setAutoRead(true);
                         if (connectMethod) {
+                            client.pipeline().addLast("temp_http_res_enc", new HttpResponseEncoder());
                             client.writeAndFlush(
-                                    new DefaultFullHttpResponse(
+                                    new DefaultHttpResponse(
                                             httpVersion,
                                             new HttpResponseStatus(200, "Connection Established")
                                     )
                             ).addListener(f0 -> {
                                 if (f0.isSuccess()) {
+                                    client.pipeline().remove("temp_http_res_enc");
                                     channelRemoval();
                                     channelTakeover();
                                     LOGGER.info("Open tunnel to remote {}:{}", remoteHttpHost, remoteHttpPort);
@@ -252,13 +259,10 @@ public class HttpToSocksServer {
                         shutOffActiveChannel(client);
                     }
                 }).channel();
-            } else {
-                ctx.fireChannelRead(msg);
             }
         }
 
         private void channelRemoval() {
-            client.pipeline().remove("http_res_enc");
             client.pipeline().remove("http_aggre");
             client.pipeline().remove("http_req_dec");
         }
