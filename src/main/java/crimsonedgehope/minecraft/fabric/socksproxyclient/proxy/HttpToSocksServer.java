@@ -173,11 +173,11 @@ public class HttpToSocksServer {
                 Proxy proxySelection = GeneralProxyConfig.getProxy();
                 GeneralProxyConfig.Credential proxyCredential = GeneralProxyConfig.getProxyCredential();
                 switch (GeneralProxyConfig.getSocksVersion()) {
-                    case 4:
+                    case SOCKS4:
                         LOGGER.debug("http - Socks4. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
                         handler = new Socks4ProxyHandler(proxySelection.address(), proxyCredential.getUsername());
                         break;
-                    case 5:
+                    case SOCKS5:
                         LOGGER.debug("http - Socks5. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
                         handler = new Socks5ProxyHandler(proxySelection.address(), proxyCredential.getUsername(), proxyCredential.getPassword());
                         break;

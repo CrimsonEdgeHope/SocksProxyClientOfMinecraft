@@ -12,10 +12,7 @@ import java.net.SocketAddress;
 @Mixin(ProxyHandler.class)
 public abstract class ProxyHandlerMixin {
     /**
-     * After tedious rounds of investigation, presumably,
-     * combination with ViaFabricPlus could fire a connection to the SOCKS proxy through itself.
-     * When opening multiplayer screen for the first time in a game session, automatic pinging
-     * a reachable server can be seen twice, between which such undesired proxying behavior occurs.
+     * Combination with ViaFabricPlus could fire a connection to the SOCKS proxy through itself.
      * Root cause unclear.
      */
 

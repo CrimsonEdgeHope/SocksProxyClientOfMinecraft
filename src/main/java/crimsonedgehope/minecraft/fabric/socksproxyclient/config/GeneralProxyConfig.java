@@ -18,13 +18,8 @@ public final class GeneralProxyConfig extends SocksProxyClientConfig {
     }
 
     public enum SocksVersion {
-        SOCKS4(4),
-        SOCKS5(5);
-
-        public final int ver;
-        SocksVersion(int ver) {
-            this.ver =  ver;
-        }
+        SOCKS4,
+        SOCKS5;
     }
     public static final String CATEGORY = "general";
 
@@ -140,7 +135,7 @@ public final class GeneralProxyConfig extends SocksProxyClientConfig {
         customCredential.setPassword(password);
     }
 
-    public static int getSocksVersion() {
-        return socksVersion.getValue().ver;
+    public static SocksVersion getSocksVersion() {
+        return socksVersion.getValue();
     }
 }

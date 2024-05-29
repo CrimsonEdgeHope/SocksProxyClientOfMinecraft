@@ -66,12 +66,12 @@ public class ClientConnectionMixin {
 
         final SocketAddress sa = proxySelection.address();
         switch (GeneralProxyConfig.getSocksVersion()) {
-            case 4:
+            case SOCKS4:
                 LOGGER.info("Using Socks4 proxy {} on {}", sa, address);
                 pipeline.addFirst("socks",
                         new Socks4ProxyHandler(sa, proxyCredential.getUsername()));
                 break;
-            case 5:
+            case SOCKS5:
                 LOGGER.info("Using Socks5 proxy {} on {}", sa, address);
                 pipeline.addFirst("socks",
                         new Socks5ProxyHandler(sa, proxyCredential.getUsername(), proxyCredential.getPassword()));
