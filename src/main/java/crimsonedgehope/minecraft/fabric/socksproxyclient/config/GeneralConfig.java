@@ -1,44 +1,36 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
 
 import com.google.gson.JsonObject;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
-public final class GeneralProxyConfig extends SocksProxyClientConfig {
+public final class GeneralConfig extends SocksProxyClientConfig {
 
-    public static final GeneralProxyConfig INSTANCE;
+    public static final GeneralConfig INSTANCE;
 
     static {
-        INSTANCE = new GeneralProxyConfig();
+        INSTANCE = new GeneralConfig();
     }
 
-    public enum SocksVersion {
-        SOCKS4,
-        SOCKS5;
-    }
     public static final String CATEGORY = "general";
 
-    public static final SocksProxyClientConfigEntry<Boolean> useProxy =
-            new SocksProxyClientConfigEntry<>(GeneralProxyConfig.class, "useProxy", false);
-    public static final SocksProxyClientConfigEntry<SocksVersion> socksVersion =
-            new SocksProxyClientConfigEntry<>(GeneralProxyConfig.class, "socksVersion", SocksVersion.SOCKS5);
-    public static final SocksProxyClientConfigEntry<String> customProxyHost =
-            new SocksProxyClientConfigEntry<>(GeneralProxyConfig.class, "customProxyHost", "localhost");
-    public static final SocksProxyClientConfigEntry<Integer> customProxyPort =
-            new SocksProxyClientConfigEntry<>(GeneralProxyConfig.class, "customProxyPort", 1080);
-    public static final SocksProxyClientConfigEntry<String> customProxyUsername =
-            new SocksProxyClientConfigEntry<>(GeneralProxyConfig.class, "customProxyUsername", "");
-    public static final SocksProxyClientConfigEntry<String> customProxyPassword =
-            new SocksProxyClientConfigEntry<>(GeneralProxyConfig.class, "customProxyPassword", "");
-    public static final SocksProxyClientConfigEntry<Boolean> imposeProxyOnLoopback =
-            new SocksProxyClientConfigEntry<>(GeneralProxyConfig.class, "imposeProxyOnLoopback", false);
+    private static final SocksProxyClientConfigEntry<Boolean> useProxy =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "useProxy", false);
+    private static final SocksProxyClientConfigEntry<SocksVersion> socksVersion =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "socksVersion", SocksVersion.SOCKS5);
+    private static final SocksProxyClientConfigEntry<String> customProxyHost =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "customProxyHost", "localhost");
+    private static final SocksProxyClientConfigEntry<Integer> customProxyPort =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "customProxyPort", 1080);
+    private static final SocksProxyClientConfigEntry<String> customProxyUsername =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "customProxyUsername", "");
+    private static final SocksProxyClientConfigEntry<String> customProxyPassword =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "customProxyPassword", "");
 
-    private GeneralProxyConfig() {
+    private GeneralConfig() {
         super("general.json");
     }
 
@@ -51,20 +43,17 @@ public final class GeneralProxyConfig extends SocksProxyClientConfig {
         obj.addProperty(customProxyPort.getEntry(), customProxyPort.getDefaultValue());
         obj.addProperty(customProxyUsername.getEntry(), customProxyUsername.getDefaultValue());
         obj.addProperty(customProxyPassword.getEntry(), customProxyPassword.getDefaultValue());
-        obj.addProperty(imposeProxyOnLoopback.getEntry(), imposeProxyOnLoopback.getDefaultValue());
         return obj;
     }
 
     @Override
-    public void fromJsonObject(JsonObject object) {
-        JsonObject entries = object;
+    public void fromJsonObject(JsonObject entries) {
         useProxy.setValue(entries.get(useProxy.getEntry()).getAsBoolean());
         socksVersion.setValue(SocksVersion.valueOf(entries.get(socksVersion.getEntry()).getAsString()));
         customProxyHost.setValue(entries.get(customProxyHost.getEntry()).getAsString());
         customProxyPort.setValue(entries.get(customProxyPort.getEntry()).getAsInt());
         customProxyUsername.setValue(entries.get(customProxyUsername.getEntry()).getAsString());
         customProxyPassword.setValue(entries.get(customProxyPassword.getEntry()).getAsString());
-        imposeProxyOnLoopback.setValue(entries.get(imposeProxyOnLoopback.getEntry()).getAsBoolean());
     }
 
     @Override
@@ -76,16 +65,16 @@ public final class GeneralProxyConfig extends SocksProxyClientConfig {
         obj.addProperty(customProxyPort.getEntry(), customProxyPort.getValue());
         obj.addProperty(customProxyUsername.getEntry(), customProxyUsername.getValue());
         obj.addProperty(customProxyPassword.getEntry(), customProxyPassword.getValue());
-        obj.addProperty(imposeProxyOnLoopback.getEntry(), imposeProxyOnLoopback.getValue());
         return obj;
+    }
+
+    public static boolean usingProxy() {
+        return useProxy.getValue();
     }
 
     @Nullable
     public static Proxy getProxy() {
-        return getProxy(useProxy.getValue());
-    }
-    public static Proxy getProxyForLoopback() {
-        return getProxy(loopbackProxyOption());
+        return getProxy(usingProxy());
     }
 
     @Nullable
@@ -101,26 +90,14 @@ public final class GeneralProxyConfig extends SocksProxyClientConfig {
         return new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(customProxyHost.getValue(), customProxyPort.getValue()));
     }
 
-    public static Credential getProxyCredential() {
+    public static ProxyCredential getProxyCredential() {
         return getCustomCredential();
     }
 
-    public static boolean loopbackProxyOption() {
-        return imposeProxyOnLoopback.getValue();
-    }
-
     @Getter
-    @Setter
-    @AllArgsConstructor
-    public static final class Credential {
-        @Nullable private String username;
-        @Nullable private String password;
-    }
-
+    private static ProxyCredential customCredential = new ProxyCredential(null, null);
     @Getter
-    private static Credential customCredential = new Credential(null, null);
-    @Getter
-    private static Credential credentialFromGameParam;
+    private static ProxyCredential credentialFromGameParam;
 
     public static void setCustomCredential(@Nullable String username, @Nullable String password) {
         setCustomCredentialUsername(username);

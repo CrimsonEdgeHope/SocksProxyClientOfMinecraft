@@ -1,7 +1,8 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralProxyConfig;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ProxyCredential;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.proxy.Socks4ProxyHandler;
@@ -52,9 +53,9 @@ public class ClientConnectionMixin {
 
         Proxy proxySelection;
         if (address.isLoopbackAddress()) {
-            proxySelection = GeneralProxyConfig.getProxyForLoopback();
+            proxySelection = ServerConfig.getProxyForLoopback();
         } else {
-            proxySelection = GeneralProxyConfig.getProxy();
+            proxySelection = ServerConfig.getProxy();
         }
 
         if (proxySelection == null) {
@@ -62,10 +63,10 @@ public class ClientConnectionMixin {
             return;
         }
 
-        GeneralProxyConfig.Credential proxyCredential = GeneralProxyConfig.getProxyCredential();
+        ProxyCredential proxyCredential = ServerConfig.getProxyCredential();
 
         final SocketAddress sa = proxySelection.address();
-        switch (GeneralProxyConfig.getSocksVersion()) {
+        switch (ServerConfig.getSocksVersion()) {
             case SOCKS4:
                 LOGGER.info("Using Socks4 proxy {} on {}", sa, address);
                 pipeline.addFirst("socks",

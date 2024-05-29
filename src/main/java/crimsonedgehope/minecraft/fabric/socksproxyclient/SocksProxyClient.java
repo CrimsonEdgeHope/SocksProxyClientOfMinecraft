@@ -1,8 +1,13 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient;
 
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralProxyConfig;
+import com.mojang.authlib.minecraft.UserApiService;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ConfigUtils;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.mixin.MinecraftClientAccessor;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyServerUtils;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpToSocksServer;
 import net.fabricmc.api.ClientModInitializer;
+import net.minecraft.client.MinecraftClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,12 +17,12 @@ public class SocksProxyClient implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(LOGGER_NAME);
 
 	public static void preInit() {
-		GeneralProxyConfig.INSTANCE.load();
+		ConfigUtils.loadAll();
 		HttpToSocksServer.INSTANCE.fire();
 	}
 
 	@Override
 	public void onInitializeClient() {
-
+		HttpProxyServerUtils.recreateAuthenticationService();
 	}
 }

@@ -1,6 +1,6 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpToSocksServer;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyServerUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -16,9 +16,6 @@ import java.net.Proxy;
 public class ServerResourcePackProviderMixin {
     @Redirect(method = "download", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getNetworkProxy()Ljava/net/Proxy;"))
     private Proxy redirectedGet(MinecraftClient instance) {
-        if (!HttpToSocksServer.INSTANCE.isFired()) {
-            return Proxy.NO_PROXY;
-        }
-        return new Proxy(Proxy.Type.HTTP, HttpToSocksServer.INSTANCE.getChannel().localAddress());
+        return HttpProxyServerUtils.getProxyObject();
     }
 }

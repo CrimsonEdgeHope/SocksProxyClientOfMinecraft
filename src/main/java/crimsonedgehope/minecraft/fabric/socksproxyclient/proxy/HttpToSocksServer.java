@@ -1,7 +1,8 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralProxyConfig;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ProxyCredential;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
@@ -69,7 +70,7 @@ public class HttpToSocksServer {
     }
 
     public void fire() {
-        if (!GeneralProxyConfig.useProxy.getValue()) {
+        if (!ServerConfig.usingProxy()) {
             LOGGER.info("Not starting internal http proxy.");
             return;
         }
@@ -170,9 +171,9 @@ public class HttpToSocksServer {
             if (remote == null) {
                 boolean noResolver = true;
                 ChannelHandler handler;
-                Proxy proxySelection = GeneralProxyConfig.getProxy();
-                GeneralProxyConfig.Credential proxyCredential = GeneralProxyConfig.getProxyCredential();
-                switch (GeneralProxyConfig.getSocksVersion()) {
+                Proxy proxySelection = ServerConfig.getProxy();
+                ProxyCredential proxyCredential = ServerConfig.getProxyCredential();
+                switch (ServerConfig.getSocksVersion()) {
                     case SOCKS4:
                         LOGGER.debug("http - Socks4. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
                         handler = new Socks4ProxyHandler(proxySelection.address(), proxyCredential.getUsername());

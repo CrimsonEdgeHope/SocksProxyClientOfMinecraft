@@ -1,7 +1,7 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpToSocksServer;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyServerUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -12,10 +12,6 @@ public class YggdrasilAuthenticationServiceMixin extends HttpAuthenticationServi
     @Override
     protected void redirectedGet(CallbackInfoReturnable<Proxy> cir) {
         cir.cancel();
-        if (!HttpToSocksServer.INSTANCE.isFired()) {
-            cir.setReturnValue(Proxy.NO_PROXY);
-        } else {
-            cir.setReturnValue(new Proxy(Proxy.Type.HTTP, HttpToSocksServer.INSTANCE.getChannel().localAddress()));
-        }
+        cir.setReturnValue(HttpProxyServerUtils.getProxyObject());
     }
 }

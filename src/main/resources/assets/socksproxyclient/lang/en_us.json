@@ -7,8 +7,12 @@
   "socksproxyclient.config.general.useProxyFrom": "Use proxy from",
   "socksproxyclient.config.general.socksVersion": "SOCKS proxy version",
   "socksproxyclient.config.general.customProxyHost": "Custom proxy host",
+  "socksproxyclient.config.general.customProxyHost.error": "\"Custom proxy host\" field input cannot be empty",
   "socksproxyclient.config.general.customProxyPort": "Custom proxy port",
+  "socksproxyclient.config.general.customProxyPort.error": "Invalid port number",
   "socksproxyclient.config.general.customProxyUsername": "Custom proxy username",
   "socksproxyclient.config.general.customProxyPassword": "Custom proxy password",
-  "socksproxyclient.config.general.imposeProxyOnLoopback": "Impose proxy on loopback"
+
+  "socksproxyclient.config.server": "Server settings",
+  "socksproxyclient.config.server.imposeProxyOnLoopback": "Impose proxy on loopback"
 }

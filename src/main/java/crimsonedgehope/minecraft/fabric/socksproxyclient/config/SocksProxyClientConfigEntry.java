@@ -1,6 +1,5 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
 
-import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeyUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static crimsonedgehope.minecraft.fabric.socksproxyclient.config.ConfigUtils.categoryField;
 
 public class SocksProxyClientConfigEntry<T> {
     @NotNull @Getter
@@ -66,14 +67,7 @@ public class SocksProxyClientConfigEntry<T> {
         this.defaultValue = defaultValue;
         this.value = this.defaultValue;
         this.configClass = configClass;
-        try {
-            this.category = (String) this.configClass.getDeclaredField("CATEGORY").get(null);
-        } catch (Exception e) {
-            SocksProxyClient.LOGGER.error("CATEGORY static field missing or inaccessible?!", e);
-        }
-        if (this.category == null) {
-            this.category = this.configClass.getSimpleName();
-        }
+        this.category = categoryField(this.configClass);
         this.translateKey = TranslateKeyUtil.configItem(this.category, this.entry);
         this.desiredLinesOfDescription = linesOfDescription;
     }
