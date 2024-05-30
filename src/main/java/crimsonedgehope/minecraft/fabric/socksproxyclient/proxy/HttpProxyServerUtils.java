@@ -40,17 +40,19 @@ public final class HttpProxyServerUtils {
     }
 
     public static void createAuthenticationService() {
-        SocksProxyClient.LOGGER.debug("recreateAuthenticationService");
-        MinecraftClient client = MinecraftClient.getInstance();
-        RunArgs args = MinecraftClientMixinVariables.getRunArgs();
-        MinecraftClientAccessor accessor = ((MinecraftClientAccessor) client);
-        accessor.setAuthenticationService(new YggdrasilAuthenticationService(getProxyObject()));
-        accessor.setSessionService(accessor.getAuthenticationService().createMinecraftSessionService());
-        accessor.setUserApiService(accessor.invokeCreateUserApiService(accessor.getAuthenticationService(), args));
-        accessor.setSkinProvider(new PlayerSkinProvider(accessor.getTextureManager(), new File(args.directories.assetDir, "skins"), accessor.getSessionService()));
-        accessor.setSocialInteractionsManager(new SocialInteractionsManager(client, accessor.getUserApiService()));
-        accessor.setTelemetryManager(new TelemetryManager(client, accessor.getUserApiService(), args.network.session));
-        accessor.setProfileKeys(ProfileKeys.create(accessor.getUserApiService(), args.network.session, client.runDirectory.toPath()));
-        accessor.setAbuseReportContext(AbuseReportContext.create(ReporterEnvironment.ofIntegratedServer(), accessor.getUserApiService()));
+        final MinecraftClient client = MinecraftClient.getInstance();
+        client.submit(() -> {
+            SocksProxyClient.LOGGER.debug("recreateAuthenticationService");
+            RunArgs args = MinecraftClientMixinVariables.getRunArgs();
+            MinecraftClientAccessor accessor = ((MinecraftClientAccessor) client);
+            accessor.setAuthenticationService(new YggdrasilAuthenticationService(getProxyObject()));
+            accessor.setSessionService(accessor.getAuthenticationService().createMinecraftSessionService());
+            accessor.setUserApiService(accessor.invokeCreateUserApiService(accessor.getAuthenticationService(), args));
+            accessor.setSkinProvider(new PlayerSkinProvider(accessor.getTextureManager(), new File(args.directories.assetDir, "skins"), accessor.getSessionService()));
+            accessor.setSocialInteractionsManager(new SocialInteractionsManager(client, accessor.getUserApiService()));
+            accessor.setTelemetryManager(new TelemetryManager(client, accessor.getUserApiService(), args.network.session));
+            accessor.setProfileKeys(ProfileKeys.create(accessor.getUserApiService(), args.network.session, client.runDirectory.toPath()));
+            accessor.setAbuseReportContext(AbuseReportContext.create(ReporterEnvironment.ofIntegratedServer(), accessor.getUserApiService()));
+        });
     }
 }

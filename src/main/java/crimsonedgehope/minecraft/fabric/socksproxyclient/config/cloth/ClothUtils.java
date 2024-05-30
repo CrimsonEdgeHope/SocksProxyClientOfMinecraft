@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ClothUtils {
 
-    public static void loadAll() {
+    public static void loadAll() throws Exception {
         ConfigUtils.loadAll();
     }
 
-    public static void saveAll() {
+    public static void saveAll() throws Exception {
         ConfigUtils.saveAll();
     }
 }

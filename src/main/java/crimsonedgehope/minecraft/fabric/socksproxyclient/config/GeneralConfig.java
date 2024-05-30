@@ -9,7 +9,7 @@ import java.net.Proxy;
 
 public final class GeneralConfig extends SocksProxyClientConfig {
 
-    public static final GeneralConfig INSTANCE;
+    private static final GeneralConfig INSTANCE;
 
     static {
         INSTANCE = new GeneralConfig();

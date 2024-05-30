@@ -6,7 +6,7 @@ import java.net.Proxy;
 
 public final class ServerConfig extends SocksProxyClientConfig {
 
-    public static final ServerConfig INSTANCE;
+    private static final ServerConfig INSTANCE;
 
     static {
         INSTANCE = new ServerConfig();

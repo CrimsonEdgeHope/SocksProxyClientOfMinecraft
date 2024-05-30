@@ -23,7 +23,11 @@ public final class ClothConfigScreen {
 
         ConfigBuilder builder = cloth.getConfigBuilder();
         builder.setSavingRunnable(() -> {
-            ClothUtils.saveAll();
+            try {
+                ClothUtils.saveAll();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             HttpProxyServerUtils.createAuthenticationService();
         });
         builder.setTransparentBackground(true)

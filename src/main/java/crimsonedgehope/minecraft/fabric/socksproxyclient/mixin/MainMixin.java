@@ -19,7 +19,7 @@ public class MainMixin {
                     ordinal = 0,
                     shift = At.Shift.BEFORE)
     )
-    private static void injected(String[] args, CallbackInfo ci) {
+    private static void injected(String[] args, CallbackInfo ci) throws Exception {
         SocksProxyClient.preInit();
     }
 }

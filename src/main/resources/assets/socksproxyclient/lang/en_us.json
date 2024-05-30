@@ -3,7 +3,7 @@
 
   "socksproxyclient.config": "SocksProxyClient config",
   "socksproxyclient.config.general": "General settings",
-  "socksproxyclient.config.general.useProxy": "Use proxy on minecraft servers",
+  "socksproxyclient.config.general.useProxy": "Use proxy",
   "socksproxyclient.config.general.useProxyFrom": "Use proxy from",
   "socksproxyclient.config.general.socksVersion": "SOCKS proxy version",
   "socksproxyclient.config.general.customProxyHost": "Custom proxy host",

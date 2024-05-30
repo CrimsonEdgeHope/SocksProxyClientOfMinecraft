@@ -67,7 +67,11 @@ public class SocksProxyClientConfigEntry<T> {
         this.defaultValue = defaultValue;
         this.value = this.defaultValue;
         this.configClass = configClass;
-        this.category = categoryField(this.configClass);
+        try {
+            this.category = categoryField(this.configClass);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         this.translateKey = TranslateKeyUtil.configItem(this.category, this.entry);
         this.desiredLinesOfDescription = linesOfDescription;
     }
