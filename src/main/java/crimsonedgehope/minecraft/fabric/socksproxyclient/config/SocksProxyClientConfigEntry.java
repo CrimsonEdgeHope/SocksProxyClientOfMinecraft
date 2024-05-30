@@ -15,8 +15,6 @@ public class SocksProxyClientConfigEntry<T> {
     @NotNull @Getter
     private final Class<? extends SocksProxyClientConfig> configClass;
     @NotNull @Getter
-    private String category;
-    @NotNull @Getter
     private String entry;
 
     @Getter
@@ -67,12 +65,13 @@ public class SocksProxyClientConfigEntry<T> {
         this.defaultValue = defaultValue;
         this.value = this.defaultValue;
         this.configClass = configClass;
+        String category;
         try {
-            this.category = categoryField(this.configClass);
+            category = categoryField(this.configClass);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        this.translateKey = TranslateKeyUtil.configItem(this.category, this.entry);
+        this.translateKey = TranslateKeyUtil.configItem(category, this.entry);
         this.desiredLinesOfDescription = linesOfDescription;
     }
 }

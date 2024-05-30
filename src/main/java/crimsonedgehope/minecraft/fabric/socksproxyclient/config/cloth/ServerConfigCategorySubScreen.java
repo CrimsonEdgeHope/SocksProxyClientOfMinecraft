@@ -2,42 +2,70 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.config.cloth;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.SocksProxyClientConfigEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeyUtil;
+import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
-import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import me.shedaniel.clothconfig2.gui.entries.BooleanListEntry;
+import me.shedaniel.clothconfig2.api.Requirement;
 
 import static crimsonedgehope.minecraft.fabric.socksproxyclient.config.ConfigUtils.categoryField;
 
-public final class ServerConfigCategorySubScreen extends CategorySubScreen<ServerConfig> {
+final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerConfig> {
 
-    public ServerConfigCategorySubScreen() {
-        super(ServerConfig.class);
+    final GeneralConfigCategorySubScreen generalConfigCategorySubScreen;
+
+    ClothConfigEntry<Boolean> httpRemoteResolve;
+    ClothConfigEntry<Boolean> imposeProxyOnLoopback;
+
+    public ServerConfigCategorySubScreen(
+            ClothAccess clothAccess,
+            GeneralConfigCategorySubScreen generalConfigCategorySubScreen
+    ) throws Exception {
+        super(clothAccess, ServerConfig.class);
+        this.generalConfigCategorySubScreen = generalConfigCategorySubScreen;
+
+        httpRemoteResolve = new ClothConfigEntry<>(clothAccess.configEntryBuilder(), entryField("httpRemoteResolve", Boolean.class)) {
+            @Override
+            protected AbstractConfigListEntry<Boolean> buildClothConfigEntry() {
+                return this.getBuilder().startBooleanToggle(
+                                this.getConfigEntry().getTranslatableText(),
+                                this.getConfigEntry().getValue()
+                        )
+                        .setRequirement(Requirement.isTrue(generalConfigCategorySubScreen.useProxy.getClothConfigEntry()))
+                        .setDefaultValue(this.getConfigEntry().getDefaultValue())
+                        .setSaveConsumer(this.getConfigEntry()::setValue)
+                        .build();
+            }
+        };
+
+        imposeProxyOnLoopback = new ClothConfigEntry<>(clothAccess.configEntryBuilder(), entryField("imposeProxyOnLoopback", Boolean.class)) {
+            @Override
+            protected AbstractConfigListEntry<Boolean> buildClothConfigEntry() {
+                return this.getBuilder().startBooleanToggle(
+                                this.getConfigEntry().getTranslatableText(),
+                                this.getConfigEntry().getValue()
+                        )
+                        .setRequirement(Requirement.isTrue(generalConfigCategorySubScreen.useProxy.getClothConfigEntry()))
+                        .setDefaultValue(this.getConfigEntry().getDefaultValue())
+                        .setSaveConsumer(this.getConfigEntry()::setValue)
+                        .build();
+            }
+        };
     }
 
     private ConfigCategory buildCategory0(ClothAccess cloth) throws Exception {
-        ConfigEntryBuilder entryBuilder = cloth.configEntryBuilder();
         ConfigCategory serverCategory =
                 cloth.configCategory(TranslateKeyUtil.configItemAsText(categoryField(this.configClass)));
 
-        SocksProxyClientConfigEntry<Boolean> imposeProxyOnLoopback = entryField("imposeProxyOnLoopback", Boolean.class);
-        BooleanListEntry imposeProxyOnLoopbackEntry = entryBuilder.startBooleanToggle(
-                        imposeProxyOnLoopback.getTranslatableText(),
-                        imposeProxyOnLoopback.getValue()
-                )
-                .setDefaultValue(imposeProxyOnLoopback.getDefaultValue())
-                .setSaveConsumer(imposeProxyOnLoopback::setValue)
-                .build();
-        serverCategory.addEntry(imposeProxyOnLoopbackEntry);
+        serverCategory.addEntry(httpRemoteResolve.getClothConfigEntry());
+        serverCategory.addEntry(imposeProxyOnLoopback.getClothConfigEntry());
 
         return serverCategory;
     }
 
     @Override
-    public ConfigCategory buildCategory(ClothAccess cloth) {
+    public ConfigCategory buildClothCategory() {
         try {
-            return buildCategory0(cloth);
+            return buildCategory0(this.clothAccess);
         } catch (Exception e) {
             SocksProxyClient.LOGGER.error("Error building cloth category screen!", e);
             throw new RuntimeException(e);

@@ -3,15 +3,15 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.config.cloth;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ConfigUtils;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.SocksProxyClientConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.SocksProxyClientConfigEntry;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 
-public abstract class CategorySubScreen<C extends SocksProxyClientConfig> {
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+abstract class ClothCategorySubScreen<C extends SocksProxyClientConfig> {
 
+    protected final ClothAccess clothAccess;
     protected final Class<C> configClass;
-
-    protected CategorySubScreen(final Class<C> configClass) {
-        this.configClass = configClass;
-    }
 
     protected static <C extends SocksProxyClientConfig> C getConfigInstance(final Class<C> clazz) throws Exception {
         return ConfigUtils.configInstance(clazz);
@@ -25,5 +25,5 @@ public abstract class CategorySubScreen<C extends SocksProxyClientConfig> {
         return getConfigInstance(this.configClass).getEntryField(fieldName, valueType);
     }
 
-    public abstract ConfigCategory buildCategory(ClothAccess cloth);
+    public abstract ConfigCategory buildClothCategory();
 }

@@ -50,8 +50,13 @@ public class MultiplayerScreenMixin {
 
         ButtonWidget openConfigScreenButton = ButtonWidget.builder(
                 TranslateKeyUtil.itemAsText(Arrays.asList("screen", "config")),
-                button -> ((ScreenAccessor) this).getClient().setScreen(ClothConfigScreen.getScreen((MultiplayerScreen) (Object) this))
-        ).width(152).build();
+                button -> {
+                    try {
+                        ((ScreenAccessor) this).getClient().setScreen(ClothConfigScreen.getScreen((MultiplayerScreen) (Object) this));
+                    } catch (Exception e) {
+                        button.active = false;
+                    }
+                }).width(152).build();
         try {
             Class.forName("me.shedaniel.clothconfig2.api.ConfigBuilder");
         } catch (Exception e) {

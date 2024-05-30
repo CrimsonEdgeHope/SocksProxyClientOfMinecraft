@@ -15,11 +15,13 @@ public final class ClothConfigScreen {
 
     private static ClothAccess cloth;
 
-    public static Screen getScreen(Screen parentScreen) {
+    public static Screen getScreen(Screen parentScreen) throws Exception {
         cloth = new ClothAccess(parentScreen, TranslateKeyUtil.configItemAsText());
 
-        new GeneralConfigCategorySubScreen().buildCategory(cloth);
-        new ServerConfigCategorySubScreen().buildCategory(cloth);
+        GeneralConfigCategorySubScreen generalConfigCategorySubScreen = new GeneralConfigCategorySubScreen(cloth);
+        generalConfigCategorySubScreen.buildClothCategory();
+        ServerConfigCategorySubScreen serverConfigCategorySubScreen = new ServerConfigCategorySubScreen(cloth, generalConfigCategorySubScreen);
+        serverConfigCategorySubScreen.buildClothCategory();
 
         ConfigBuilder builder = cloth.getConfigBuilder();
         builder.setSavingRunnable(() -> {

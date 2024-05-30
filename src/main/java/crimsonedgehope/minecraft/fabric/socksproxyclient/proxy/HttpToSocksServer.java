@@ -169,7 +169,7 @@ public class HttpToSocksServer {
             }
 
             if (remote == null) {
-                boolean noResolver = true;
+                boolean noResolver = ServerConfig.remoteResolve();
                 ChannelHandler handler;
                 Proxy proxySelection = ServerConfig.getProxy();
                 ProxyCredential proxyCredential = ServerConfig.getProxyCredential();
@@ -177,6 +177,7 @@ public class HttpToSocksServer {
                     case SOCKS4:
                         LOGGER.debug("http - Socks4. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
                         handler = new Socks4ProxyHandler(proxySelection.address(), proxyCredential.getUsername());
+                        noResolver = false;
                         break;
                     case SOCKS5:
                         LOGGER.debug("http - Socks5. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
@@ -204,6 +205,7 @@ public class HttpToSocksServer {
                 if (noResolver) {
                     b = b.disableResolver();
                 }
+                LOGGER.debug("noResolver: {}", noResolver);
                 ChannelFuture future = b.connect(remoteHttpHost, remoteHttpPort);
                 future.addListener(f -> {
                     if (f.isSuccess()) {

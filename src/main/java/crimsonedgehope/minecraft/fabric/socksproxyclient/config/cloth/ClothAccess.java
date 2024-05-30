@@ -7,8 +7,7 @@ import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
-public final class ClothAccess {
-
+final class ClothAccess {
     @Getter
     private final Screen parentScreen;
     @Getter

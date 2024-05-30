@@ -12,6 +12,8 @@ public final class ServerConfig extends SocksProxyClientConfig {
         INSTANCE = new ServerConfig();
     }
 
+    private static final SocksProxyClientConfigEntry<Boolean> httpRemoteResolve =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "httpRemoteResolve", true);
     private static final SocksProxyClientConfigEntry<Boolean> imposeProxyOnLoopback =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "imposeProxyOnLoopback", false);
 
@@ -45,9 +47,14 @@ public final class ServerConfig extends SocksProxyClientConfig {
         return GeneralConfig.getSocksVersion();
     }
 
+    public static boolean remoteResolve() {
+        return httpRemoteResolve.getDefaultValue();
+    }
+
     @Override
     public JsonObject defaultEntries() {
         JsonObject obj = new JsonObject();
+        obj.addProperty(httpRemoteResolve.getEntry(), httpRemoteResolve.getDefaultValue());
         obj.addProperty(imposeProxyOnLoopback.getEntry(), imposeProxyOnLoopback.getDefaultValue());
         return obj;
     }
@@ -55,12 +62,14 @@ public final class ServerConfig extends SocksProxyClientConfig {
     @Override
     public JsonObject toJsonObject() {
         JsonObject obj = new JsonObject();
+        obj.addProperty(httpRemoteResolve.getEntry(), httpRemoteResolve.getValue());
         obj.addProperty(imposeProxyOnLoopback.getEntry(), imposeProxyOnLoopback.getValue());
         return obj;
     }
 
     @Override
     public void fromJsonObject(JsonObject object) {
+        httpRemoteResolve.setValue(object.get(httpRemoteResolve.getEntry()).getAsBoolean());
         imposeProxyOnLoopback.setValue(object.get(imposeProxyOnLoopback.getEntry()).getAsBoolean());
     }
 }
