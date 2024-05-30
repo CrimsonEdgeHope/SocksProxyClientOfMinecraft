@@ -3,6 +3,8 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import com.mojang.authlib.minecraft.UserApiService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.network.SocialInteractionsManager;
@@ -16,6 +18,7 @@ import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
+@Environment(EnvType.CLIENT)
 @Mixin(MinecraftClient.class)
 public interface MinecraftClientAccessor {
     @Accessor

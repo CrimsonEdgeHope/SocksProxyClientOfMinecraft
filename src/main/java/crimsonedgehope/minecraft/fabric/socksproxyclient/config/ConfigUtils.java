@@ -1,6 +1,5 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
 
-import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

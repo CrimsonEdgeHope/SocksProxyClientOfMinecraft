@@ -3,6 +3,8 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.cloth.ClothConfigScreen;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeyUtil;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyServerUtils;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.AxisGridWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -16,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.Arrays;
 
+@Environment(EnvType.CLIENT)
 @Mixin(MultiplayerScreen.class)
 public class MultiplayerScreenMixin {
     @Inject(method = "init",
@@ -57,12 +60,12 @@ public class MultiplayerScreenMixin {
                         button.active = false;
                     }
                 }).width(152).build();
+        ((ScreenAccessor) this).invokeAddDrawableChild(openConfigScreenButton);
+        axisGridWidget3.add(openConfigScreenButton);
         try {
-            Class.forName("me.shedaniel.clothconfig2.api.ConfigBuilder");
+            Class.forName("me.shedaniel.clothconfig2.api.ValueHolder");
         } catch (Exception e) {
             openConfigScreenButton.active = false;
         }
-        ((ScreenAccessor) this).invokeAddDrawableChild(openConfigScreenButton);
-        axisGridWidget3.add(openConfigScreenButton);
     }
 }
