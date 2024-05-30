@@ -1,0 +1,36 @@
+name: Jar
+
+on:
+  push:
+    branches:
+      - "1.20.1"
+    paths:
+      - src/**/*.java
+      - src/resources/
+  workflow_dispatch:
+
+jobs:
+  buildJar:
+    name: Build jar
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: "${{ github.sha }}"
+      - name: Setup Java 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: "17"
+          distribution: "oracle"
+          cache: "gradle"
+      - name: Gradle build
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build
+      - name: Upload jar artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: buildJar-${{ github.sha }}-${{ github.run_id }}-java17
+          path: './build/libs/*.jar'
+          retention-days: 7
