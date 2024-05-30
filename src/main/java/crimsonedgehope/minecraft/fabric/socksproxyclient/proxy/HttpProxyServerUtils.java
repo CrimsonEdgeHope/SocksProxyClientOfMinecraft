@@ -19,6 +19,7 @@ import net.minecraft.client.util.telemetry.TelemetryManager;
 
 import java.io.File;
 import java.net.Proxy;
+import java.util.concurrent.CompletableFuture;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class HttpProxyServerUtils {
@@ -32,17 +33,21 @@ public final class HttpProxyServerUtils {
         }
     }
 
-    public static void recreateAuthenticationService() {
+    public static CompletableFuture<Void> recreateAuthenticationService() {
         if (((MinecraftClientAccessor) MinecraftClient.getInstance()).getUserApiService().equals(UserApiService.OFFLINE)
                 && GeneralConfig.usingProxy()) {
-            HttpProxyServerUtils.createAuthenticationService();
+            return HttpProxyServerUtils.createAuthenticationService();
         }
+        return CompletableFuture.runAsync(() -> {});
     }
 
-    public static void createAuthenticationService() {
+    public static CompletableFuture<Void> createAuthenticationService() {
         final MinecraftClient client = MinecraftClient.getInstance();
-        client.submit(() -> {
+        return client.submit(() -> {
             SocksProxyClient.LOGGER.debug("recreateAuthenticationService");
+            SocksProxyClient.LOGGER.info("Attempt to recreate authentication service");
+            HttpToSocksServer.INSTANCE.cease();
+            HttpToSocksServer.INSTANCE.fire();
             RunArgs args = MinecraftClientMixinVariables.getRunArgs();
             MinecraftClientAccessor accessor = ((MinecraftClientAccessor) client);
             accessor.setAuthenticationService(new YggdrasilAuthenticationService(getProxyObject()));
@@ -53,6 +58,7 @@ public final class HttpProxyServerUtils {
             accessor.setTelemetryManager(new TelemetryManager(client, accessor.getUserApiService(), args.network.session));
             accessor.setProfileKeys(ProfileKeys.create(accessor.getUserApiService(), args.network.session, client.runDirectory.toPath()));
             accessor.setAbuseReportContext(AbuseReportContext.create(ReporterEnvironment.ofIntegratedServer(), accessor.getUserApiService()));
+            SocksProxyClient.LOGGER.info("Recreated authentication service.");
         });
     }
 }

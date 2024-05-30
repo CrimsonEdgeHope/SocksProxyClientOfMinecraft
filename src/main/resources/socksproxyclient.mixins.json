@@ -9,7 +9,9 @@
     "MainMixin",
     "MinecraftClientAccessor",
     "MinecraftClientMixin",
+    "MultiplayerScreenMixin",
     "PlayerSkinTextureMixin",
+    "ScreenAccessor",
     "ServerResourcePackProviderMixin",
     "YggdrasilAuthenticationServiceMixin"
   ],

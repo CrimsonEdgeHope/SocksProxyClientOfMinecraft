@@ -39,6 +39,7 @@ import org.slf4j.Logger;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Getter
 public class HttpToSocksServer {
@@ -84,46 +85,45 @@ public class HttpToSocksServer {
             EventLoopGroup clientGroup = new NioEventLoopGroup();
             try {
                 ServerBootstrap b = new ServerBootstrap();
-                    ChannelFuture future = b.group(acceptorGroup, clientGroup)
-                            .channel(NioServerSocketChannel.class)
-                            .handler(new LoggingHandler())
-                            .childHandler(new ChannelInitializer<SocketChannel>() {
-                                @Override
-                                public void initChannel(SocketChannel channel) {
-                                    channel.pipeline()
-                                            .addLast("http_aggre", new HttpObjectAggregator(262144000))
-                                            .addLast("http_req_dec", new HttpRequestDecoder())
-                                            .addLast("opentunnel", new HttpProxyClientInboundHandler());
-                                }
-                            })
-                            .bind(host, port).sync();
-                    channel = future.addListener(f -> {
-                        if (f.isSuccess()) {
-                            port = ((InetSocketAddress) future.channel().localAddress()).getPort();
-                            fired = true;
-                            LOGGER.info("Internal http proxy listening on {}", future.channel().localAddress());
-                        }
-                    }).channel();
-                    channel.closeFuture().sync().addListener(f -> {
-                        if (f.isDone()) {
-                            LOGGER.info("Internal http proxy off.");
-                            fired = false;
-                        }
-                    }).channel();
+                ChannelFuture future = b.group(acceptorGroup, clientGroup)
+                        .channel(NioServerSocketChannel.class)
+                        .handler(new LoggingHandler())
+                        .childHandler(new ChannelInitializer<SocketChannel>() {
+                            @Override
+                            public void initChannel(SocketChannel channel) {
+                                channel.pipeline()
+                                        .addLast("http_aggre", new HttpObjectAggregator(262144000))
+                                        .addLast("http_req_dec", new HttpRequestDecoder())
+                                        .addLast("opentunnel", new HttpProxyClientInboundHandler());
+                            }
+                        })
+                        .bind(host, port).sync();
+                channel = future.addListener(f -> {
+                    if (f.isSuccess()) {
+                        port = ((InetSocketAddress) future.channel().localAddress()).getPort();
+                        fired = true;
+                        LOGGER.info("Internal http proxy listening on {}", future.channel().localAddress());
+                    }
+                }).channel();
+                channel = channel.closeFuture().sync().addListener(f -> {
+                    LOGGER.info("Internal http proxy shutting off!");
+                }).channel();
             } catch (Exception e) {
                 LOGGER.error("Error starting internal http proxy!", e);
             } finally {
-                acceptorGroup.shutdownGracefully();
-                clientGroup.shutdownGracefully();
+                acceptorGroup.shutdownGracefully(1, 1, TimeUnit.MILLISECONDS);
+                clientGroup.shutdownGracefully(1, 1, TimeUnit.MILLISECONDS);
             }
         }).start();
     }
 
     public void cease() {
+        fired = false;
         if (channel != null) {
             channel.close();
             channel = null;
         }
+        this.port = 0;
     }
 
     @ChannelHandler.Sharable

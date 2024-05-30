@@ -14,5 +14,8 @@
   "socksproxyclient.config.general.customProxyPassword": "Custom proxy password",
 
   "socksproxyclient.config.server": "Server settings",
-  "socksproxyclient.config.server.imposeProxyOnLoopback": "Impose proxy on loopback"
+  "socksproxyclient.config.server.imposeProxyOnLoopback": "Impose proxy on loopback",
+
+  "socksproxyclient.screen.recreateAuth": "Recreate auth service",
+  "socksproxyclient.screen.config": "Open SocksProxyClient config"
 }
