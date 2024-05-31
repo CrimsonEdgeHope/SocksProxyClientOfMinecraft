@@ -1,5 +1,6 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.cloth.ClothConfigScreen;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeyUtil;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyServerUtils;
@@ -38,6 +39,9 @@ public class MultiplayerScreenMixin {
             AxisGridWidget axisGridWidget,
             AxisGridWidget axisGridWidget2
     ) {
+        if (!GeneralConfig.showButtonsInMultiplayerScreen()) {
+            return;
+        }
         adder.add(EmptyWidget.ofHeight(4));
         AxisGridWidget axisGridWidget3 = adder.add(new AxisGridWidget(308, 20, AxisGridWidget.DisplayAxis.HORIZONTAL));
 

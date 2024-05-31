@@ -8,6 +8,7 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpToSocksServer
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.Requirement;
+import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.minecraft.text.Text;
 
 import java.util.Optional;
@@ -16,11 +17,14 @@ import static crimsonedgehope.minecraft.fabric.socksproxyclient.config.ConfigUti
 
 final class GeneralConfigCategorySubScreen extends ClothCategorySubScreen<GeneralConfig> {
     ClothConfigEntry<Boolean> useProxy;
+
     ClothConfigEntry<SocksVersion> socksVersion;
     ClothConfigEntry<String> customProxyHost;
     ClothConfigEntry<Integer> customProxyPort;
     ClothConfigEntry<String> customProxyUsername;
     ClothConfigEntry<String> customProxyPassword;
+
+    ClothConfigEntry<Boolean> buttonsInMultiplayerScreen;
 
     public GeneralConfigCategorySubScreen(ClothAccess clothAccess) throws Exception {
         super(clothAccess, GeneralConfig.class);
@@ -141,18 +145,41 @@ final class GeneralConfigCategorySubScreen extends ClothCategorySubScreen<Genera
                         .build();
             }
         };
+
+        buttonsInMultiplayerScreen = new ClothConfigEntry<>(clothAccess.configEntryBuilder(), entryField("buttonsInMultiplayerScreen", Boolean.class)) {
+            @Override
+            protected AbstractConfigListEntry<Boolean> buildClothConfigEntry() {
+                return this.getBuilder().startBooleanToggle(
+                                this.getConfigEntry().getTranslatableText(),
+                                this.getConfigEntry().getValue()
+                        )
+                        .setDefaultValue(this.getConfigEntry().getDefaultValue())
+                        .setSaveConsumer(this.getConfigEntry()::setValue)
+                        .build();
+            }
+        };
     }
 
     private ConfigCategory buildCategory0(ClothAccess cloth) throws Exception {
-        ConfigCategory generalCategory =
-                cloth.configCategory(TranslateKeyUtil.configItemAsText(categoryField(this.configClass)));
+        String transKey = TranslateKeyUtil.configItem(categoryField(this.configClass));
+        Text text = Text.translatable(transKey);
+
+        ConfigCategory generalCategory = cloth.configCategory(text);
 
         generalCategory.addEntry(useProxy.getClothConfigEntry());
-        generalCategory.addEntry(socksVersion.getClothConfigEntry());
-        generalCategory.addEntry(customProxyHost.getClothConfigEntry());
-        generalCategory.addEntry(customProxyPort.getClothConfigEntry());
-        generalCategory.addEntry(customProxyUsername.getClothConfigEntry());
-        generalCategory.addEntry(customProxyPassword.getClothConfigEntry());
+
+        SubCategoryBuilder subProxyCateBuild = clothAccess.configEntryBuilder().startSubCategory(TranslateKeyUtil.itemAsText(transKey, "proxy"));
+        subProxyCateBuild.setExpanded(true);
+        subProxyCateBuild.setRequirement(Requirement.isTrue(useProxy.getClothConfigEntry()));
+
+        subProxyCateBuild.add(socksVersion.getClothConfigEntry());
+        subProxyCateBuild.add(customProxyHost.getClothConfigEntry());
+        subProxyCateBuild.add(customProxyPort.getClothConfigEntry());
+        subProxyCateBuild.add(customProxyUsername.getClothConfigEntry());
+        subProxyCateBuild.add(customProxyPassword.getClothConfigEntry());
+
+        generalCategory.addEntry(subProxyCateBuild.build());
+        generalCategory.addEntry(buttonsInMultiplayerScreen.getClothConfigEntry());
 
         return generalCategory;
     }
