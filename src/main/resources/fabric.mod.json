@@ -3,13 +3,14 @@
   "id": "socksproxyclient",
   "version": "${mod_version}",
   "name": "SocksProxyClient",
-  "description": "Use SOCKS proxy to connect to Minecraft server.",
+  "description": "Explicitly use SOCKS proxy to connect to Minecraft servers.",
   "authors": [
     "CrimsonEdgeHope"
   ],
   "license": "WTFPL",
   "contact": {
     "homepage": "https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft",
+    "sources": "https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft",
     "issues": "https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/issues"
   },
   "icon": "assets/socksproxyclient/icon.png",
@@ -27,15 +28,21 @@
     "socksproxyclient.proxy.mixins.json"
   ],
   "depends": {
-    "fabricloader": "~${fabricloader_version}",
+    "fabricloader": ">=0.12.13",
     "minecraft": "${minecraft_version}",
     "java": ">=17"
   },
   "recommends": {
-    "cloth-config": ">=${cloth_config_version}",
-    "modmenu": ">=${modmenu_version}"
+    "cloth-config": "^${cloth_config_version}"
+  },
+  "suggests": {
+    "modmenu": "^${modmenu_version}"
   },
   "conflicts": {
     "viafabricplus": ">=2.7.7"
+  },
+  "breaks": {
+    "proxyserver": "*",
+    "respectproxyoptions": "*"
   }
 }
