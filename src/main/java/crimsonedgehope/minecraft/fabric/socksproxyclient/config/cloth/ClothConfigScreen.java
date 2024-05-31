@@ -7,7 +7,10 @@ import lombok.NoArgsConstructor;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+
+import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -32,9 +35,11 @@ public final class ClothConfigScreen {
             }
             HttpProxyServerUtils.createAuthenticationService();
         });
-        builder.setTransparentBackground(true)
-                .setAlwaysShowTabs(true)
-                .setShouldTabsSmoothScroll(true);
+        builder = builder.setAlwaysShowTabs(true)
+                .setShouldTabsSmoothScroll(true)
+                .setShouldListSmoothScroll(true)
+                .setTransparentBackground(true);
+        builder.setEditable(Objects.isNull(MinecraftClient.getInstance().world));
         return builder.build();
     }
 }

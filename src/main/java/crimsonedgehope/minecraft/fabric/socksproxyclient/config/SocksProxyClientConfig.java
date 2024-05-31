@@ -7,7 +7,6 @@ import com.google.gson.stream.JsonReader;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import lombok.Getter;
 import net.fabricmc.loader.api.FabricLoader;
-import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -15,6 +14,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -53,30 +53,52 @@ public abstract class SocksProxyClientConfig {
     public void load() {
         LOGGER.info("Reading config file {}", this.configFile.getName());
         if (!this.configFile.exists()) {
-            writeFile(defaultEntries());
+            writeConfigFile(defaultEntries());
         }
         try {
-            readFile();
+            readConfigFile();
         } catch (Exception e) {
             LOGGER.info("Error reading config file {}", this.configFile.getName());
         }
     }
 
     public void save() {
-        writeFile(toJsonObject());
+        writeConfigFile(toJsonObject());
     }
 
-    private void readFile() throws IOException {
-        FileReader reader = new FileReader(this.configFile, StandardCharsets.UTF_8);
+    private FileReader readFile(File file) throws IOException {
+        return readFile(file, StandardCharsets.UTF_8);
+    }
+
+    private FileReader readFile(File file, Charset charset) throws IOException {
+        return new FileReader(file, charset);
+    }
+
+    private FileWriter writeFile(File file, boolean append) throws IOException {
+        return new FileWriter(file, append);
+    }
+
+    private FileWriter writeFile(File file, String content) throws IOException {
+        return writeFile(file, content, false);
+    }
+
+    private FileWriter writeFile(File file, String content, boolean append) throws IOException {
+        FileWriter writer = writeFile(file, append);
+        writer.write(content);
+        return writer;
+    }
+
+    private void readConfigFile() throws IOException {
+        FileReader reader = readFile(this.configFile);
         Gson gson = new Gson();
         JsonObject object = gson.fromJson(new JsonReader(reader), JsonObject.class);
-        readJson(object);
+        readConfigJson(object);
     }
 
-    private void readJson(JsonObject object) {
+    private void readConfigJson(JsonObject object) {
         JsonObject defaults = defaultEntries();
         if (object == null || object.size() == 0) {
-            writeFile(defaults);
+            writeConfigFile(defaults);
             load();
             return;
         }
@@ -84,7 +106,7 @@ public abstract class SocksProxyClientConfig {
         try {
             for (String key : defaults.keySet()) {
                 if (!object.has(key)) {
-                    writeFile(defaults);
+                    writeConfigFile(defaults);
                     load();
                     return;
                 }
@@ -95,8 +117,8 @@ public abstract class SocksProxyClientConfig {
         fromJsonObject(object);
     }
 
-    private void writeFile(JsonObject entries) {
-        try (FileWriter writer = new FileWriter(this.configFile, false)) {
+    private void writeConfigFile(JsonObject entries) {
+        try (FileWriter writer = writeFile(this.configFile, false)) {
             LOGGER.info("Writing config to file {}", this.configFile.getName());
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             writer.write(gson.toJson(entries));
@@ -108,12 +130,6 @@ public abstract class SocksProxyClientConfig {
     protected Predicate<Field> entryVariablesListFilter =
             field -> SocksProxyClientConfigEntry.class.isAssignableFrom(field.getType());
 
-    @ApiStatus.Experimental
-    public List<SocksProxyClientConfigEntry<?>> entryFields() throws Exception {
-        return entryFields(entryVariablesListFilter);
-    }
-
-    @ApiStatus.Experimental
     public List<SocksProxyClientConfigEntry<?>> entryFields(final Predicate<Field> listFilter) throws Exception {
         List<SocksProxyClientConfigEntry<?>> entries = new ArrayList<>();
         List<Field> fields = Arrays.stream(this.getClass().getDeclaredFields()).filter(listFilter).toList();
@@ -132,12 +148,10 @@ public abstract class SocksProxyClientConfig {
         return entries;
     }
 
-    @ApiStatus.Experimental
     public SocksProxyClientConfigEntry<?> getEntryField(final String fieldName) throws Exception {
         return entryFields(field -> entryVariablesListFilter.test(field) && field.getName().equals(fieldName)).get(0);
     }
 
-    @ApiStatus.Experimental
     public <T> SocksProxyClientConfigEntry<T> getEntryField(final String fieldName, final Class<T> valueType) throws Exception {
         return (SocksProxyClientConfigEntry<T>) entryFields(field -> {
                     try {

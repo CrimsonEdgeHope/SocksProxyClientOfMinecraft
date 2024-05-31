@@ -1,6 +1,7 @@
 plugins {
 	id "fabric-loom" version "1.5-SNAPSHOT"
 	id "java-library"
+	id "com.github.johnrengelman.shadow" version "8.1.1"
 }
 
 version = "${project.mod_version}+${project.minecraft_version}"
@@ -16,10 +17,6 @@ java {
 	targetCompatibility = JavaVersion.VERSION_17
 }
 
-jar {
-	archiveClassifier.set("shadow")
-}
-
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = 17
 	it.options.encoding = "UTF-8"
@@ -30,7 +27,14 @@ sourcesJar {
 	from sourceSets.main.allSource
 }
 
+shadowJar {
+	configurations = [ project.configurations.shadow ]
+	archiveClassifier.set("shadow")
+}
+
 remapJar {
+	dependsOn(shadowJar)
+	inputFile = tasks.shadowJar.archiveFile
 	archiveClassifier.set("local")
 }
 
@@ -49,7 +53,7 @@ dependencies {
 	modApi("com.terraformersmc:modmenu:${project.modmenu_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	include(implementation("io.netty:netty-handler-proxy:4.1.97.Final"))
+	shadow(implementation("io.netty:netty-handler-proxy:4.1.110.Final"))
 
 	compileOnly "org.projectlombok:lombok:1.18.30"
 	annotationProcessor "org.projectlombok:lombok:1.18.30"
