@@ -33,7 +33,7 @@ public final class GeneralConfig extends SocksProxyClientConfig {
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "buttonsInMultiplayerScreen", true);
 
     private GeneralConfig() {
-        super("general.json");
+        super(CATEGORY + ".json");
     }
 
     @Override

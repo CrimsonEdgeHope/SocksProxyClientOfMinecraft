@@ -12,16 +12,16 @@ public final class ServerConfig extends SocksProxyClientConfig {
         INSTANCE = new ServerConfig();
     }
 
+    private static final SocksProxyClientConfigEntry<Boolean> imposeProxyOnLoopback =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "imposeProxyOnLoopback", false, 1);
     private static final SocksProxyClientConfigEntry<Boolean> httpRemoteResolve =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "httpRemoteResolve", true);
-    private static final SocksProxyClientConfigEntry<Boolean> imposeProxyOnLoopback =
-            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "imposeProxyOnLoopback", false);
-
-    private ServerConfig() {
-        super("server.json");
-    }
 
     public static final String CATEGORY = "server";
+
+    private ServerConfig() {
+        super(CATEGORY + ".json");
+    }
 
     public static boolean loopbackProxyOption() {
         return imposeProxyOnLoopback.getValue();
@@ -54,22 +54,22 @@ public final class ServerConfig extends SocksProxyClientConfig {
     @Override
     public JsonObject defaultEntries() {
         JsonObject obj = new JsonObject();
-        obj.addProperty(httpRemoteResolve.getEntry(), httpRemoteResolve.getDefaultValue());
         obj.addProperty(imposeProxyOnLoopback.getEntry(), imposeProxyOnLoopback.getDefaultValue());
+        obj.addProperty(httpRemoteResolve.getEntry(), httpRemoteResolve.getDefaultValue());
         return obj;
     }
 
     @Override
     public JsonObject toJsonObject() {
         JsonObject obj = new JsonObject();
-        obj.addProperty(httpRemoteResolve.getEntry(), httpRemoteResolve.getValue());
         obj.addProperty(imposeProxyOnLoopback.getEntry(), imposeProxyOnLoopback.getValue());
+        obj.addProperty(httpRemoteResolve.getEntry(), httpRemoteResolve.getValue());
         return obj;
     }
 
     @Override
     public void fromJsonObject(JsonObject object) {
-        httpRemoteResolve.setValue(object.get(httpRemoteResolve.getEntry()).getAsBoolean());
         imposeProxyOnLoopback.setValue(object.get(imposeProxyOnLoopback.getEntry()).getAsBoolean());
+        httpRemoteResolve.setValue(object.get(httpRemoteResolve.getEntry()).getAsBoolean());
     }
 }

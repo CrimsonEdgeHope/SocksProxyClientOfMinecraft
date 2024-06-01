@@ -13,8 +13,8 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
 
     final GeneralConfigCategorySubScreen generalConfigCategorySubScreen;
 
-    ClothConfigEntry<Boolean> httpRemoteResolve;
     ClothConfigEntry<Boolean> imposeProxyOnLoopback;
+    ClothConfigEntry<Boolean> httpRemoteResolve;
 
     public ServerConfigCategorySubScreen(
             ClothAccess clothAccess,
@@ -23,7 +23,7 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
         super(clothAccess, ServerConfig.class);
         this.generalConfigCategorySubScreen = generalConfigCategorySubScreen;
 
-        httpRemoteResolve = new ClothConfigEntry<>(clothAccess.configEntryBuilder(), entryField("httpRemoteResolve", Boolean.class)) {
+        imposeProxyOnLoopback = new ClothConfigEntry<>(clothAccess.configEntryBuilder(), entryField("imposeProxyOnLoopback", Boolean.class)) {
             @Override
             protected AbstractConfigListEntry<Boolean> buildClothConfigEntry() {
                 return this.getBuilder().startBooleanToggle(
@@ -37,7 +37,7 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
             }
         };
 
-        imposeProxyOnLoopback = new ClothConfigEntry<>(clothAccess.configEntryBuilder(), entryField("imposeProxyOnLoopback", Boolean.class)) {
+        httpRemoteResolve = new ClothConfigEntry<>(clothAccess.configEntryBuilder(), entryField("httpRemoteResolve", Boolean.class)) {
             @Override
             protected AbstractConfigListEntry<Boolean> buildClothConfigEntry() {
                 return this.getBuilder().startBooleanToggle(
@@ -56,8 +56,8 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
         ConfigCategory serverCategory =
                 cloth.configCategory(TranslateKeyUtil.configItemAsText(categoryField(this.configClass)));
 
-        serverCategory.addEntry(httpRemoteResolve.getClothConfigEntry());
         serverCategory.addEntry(imposeProxyOnLoopback.getClothConfigEntry());
+        serverCategory.addEntry(httpRemoteResolve.getClothConfigEntry());
 
         return serverCategory;
     }
