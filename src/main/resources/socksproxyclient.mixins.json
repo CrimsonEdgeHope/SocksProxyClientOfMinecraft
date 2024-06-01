@@ -9,6 +9,7 @@
     "MainMixin",
     "MinecraftClientAccessor",
     "MinecraftClientMixin",
+    "MojangBlockListSupplierMixin",
     "MultiplayerScreenMixin",
     "PlayerSkinTextureMixin",
     "ScreenAccessor",

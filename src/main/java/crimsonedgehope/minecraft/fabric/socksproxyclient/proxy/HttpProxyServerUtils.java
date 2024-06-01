@@ -25,8 +25,12 @@ import java.util.concurrent.CompletableFuture;
 public final class HttpProxyServerUtils {
 
     public static Proxy getProxyObject() {
-        SocksProxyClient.LOGGER.debug("getProxyObject");
-        if (!HttpToSocksServer.INSTANCE.isFired()) {
+        return getProxyObject(true);
+    }
+
+    public static Proxy getProxyObject(boolean useProxy) {
+        SocksProxyClient.LOGGER.debug("getProxyObject: {}", useProxy);
+        if (!useProxy || !HttpToSocksServer.INSTANCE.isFired()) {
             return Proxy.NO_PROXY;
         } else {
             return new Proxy(Proxy.Type.HTTP, HttpToSocksServer.INSTANCE.getChannel().localAddress());
@@ -50,7 +54,7 @@ public final class HttpProxyServerUtils {
             HttpToSocksServer.INSTANCE.fire();
             RunArgs args = MinecraftClientMixinVariables.getRunArgs();
             MinecraftClientAccessor accessor = ((MinecraftClientAccessor) client);
-            accessor.setAuthenticationService(new YggdrasilAuthenticationService(getProxyObject()));
+            accessor.setAuthenticationService(new YggdrasilAuthenticationService(Proxy.NO_PROXY));
             accessor.setSessionService(accessor.getAuthenticationService().createMinecraftSessionService());
             accessor.setUserApiService(accessor.invokeCreateUserApiService(accessor.getAuthenticationService(), args));
             accessor.setSkinProvider(new PlayerSkinProvider(accessor.getTextureManager(), new File(args.directories.assetDir, "skins"), accessor.getSessionService()));

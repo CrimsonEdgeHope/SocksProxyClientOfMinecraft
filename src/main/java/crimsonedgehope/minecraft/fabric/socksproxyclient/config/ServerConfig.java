@@ -14,6 +14,14 @@ public final class ServerConfig extends SocksProxyClientConfig {
 
     private static final SocksProxyClientConfigEntry<Boolean> imposeProxyOnLoopback =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "imposeProxyOnLoopback", false, 1);
+    private static final SocksProxyClientConfigEntry<Boolean> proxyYggdrasilAuth =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyYggdrasilAuth", true, 1);
+    private static final SocksProxyClientConfigEntry<Boolean> proxyPlayerSkinDownload =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyPlayerSkinDownload", true, 1);
+    private static final SocksProxyClientConfigEntry<Boolean> proxyServerResourceDownload =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyServerResourceDownload", true, 1);
+    private static final SocksProxyClientConfigEntry<Boolean> proxyBlockListSupplier =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyBlockListSupplier", true, 1);
     private static final SocksProxyClientConfigEntry<Boolean> httpRemoteResolve =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "httpRemoteResolve", true);
 
@@ -35,8 +43,28 @@ public final class ServerConfig extends SocksProxyClientConfig {
         return GeneralConfig.getProxy();
     }
 
+    public static Proxy getProxy(boolean useProxy) {
+        return GeneralConfig.getProxy(useProxy);
+    }
+
     public static Proxy getProxyForLoopback() {
-        return GeneralConfig.getProxy(loopbackProxyOption());
+        return getProxy(loopbackProxyOption());
+    }
+
+    public static boolean shouldProxyYggdrasilAuth() {
+        return proxyYggdrasilAuth.getValue();
+    }
+
+    public static boolean shouldProxyPlayerSkinDownload() {
+        return proxyPlayerSkinDownload.getValue();
+    }
+
+    public static boolean shouldProxyServerResourceDownload() {
+        return proxyServerResourceDownload.getValue();
+    }
+
+    public static boolean shouldProxyBlockListSupplier() {
+        return proxyBlockListSupplier.getValue();
     }
 
     public static ProxyCredential getProxyCredential() {
@@ -55,6 +83,10 @@ public final class ServerConfig extends SocksProxyClientConfig {
     public JsonObject defaultEntries() {
         JsonObject obj = new JsonObject();
         obj.addProperty(imposeProxyOnLoopback.getEntry(), imposeProxyOnLoopback.getDefaultValue());
+        obj.addProperty(proxyYggdrasilAuth.getEntry(), proxyYggdrasilAuth.getDefaultValue());
+        obj.addProperty(proxyPlayerSkinDownload.getEntry(), proxyPlayerSkinDownload.getDefaultValue());
+        obj.addProperty(proxyServerResourceDownload.getEntry(), proxyServerResourceDownload.getDefaultValue());
+        obj.addProperty(proxyBlockListSupplier.getEntry(), proxyBlockListSupplier.getDefaultValue());
         obj.addProperty(httpRemoteResolve.getEntry(), httpRemoteResolve.getDefaultValue());
         return obj;
     }
@@ -63,6 +95,10 @@ public final class ServerConfig extends SocksProxyClientConfig {
     public JsonObject toJsonObject() {
         JsonObject obj = new JsonObject();
         obj.addProperty(imposeProxyOnLoopback.getEntry(), imposeProxyOnLoopback.getValue());
+        obj.addProperty(proxyYggdrasilAuth.getEntry(), proxyYggdrasilAuth.getValue());
+        obj.addProperty(proxyPlayerSkinDownload.getEntry(), proxyPlayerSkinDownload.getValue());
+        obj.addProperty(proxyServerResourceDownload.getEntry(), proxyServerResourceDownload.getValue());
+        obj.addProperty(proxyBlockListSupplier.getEntry(), proxyBlockListSupplier.getValue());
         obj.addProperty(httpRemoteResolve.getEntry(), httpRemoteResolve.getValue());
         return obj;
     }
@@ -70,6 +106,10 @@ public final class ServerConfig extends SocksProxyClientConfig {
     @Override
     public void fromJsonObject(JsonObject object) {
         imposeProxyOnLoopback.setValue(object.get(imposeProxyOnLoopback.getEntry()).getAsBoolean());
+        proxyYggdrasilAuth.setValue(object.get(proxyYggdrasilAuth.getEntry()).getAsBoolean());
+        proxyPlayerSkinDownload.setValue(object.get(proxyPlayerSkinDownload.getEntry()).getAsBoolean());
+        proxyServerResourceDownload.setValue(object.get(proxyServerResourceDownload.getEntry()).getAsBoolean());
+        proxyBlockListSupplier.setValue(object.get(proxyBlockListSupplier.getEntry()).getAsBoolean());
         httpRemoteResolve.setValue(object.get(httpRemoteResolve.getEntry()).getAsBoolean());
     }
 }

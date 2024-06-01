@@ -16,8 +16,17 @@
   "socksproxyclient.config.general.buttonsInMultiplayerScreen": "Show buttons in multiplayer screen",
 
   "socksproxyclient.config.server": "Server settings",
-  "socksproxyclient.config.server.httpRemoteResolve": "HTTP domain remote resolve",
-  "socksproxyclient.config.server.imposeProxyOnLoopback": "Impose proxy on loopback",
+  "socksproxyclient.config.server.imposeProxyOnLoopback": "Impose proxy on loopback address",
+  "socksproxyclient.config.server.imposeProxyOnLoopback.tooltip": "Minecraft server traffic only",
+  "socksproxyclient.config.server.proxyYggdrasilAuth": "Use proxy on Yggdrasil authentication service",
+  "socksproxyclient.config.server.proxyYggdrasilAuth.tooltip": "HTTP protocol",
+  "socksproxyclient.config.server.proxyPlayerSkinDownload": "Use proxy on player skin downloading",
+  "socksproxyclient.config.server.proxyPlayerSkinDownload.tooltip": "HTTP protocol",
+  "socksproxyclient.config.server.proxyServerResourceDownload": "Use proxy on Minecraft server resource pack downloading",
+  "socksproxyclient.config.server.proxyServerResourceDownload.tooltip": "HTTP protocol",
+  "socksproxyclient.config.server.proxyBlockListSupplier": "Use proxy on Server blocklist supplier",
+  "socksproxyclient.config.server.proxyBlockListSupplier.tooltip": "HTTP protocol",
+  "socksproxyclient.config.server.httpRemoteResolve": "Use proxy on DNS resolve for HTTP when using SOCKS5",
 
   "socksproxyclient.screen.recreateAuth": "Recreate auth service",
   "socksproxyclient.screen.config": "Open SocksProxyClient config"

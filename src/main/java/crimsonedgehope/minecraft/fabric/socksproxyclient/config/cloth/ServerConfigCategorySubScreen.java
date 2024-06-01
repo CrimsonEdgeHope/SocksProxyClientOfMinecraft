@@ -6,6 +6,9 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeyUtil;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.Requirement;
+import net.minecraft.text.Text;
+
+import java.util.Optional;
 
 import static crimsonedgehope.minecraft.fabric.socksproxyclient.config.ConfigUtils.categoryField;
 
@@ -14,6 +17,10 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
     final GeneralConfigCategorySubScreen generalConfigCategorySubScreen;
 
     ClothConfigEntry<Boolean> imposeProxyOnLoopback;
+    ClothConfigEntry<Boolean> proxyYggdrasilAuth;
+    ClothConfigEntry<Boolean> proxyPlayerSkinDownload;
+    ClothConfigEntry<Boolean> proxyServerResourceDownload;
+    ClothConfigEntry<Boolean> proxyBlockListSupplier;
     ClothConfigEntry<Boolean> httpRemoteResolve;
 
     public ServerConfigCategorySubScreen(
@@ -30,6 +37,67 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
                                 this.getConfigEntry().getTranslatableText(),
                                 this.getConfigEntry().getValue()
                         )
+                        .setTooltip(Optional.of(this.getConfigEntry().getDescriptionTranslatableText().toArray(Text[]::new)))
+                        .setRequirement(Requirement.isTrue(generalConfigCategorySubScreen.useProxy.getClothConfigEntry()))
+                        .setDefaultValue(this.getConfigEntry().getDefaultValue())
+                        .setSaveConsumer(this.getConfigEntry()::setValue)
+                        .build();
+            }
+        };
+
+        proxyYggdrasilAuth = new ClothConfigEntry<>(clothAccess.configEntryBuilder(), entryField("proxyYggdrasilAuth", Boolean.class)) {
+            @Override
+            protected AbstractConfigListEntry<Boolean> buildClothConfigEntry() {
+                return this.getBuilder().startBooleanToggle(
+                                this.getConfigEntry().getTranslatableText(),
+                                this.getConfigEntry().getValue()
+                        )
+                        .setTooltip(Optional.of(this.getConfigEntry().getDescriptionTranslatableText().toArray(Text[]::new)))
+                        .setRequirement(Requirement.isTrue(generalConfigCategorySubScreen.useProxy.getClothConfigEntry()))
+                        .setDefaultValue(this.getConfigEntry().getDefaultValue())
+                        .setSaveConsumer(this.getConfigEntry()::setValue)
+                        .build();
+            }
+        };
+
+        proxyPlayerSkinDownload = new ClothConfigEntry<>(clothAccess.configEntryBuilder(), entryField("proxyPlayerSkinDownload", Boolean.class)) {
+            @Override
+            protected AbstractConfigListEntry<Boolean> buildClothConfigEntry() {
+                return this.getBuilder().startBooleanToggle(
+                                this.getConfigEntry().getTranslatableText(),
+                                this.getConfigEntry().getValue()
+                        )
+                        .setTooltip(Optional.of(this.getConfigEntry().getDescriptionTranslatableText().toArray(Text[]::new)))
+                        .setRequirement(Requirement.isTrue(generalConfigCategorySubScreen.useProxy.getClothConfigEntry()))
+                        .setDefaultValue(this.getConfigEntry().getDefaultValue())
+                        .setSaveConsumer(this.getConfigEntry()::setValue)
+                        .build();
+            }
+        };
+
+        proxyServerResourceDownload = new ClothConfigEntry<>(clothAccess.configEntryBuilder(), entryField("proxyServerResourceDownload", Boolean.class)) {
+            @Override
+            protected AbstractConfigListEntry<Boolean> buildClothConfigEntry() {
+                return this.getBuilder().startBooleanToggle(
+                                this.getConfigEntry().getTranslatableText(),
+                                this.getConfigEntry().getValue()
+                        )
+                        .setTooltip(Optional.of(this.getConfigEntry().getDescriptionTranslatableText().toArray(Text[]::new)))
+                        .setRequirement(Requirement.isTrue(generalConfigCategorySubScreen.useProxy.getClothConfigEntry()))
+                        .setDefaultValue(this.getConfigEntry().getDefaultValue())
+                        .setSaveConsumer(this.getConfigEntry()::setValue)
+                        .build();
+            }
+        };
+
+        proxyBlockListSupplier = new ClothConfigEntry<>(clothAccess.configEntryBuilder(), entryField("proxyBlockListSupplier", Boolean.class)) {
+            @Override
+            protected AbstractConfigListEntry<Boolean> buildClothConfigEntry() {
+                return this.getBuilder().startBooleanToggle(
+                                this.getConfigEntry().getTranslatableText(),
+                                this.getConfigEntry().getValue()
+                        )
+                        .setTooltip(Optional.of(this.getConfigEntry().getDescriptionTranslatableText().toArray(Text[]::new)))
                         .setRequirement(Requirement.isTrue(generalConfigCategorySubScreen.useProxy.getClothConfigEntry()))
                         .setDefaultValue(this.getConfigEntry().getDefaultValue())
                         .setSaveConsumer(this.getConfigEntry()::setValue)
@@ -57,6 +125,10 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
                 cloth.configCategory(TranslateKeyUtil.configItemAsText(categoryField(this.configClass)));
 
         serverCategory.addEntry(imposeProxyOnLoopback.getClothConfigEntry());
+        serverCategory.addEntry(proxyYggdrasilAuth.getClothConfigEntry());
+        serverCategory.addEntry(proxyPlayerSkinDownload.getClothConfigEntry());
+        serverCategory.addEntry(proxyServerResourceDownload.getClothConfigEntry());
+        serverCategory.addEntry(proxyBlockListSupplier.getClothConfigEntry());
         serverCategory.addEntry(httpRemoteResolve.getClothConfigEntry());
 
         return serverCategory;

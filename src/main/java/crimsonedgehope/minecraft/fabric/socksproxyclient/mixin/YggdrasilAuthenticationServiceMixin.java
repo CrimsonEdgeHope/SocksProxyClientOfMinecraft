@@ -1,6 +1,7 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyServerUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -15,6 +16,6 @@ public class YggdrasilAuthenticationServiceMixin extends HttpAuthenticationServi
     @Override
     protected void redirectedGet(CallbackInfoReturnable<Proxy> cir) {
         cir.cancel();
-        cir.setReturnValue(HttpProxyServerUtils.getProxyObject());
+        cir.setReturnValue(HttpProxyServerUtils.getProxyObject(ServerConfig.shouldProxyYggdrasilAuth()));
     }
 }
