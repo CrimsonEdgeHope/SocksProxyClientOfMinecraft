@@ -33,6 +33,7 @@
     "java": ">=17"
   },
   "recommends": {
+    "fabric-api": "*",
     "cloth-config": "^${cloth_config_version}"
   },
   "suggests": {

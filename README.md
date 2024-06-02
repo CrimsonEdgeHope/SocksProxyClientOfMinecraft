@@ -7,4 +7,181 @@
 <!--<img src="https://i.postimg.cc/85ccwZSY/cloth-config-api-badge.png" alt="Requires Cloth Config API" width="149" height="50" />-->
 
 Modern Minecraft Java client relies on Netty to connect to multiplayer servers,
-and this simple mod proxies **Minecraft server traffic** through designated SOCKS proxy as desired.
+and this simple mod is able to proxy Minecraft server traffic through designated SOCKS proxy as desired.
+
+## Feature
+
+- SOCKS proxy support. Explicitly proxy Minecraft server traffic.
+- Convert SOCKS proxy to HTTP(S) proxy. Proxy communications with Mojang Yggdrasil auth service, player skin download endpoint, and server resource pack downloading.
+
+## When to/Why should use this mod?
+
+- You have a better network route through a proxy and want to lower your ping as much as possible.
+- You have trouble accepting server resource pack because it's hosted on a provider that's blocked in your residence.
+- You care about your privacy.
+
+## Where/How to get this mod?
+
+There are currently several approaches:
+
+- Clone this repository and compile by executing `./gradlew build` on *nix or `./gradlew.bat build` on Windows.
+After successful compilation, navigate to `build/libs` directory under the project root directory.
+- Navigate to [Actions section](https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/actions),
+open the latest successful workflow run and download artifacts. (Artifacts will eventually expire. Compilation approach is preferred)
+- ~~Turn to GitHub releases and download jar there. (Coming soon. Haven't decided mod's versioning.)~~
+- ~~Go to Modrinth (Planning. Not live yet.)~~
+
+Choose the jar with "local" suffix.
+
+### CurseForge?
+
+No plan.
+
+### Modrinth?
+
+Planning.
+
+### (Other third-party Minecraft mod distribution platform)?
+
+Currently, no.
+
+## Dependency
+
+Based on Fabric (Minecraft 1.20.1). Just drop mod jar in mods folder, and voilà!
+
+But...
+
+- You probably want [Cloth Config API (at least 11.1.106)](https://modrinth.com/mod/cloth-config/version/11.1.106+fabric) to have convenience adjusting configuration.
+- [ModMenu](https://modrinth.com/mod/modmenu/versions?g=1.20.1&l=fabric) is advised as well.
+
+## How to use?
+
+Before you start, drop mod jar in mods folder, and launch game! (Assume you have Cloth Config API as well.)
+
+- Open this mod's config screen (whether via ModMenu or buttons in the multiplayer screen)
+- In "General settings" section, turn on "Use proxy". Choose SOCKS proxy version your proxy accepts. (SOCKS5 is highly recommended. SOCKS4 is pretty old.)
+- Fill in host address port number to your proxy. Should authentication be in demand, fill in username and password. (SOCKS4 wants username field only)
+- Hit save button. Done. This mod will try to reopen communication with Mojang Yggdrasil auth service, so you may pass verification upon joining servers through proxy.
+
+## Troubleshooting
+
+I think I have everything live, but proxy isn't working! (Can't join server. Can't accept resource pack. etc.)
+
+- Make sure your game doesn't have other mods causing conflicts with this mod.
+- Make sure your proxy is reachable live from your PC, socks version, host address, port, username and password correct.
+- Make sure your dream desired Minecraft server reachable from your proxy, including
+Mojang Yggdrasil auth service to verify your Minecraft character's identity. 
+- Make sure your ISP isn't polluting DNS. If confirmed or unsure, navigate to "Server settings" section, 
+turn on "Use proxy on DNS resolve for HTTP when using SOCKS5" and at least "Use proxy on Yggdrasil authentication service".
+(By default they are on)
+(Should your proxy be polluting DNS as well, or just simply offers no DNS support, you will have to seek other possible solution.)
+**(Resolving Minecraft server's domain through proxy is not currently supported.)**
+- If, in the worst case, unsure about or no clue of cause (you may encounter a bug), open an issue and **elaborate** what issue or problem you face using this mod.
+
+## Compatibility
+
+Combination with [ViaFabricPlus](https://modrinth.com/mod/viafabricplus) had its multi-versioning feature fail. After manual debugging and testing, it's been resolved.
+However, I am not sure whether is 100% compatible or not. Bugs may persist unnoticed, since my main focus is Java (not Bedrock).
+
+## Upgrading
+
+**This mod is in early development!** Breaking changes will be introduced sooner or later. You are advised to backup your config file before upgrading!
+
+Navigate to your game's directory (usually `.minecraft`), open `config/socksproxyclient` and make copy.
+
+## FAQs
+
+### 1.x.x (major version) Forge/Fabric/Quilt/NeoForge please?
+
+Maybe. I personally don't really have much time. Developing multiplatform mod (and backporting) is painful as hell,
+I need to learn.
+
+Fork for your own version, or open a PR.
+
+### Fabric API required?
+
+This mod doesn't declare Fabric API as a dependency, so it's a No. But you better have it.
+
+### Fabric server applicable?
+
+No. This mod is client-side.
+
+### Compatibility with (mod name) mod?
+
+Depends. Should be compatible as long as (mod name) doesn't mess up with the part where Minecraft handles network connection.
+
+As such, this mod won't be compatible with [Proxy Server](https://www.curseforge.com/minecraft/mc-mods/proxy-server)
+and [RespectProxyOptions](https://modrinth.com/mod/respectproxyoptions)
+
+### Will this mod ever be allowed on (server name)?
+
+Look, you, as a simple Minecraft Java player, just want a nice game playing or have privacy protected, such desire is 100% acceptable.
+You don't want to play on a server under 400+ ping through a shitty ISP network route.
+
+Also, all code is open source, take a look in it if concerned. Besides, having a VPN yeets out this mod because your VPN software will take care of every bit of traffic for you.
+
+Still unsure, consult server admin then.
+Take Hypixel as an example, they impose inspection on your Minecraft character to see if your account is "safe".
+Switching IP address frequently (or abnormally) may result in being banned because they think your account is compromised.
+Under such circumstance, better consult first.
+
+If, unfortunately, (server name) explicitly forbids proxy (or it's pay-to-use-proxy), then issue stands at their side.
+
+### How to see if this mod is actually working?
+
+It will print logs when:
+
+- Pinging a Minecraft server. (Unless you have explicitly turned off the proxy setting.)
+- Joining and playing on a Minecraft server. (Unless you have explicitly turned off the proxy setting.)
+- Game client makes communications with Mojang Yggdrasil auth service, player skin download endpoint, or downloads server resource pack.
+(Unless you have explicitly turned off their proxy settings.)
+
+So what will those logs look like?
+
+Communications with **Minecraft servers** will look like this:
+```text
+[00:00:00] [Netty Client IO #1/INFO] (SocksProxyClient) Using Socks5 proxy /127.0.0.1:1080 on mc.hypixel.net/209.222.115.58
+[00:00:00] [Netty Client IO #2/INFO] (SocksProxyClient) No proxy on host localhost/127.0.0.1
+```
+
+Communications with **HTTP(S) servers** (Mojang Yggdrasil auth service. Player skin download endpoint. Server resource pack provider.) will look like this:
+
+```text
+[00:00:00] [nioEventLoopGroup-6-1/INFO] (SocksProxyClient) Open tunnel to remote sessionserver.mojang.com:443
+[00:00:02] [nioEventLoopGroup-6-1/INFO] (SocksProxyClient) Tunnel to sessionserver.mojang.com:443 closed.
+```
+
+### Aren't proxyHost and proxyPort (and proxyUser and proxyPass) game parameters sufficient?
+
+No. In fact, they are practically useless. Minecraft will take it as a SOCKS proxy, while JDK's HTTP client wants an HTTP proxy.
+The root cause lies in JDK's native implementation.
+
+Therefore, should you take this game-parameter approach, you likely won't pass verification upon joining servers
+because your genuine IP address and proxy IP address have 0 chance of matching, unless your dream server allows
+proxies.
+
+### Is Realms applicable?
+
+No. Realms requires vanilla client. This mod won't cover Realms part.
+
+### Initial purpose of developing this mod?
+
+Initially to satisfy my own need. 
+
+### Where to ask more questions?
+
+[Open issue here.](https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/issues)
+
+
+## Contributing
+
+Bugs may persist unnoticed. Feel free to open a PR if you find and resolve a bug!
+
+Translations are welcome. See `en_us.json` lang file in `src/main/resources/assets/socksproxyclient/lang` directory for example.
+Or you may translate this README.
+
+## License. Ending.
+
+Licensed under [WTFPL](http://www.wtfpl.net/about/)
+
+Leave a **star** if you find this mod useful to you!
