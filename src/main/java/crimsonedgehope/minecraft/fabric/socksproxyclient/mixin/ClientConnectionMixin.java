@@ -53,9 +53,9 @@ public class ClientConnectionMixin {
 
         Proxy proxySelection;
         if (address.isLoopbackAddress()) {
-            proxySelection = ServerConfig.getProxyForLoopback();
+            proxySelection = ServerConfig.getProxyForMinecraftLoopback();
         } else {
-            proxySelection = ServerConfig.getProxy();
+            proxySelection = ServerConfig.getProxyForMinecraft();
         }
 
         if (proxySelection == null) {

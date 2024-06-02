@@ -12,8 +12,8 @@ public final class ServerConfig extends SocksProxyClientConfig {
         INSTANCE = new ServerConfig();
     }
 
-    private static final SocksProxyClientConfigEntry<Boolean> imposeProxyOnLoopback =
-            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "imposeProxyOnLoopback", false, 1);
+    private static final SocksProxyClientConfigEntry<Boolean> proxyMinecraft =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyMinecraft", true);
     private static final SocksProxyClientConfigEntry<Boolean> proxyYggdrasilAuth =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyYggdrasilAuth", true, 1);
     private static final SocksProxyClientConfigEntry<Boolean> proxyPlayerSkinDownload =
@@ -24,6 +24,8 @@ public final class ServerConfig extends SocksProxyClientConfig {
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyBlockListSupplier", true, 1);
     private static final SocksProxyClientConfigEntry<Boolean> httpRemoteResolve =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "httpRemoteResolve", true);
+    private static final SocksProxyClientConfigEntry<Boolean> imposeProxyOnMinecraftLoopback =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "imposeProxyOnMinecraftLoopback", false, 1);
 
     public static final String CATEGORY = "server";
 
@@ -31,40 +33,40 @@ public final class ServerConfig extends SocksProxyClientConfig {
         super(CATEGORY + ".json");
     }
 
-    public static boolean loopbackProxyOption() {
-        return imposeProxyOnLoopback.getValue();
+    public static boolean usingProxyOnMinecraft() {
+        return GeneralConfig.usingProxy() && proxyMinecraft.getValue();
     }
 
-    public static boolean usingProxy() {
-        return GeneralConfig.usingProxy();
+    public static boolean minecraftLoopbackProxyOption() {
+        return usingProxyOnMinecraft() && imposeProxyOnMinecraftLoopback.getValue();
     }
 
-    public static Proxy getProxy() {
-        return GeneralConfig.getProxy();
+    public static Proxy getProxyForMinecraft() {
+        return getProxyForMinecraft(usingProxyOnMinecraft());
     }
 
-    public static Proxy getProxy(boolean useProxy) {
+    public static Proxy getProxyForMinecraft(boolean useProxy) {
         return GeneralConfig.getProxy(useProxy);
     }
 
-    public static Proxy getProxyForLoopback() {
-        return getProxy(loopbackProxyOption());
+    public static Proxy getProxyForMinecraftLoopback() {
+        return getProxyForMinecraft(minecraftLoopbackProxyOption());
     }
 
     public static boolean shouldProxyYggdrasilAuth() {
-        return proxyYggdrasilAuth.getValue();
+        return GeneralConfig.usingProxy() && proxyYggdrasilAuth.getValue();
     }
 
     public static boolean shouldProxyPlayerSkinDownload() {
-        return proxyPlayerSkinDownload.getValue();
+        return GeneralConfig.usingProxy() && proxyPlayerSkinDownload.getValue();
     }
 
     public static boolean shouldProxyServerResourceDownload() {
-        return proxyServerResourceDownload.getValue();
+        return GeneralConfig.usingProxy() && proxyServerResourceDownload.getValue();
     }
 
     public static boolean shouldProxyBlockListSupplier() {
-        return proxyBlockListSupplier.getValue();
+        return GeneralConfig.usingProxy() && proxyBlockListSupplier.getValue();
     }
 
     public static ProxyCredential getProxyCredential() {
@@ -76,40 +78,43 @@ public final class ServerConfig extends SocksProxyClientConfig {
     }
 
     public static boolean remoteResolve() {
-        return httpRemoteResolve.getDefaultValue();
+        return GeneralConfig.usingProxy() && httpRemoteResolve.getValue();
     }
 
     @Override
     public JsonObject defaultEntries() {
         JsonObject obj = new JsonObject();
-        obj.addProperty(imposeProxyOnLoopback.getEntry(), imposeProxyOnLoopback.getDefaultValue());
+        obj.addProperty(proxyMinecraft.getEntry(), proxyMinecraft.getDefaultValue());
         obj.addProperty(proxyYggdrasilAuth.getEntry(), proxyYggdrasilAuth.getDefaultValue());
         obj.addProperty(proxyPlayerSkinDownload.getEntry(), proxyPlayerSkinDownload.getDefaultValue());
         obj.addProperty(proxyServerResourceDownload.getEntry(), proxyServerResourceDownload.getDefaultValue());
         obj.addProperty(proxyBlockListSupplier.getEntry(), proxyBlockListSupplier.getDefaultValue());
         obj.addProperty(httpRemoteResolve.getEntry(), httpRemoteResolve.getDefaultValue());
+        obj.addProperty(imposeProxyOnMinecraftLoopback.getEntry(), imposeProxyOnMinecraftLoopback.getDefaultValue());
         return obj;
     }
 
     @Override
     public JsonObject toJsonObject() {
         JsonObject obj = new JsonObject();
-        obj.addProperty(imposeProxyOnLoopback.getEntry(), imposeProxyOnLoopback.getValue());
+        obj.addProperty(proxyMinecraft.getEntry(), proxyMinecraft.getValue());
         obj.addProperty(proxyYggdrasilAuth.getEntry(), proxyYggdrasilAuth.getValue());
         obj.addProperty(proxyPlayerSkinDownload.getEntry(), proxyPlayerSkinDownload.getValue());
         obj.addProperty(proxyServerResourceDownload.getEntry(), proxyServerResourceDownload.getValue());
         obj.addProperty(proxyBlockListSupplier.getEntry(), proxyBlockListSupplier.getValue());
         obj.addProperty(httpRemoteResolve.getEntry(), httpRemoteResolve.getValue());
+        obj.addProperty(imposeProxyOnMinecraftLoopback.getEntry(), imposeProxyOnMinecraftLoopback.getValue());
         return obj;
     }
 
     @Override
     public void fromJsonObject(JsonObject object) {
-        imposeProxyOnLoopback.setValue(object.get(imposeProxyOnLoopback.getEntry()).getAsBoolean());
+        proxyMinecraft.setValue(object.get(proxyMinecraft.getEntry()).getAsBoolean());
         proxyYggdrasilAuth.setValue(object.get(proxyYggdrasilAuth.getEntry()).getAsBoolean());
         proxyPlayerSkinDownload.setValue(object.get(proxyPlayerSkinDownload.getEntry()).getAsBoolean());
         proxyServerResourceDownload.setValue(object.get(proxyServerResourceDownload.getEntry()).getAsBoolean());
         proxyBlockListSupplier.setValue(object.get(proxyBlockListSupplier.getEntry()).getAsBoolean());
         httpRemoteResolve.setValue(object.get(httpRemoteResolve.getEntry()).getAsBoolean());
+        imposeProxyOnMinecraftLoopback.setValue(object.get(imposeProxyOnMinecraftLoopback.getEntry()).getAsBoolean());
     }
 }

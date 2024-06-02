@@ -1,9 +1,7 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
 
-import com.mojang.authlib.minecraft.UserApiService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.mixin.MinecraftClientAccessor;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.mixin_variables.MinecraftClientMixinVariables;
 import lombok.AccessLevel;
@@ -38,11 +36,7 @@ public final class HttpProxyServerUtils {
     }
 
     public static CompletableFuture<Void> recreateAuthenticationService() {
-        if (((MinecraftClientAccessor) MinecraftClient.getInstance()).getUserApiService().equals(UserApiService.OFFLINE)
-                && GeneralConfig.usingProxy()) {
-            return HttpProxyServerUtils.createAuthenticationService();
-        }
-        return CompletableFuture.runAsync(() -> {});
+        return HttpProxyServerUtils.createAuthenticationService();
     }
 
     public static CompletableFuture<Void> createAuthenticationService() {

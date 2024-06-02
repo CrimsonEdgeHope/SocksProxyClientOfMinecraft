@@ -1,6 +1,7 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ProxyCredential;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import io.netty.bootstrap.Bootstrap;
@@ -71,7 +72,7 @@ public class HttpToSocksServer {
     }
 
     public void fire() {
-        if (!ServerConfig.usingProxy()) {
+        if (!GeneralConfig.usingProxy()) {
             LOGGER.info("Not starting internal http proxy.");
             return;
         }
@@ -111,13 +112,17 @@ public class HttpToSocksServer {
             } catch (Exception e) {
                 LOGGER.error("Error starting internal http proxy!", e);
             } finally {
-                acceptorGroup.shutdownGracefully(1, 1, TimeUnit.MILLISECONDS);
-                clientGroup.shutdownGracefully(1, 1, TimeUnit.MILLISECONDS);
+                cease();
+                acceptorGroup.shutdownGracefully(0, 0, TimeUnit.MILLISECONDS);
+                clientGroup.shutdownGracefully(0, 0, TimeUnit.MILLISECONDS);
             }
         }).start();
     }
 
     public void cease() {
+        if (!fired) {
+            return;
+        }
         fired = false;
         if (channel != null) {
             channel.close();
@@ -171,9 +176,9 @@ public class HttpToSocksServer {
             if (remote == null) {
                 boolean noResolver = ServerConfig.remoteResolve();
                 ChannelHandler handler;
-                Proxy proxySelection = ServerConfig.getProxy();
-                ProxyCredential proxyCredential = ServerConfig.getProxyCredential();
-                switch (ServerConfig.getSocksVersion()) {
+                Proxy proxySelection = GeneralConfig.getProxy();
+                ProxyCredential proxyCredential = GeneralConfig.getProxyCredential();
+                switch (GeneralConfig.getSocksVersion()) {
                     case SOCKS4:
                         LOGGER.debug("http - Socks4. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
                         handler = new Socks4ProxyHandler(proxySelection.address(), proxyCredential.getUsername());
