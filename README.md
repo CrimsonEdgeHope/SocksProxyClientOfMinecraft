@@ -111,8 +111,7 @@ Depends. Should be compatible as long as (mod name) doesn't mess up with the par
 As such, this mod won't be compatible with [Proxy Server](https://www.curseforge.com/minecraft/mc-mods/proxy-server)
 and [RespectProxyOptions](https://modrinth.com/mod/respectproxyoptions).
 
-Combination with [ViaFabricPlus](https://modrinth.com/mod/viafabricplus) had its multi-versioning feature failed. After manual debugging and testing, it's been resolved.
-However, I am not sure whether is 100% compatible or not. Bugs may persist unnoticed, since my main focus is Java (not Bedrock).
+**Currently, this mod isn't 100% compatible with [ViaFabricPlus](https://modrinth.com/mod/viafabricplus). Bugs may persist unnoticed. Use at own risk!**
 
 ### Will this mod ever be allowed on (server name)?
 
