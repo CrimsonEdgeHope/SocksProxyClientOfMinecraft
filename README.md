@@ -19,31 +19,6 @@ and this simple mod is able to proxy Minecraft server traffic through designated
 - You have trouble accepting server resource pack because it's hosted on a provider that's blocked in your residence.
 - You care about your privacy.
 
-## Where/How to get this mod?
-
-There are currently several approaches:
-
-- Clone this repository and compile by executing `./gradlew build` on *nix or `./gradlew.bat build` on Windows.
-After successful compilation, navigate to `build/libs` directory under the project root directory.
-- Navigate to [Actions section](https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/actions),
-open the latest successful workflow run and download artifacts. (Artifacts will eventually expire. Compilation approach is preferred)
-- ~~Turn to GitHub releases and download jar there. (Coming soon. Haven't decided mod's versioning.)~~
-- ~~Go to Modrinth (Planning. Not live yet.)~~
-
-Choose the jar with "SNAPSHOT" suffix.
-
-### CurseForge?
-
-No plan.
-
-### Modrinth?
-
-Planning.
-
-### (Other third-party Minecraft mod distribution platform)?
-
-Currently, no.
-
 ## Dependency
 
 Based on Fabric (Minecraft 1.20.1). Just drop mod jar in mods folder, and voilà!
@@ -84,6 +59,30 @@ Navigate to your game's directory (usually `.minecraft`), open `config/socksprox
 
 ## FAQs
 
+### Where/How to get this mod?
+
+There are currently several approaches:
+
+- Clone this repository and compile by executing `./gradlew build` on *nix or `./gradlew.bat build` on Windows.
+  After successful compilation, navigate to `build/libs` directory under the project root directory.
+- Navigate to [Actions section](https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/actions),
+  open the latest successful workflow run and download artifacts. (Artifacts will eventually expire. Compilation approach is preferred)
+- Turn to [GitHub releases](https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/releases) and download jar there.
+
+Choose the jar with "SNAPSHOT" suffix.
+
+#### CurseForge?
+
+Planning. (Perhaps not. Will see.)
+
+#### Modrinth?
+
+Planning.
+
+#### (Other third-party Minecraft mod distribution platform)?
+
+Currently, no.
+
 ### 1.x.x (major version) Forge/Fabric/Quilt/NeoForge please?
 
 Maybe. I personally don't really have much time. Developing multiplatform mod (and backporting) is painful as hell,
@@ -117,16 +116,14 @@ However, I am not sure whether is 100% compatible or not. Bugs may persist unnot
 
 ### Will this mod ever be allowed on (server name)?
 
-Look, you, as a simple Minecraft Java player, just want a nice game playing or have privacy protected, such desire is 100% acceptable.
+Look, you, as a simple Minecraft Java player, just want a nice game playing (fairness of course)
+or have privacy protected, such desire is 100% acceptable.
 You don't want to play on a server under 400+ ping through a shitty ISP network route.
 
-Also, all code is open source, take a look in it if concerned. Besides, having a VPN yeets out this mod because your VPN software will take care of every bit of traffic for you.
+Also, all code is open source, take a look in it if concerned.
+Besides, having a VPN yeets out this mod because your VPN software will take care of every bit of traffic for you.
 
-Still unsure, consult server admin then.
-Take Hypixel as an example, they impose inspection on your Minecraft character to see if your account is "safe".
-Switching IP address frequently (or abnormally) may result in being banned because they would think your account's compromised.
-Under such circumstance, better consult first.
-
+Still unsure, consult server admin then. 
 If, unfortunately, (server name) explicitly forbids proxy (or it's pay-to-use-proxy), then issue stands at their side.
 
 ### How to see if this mod is actually working?
