@@ -1,4 +1,4 @@
-package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
+package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,5 +1,6 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 
+import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.cloth.ClothConfigScreen;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeyUtil;
@@ -61,6 +62,7 @@ public class MultiplayerScreenMixin {
                     try {
                         ((ScreenAccessor) this).getClient().setScreen(ClothConfigScreen.getScreen((MultiplayerScreen) (Object) this));
                     } catch (Exception e) {
+                        SocksProxyClient.LOGGER.error("Where's my config screen?", e);
                         button.active = false;
                     }
                 }).width(152).build();

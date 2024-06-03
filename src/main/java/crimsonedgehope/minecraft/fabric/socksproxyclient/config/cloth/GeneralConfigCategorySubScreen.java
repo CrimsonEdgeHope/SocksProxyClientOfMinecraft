@@ -2,7 +2,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.config.cloth;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.SocksVersion;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeyUtil;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpToSocksServer;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
@@ -56,6 +56,10 @@ final class GeneralConfigCategorySubScreen extends ClothCategorySubScreen<Genera
                                 (Class<SocksVersion>) this.getConfigEntry().getDefaultValue().getClass(),
                                 this.getConfigEntry().getValue()
                         )
+                        .setEnumNameProvider(e -> switch ((SocksVersion) e) {
+                            case SOCKS4 -> Text.of("Socks 4");
+                            case SOCKS5 -> Text.of("Socks 5");
+                        })
                         .setRequirement(Requirement.isTrue(useProxy.getClothConfigEntry()))
                         .setDefaultValue(this.getConfigEntry().getDefaultValue())
                         .setSaveConsumer(this.getConfigEntry()::setValue)
@@ -75,7 +79,7 @@ final class GeneralConfigCategorySubScreen extends ClothCategorySubScreen<Genera
                             Optional<Text> r = Optional.of(
                                     TranslateKeyUtil.itemAsText(this.getConfigEntry().getTranslateKey(), "error")
                             );
-                            if (s.isEmpty()) {
+                            if (s.isEmpty() || s.isBlank()) {
                                 return r;
                             }
                             return Optional.empty();

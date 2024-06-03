@@ -1,6 +1,8 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
 
 import com.google.gson.JsonObject;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.ProxyCredential;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 

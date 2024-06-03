@@ -4,6 +4,7 @@
   "package": "crimsonedgehope.minecraft.fabric.socksproxyclient.mixin.proxy",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "DohResolverMixin",
     "ProxyHandlerMixin",
     "Socks4ProxyHandlerMixin",
     "Socks5ProxyHandlerMixin"

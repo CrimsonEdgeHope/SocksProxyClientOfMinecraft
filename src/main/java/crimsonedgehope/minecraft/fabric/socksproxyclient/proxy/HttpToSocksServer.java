@@ -2,7 +2,6 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ProxyCredential;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
@@ -174,7 +173,7 @@ public class HttpToSocksServer {
             }
 
             if (remote == null) {
-                boolean noResolver = ServerConfig.remoteResolve();
+                boolean noResolver = ServerConfig.httpRemoteResolve();
                 ChannelHandler handler;
                 Proxy proxySelection = GeneralConfig.getProxy();
                 ProxyCredential proxyCredential = GeneralConfig.getProxyCredential();

@@ -1,6 +1,9 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
 
 import com.google.gson.JsonObject;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.DNSOverHTTPSProvider;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.ProxyCredential;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
 
 import java.net.Proxy;
 
@@ -14,6 +17,12 @@ public final class ServerConfig extends SocksProxyClientConfig {
 
     private static final SocksProxyClientConfigEntry<Boolean> proxyMinecraft =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyMinecraft", true);
+    private static final SocksProxyClientConfigEntry<Boolean> minecraftRemoteResolve =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "minecraftRemoteResolve", false);
+    private static final SocksProxyClientConfigEntry<DNSOverHTTPSProvider> minecraftRemoteResolveProvider =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "minecraftRemoteResolveProvider", DNSOverHTTPSProvider.CLOUDFLARE);
+    private static final SocksProxyClientConfigEntry<String> customMinecraftRemoteResolveProvider =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "customMinecraftRemoteResolveProvider", DNSOverHTTPSProvider.CLOUDFLARE.url);
     private static final SocksProxyClientConfigEntry<Boolean> proxyYggdrasilAuth =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyYggdrasilAuth", true, 1);
     private static final SocksProxyClientConfigEntry<Boolean> proxyPlayerSkinDownload =
@@ -77,14 +86,31 @@ public final class ServerConfig extends SocksProxyClientConfig {
         return GeneralConfig.getSocksVersion();
     }
 
-    public static boolean remoteResolve() {
+    public static boolean httpRemoteResolve() {
         return GeneralConfig.usingProxy() && httpRemoteResolve.getValue();
+    }
+
+    public static boolean minecraftRemoteResolve() {
+        return usingProxyOnMinecraft() && minecraftRemoteResolve.getValue();
+    }
+
+    public static String minecraftRemoteResolveProviderUrl() {
+        if (!minecraftRemoteResolve()) {
+            return null;
+        }
+        if (minecraftRemoteResolveProvider.getValue().equals(DNSOverHTTPSProvider.CUSTOM)) {
+            return customMinecraftRemoteResolveProvider.getValue();
+        }
+        return minecraftRemoteResolveProvider.getValue().url;
     }
 
     @Override
     public JsonObject defaultEntries() {
         JsonObject obj = new JsonObject();
         obj.addProperty(proxyMinecraft.getEntry(), proxyMinecraft.getDefaultValue());
+        obj.addProperty(minecraftRemoteResolve.getEntry(), minecraftRemoteResolve.getDefaultValue());
+        obj.addProperty(minecraftRemoteResolveProvider.getEntry(), minecraftRemoteResolveProvider.getDefaultValue().name());
+        obj.addProperty(customMinecraftRemoteResolveProvider.getEntry(), customMinecraftRemoteResolveProvider.getDefaultValue());
         obj.addProperty(proxyYggdrasilAuth.getEntry(), proxyYggdrasilAuth.getDefaultValue());
         obj.addProperty(proxyPlayerSkinDownload.getEntry(), proxyPlayerSkinDownload.getDefaultValue());
         obj.addProperty(proxyServerResourceDownload.getEntry(), proxyServerResourceDownload.getDefaultValue());
@@ -98,6 +124,9 @@ public final class ServerConfig extends SocksProxyClientConfig {
     public JsonObject toJsonObject() {
         JsonObject obj = new JsonObject();
         obj.addProperty(proxyMinecraft.getEntry(), proxyMinecraft.getValue());
+        obj.addProperty(minecraftRemoteResolve.getEntry(), minecraftRemoteResolve.getValue());
+        obj.addProperty(minecraftRemoteResolveProvider.getEntry(), minecraftRemoteResolveProvider.getValue().name());
+        obj.addProperty(customMinecraftRemoteResolveProvider.getEntry(), customMinecraftRemoteResolveProvider.getValue());
         obj.addProperty(proxyYggdrasilAuth.getEntry(), proxyYggdrasilAuth.getValue());
         obj.addProperty(proxyPlayerSkinDownload.getEntry(), proxyPlayerSkinDownload.getValue());
         obj.addProperty(proxyServerResourceDownload.getEntry(), proxyServerResourceDownload.getValue());
@@ -110,6 +139,9 @@ public final class ServerConfig extends SocksProxyClientConfig {
     @Override
     public void fromJsonObject(JsonObject object) {
         proxyMinecraft.setValue(object.get(proxyMinecraft.getEntry()).getAsBoolean());
+        minecraftRemoteResolve.setValue(object.get(minecraftRemoteResolve.getEntry()).getAsBoolean());
+        minecraftRemoteResolveProvider.setValue(DNSOverHTTPSProvider.valueOf(object.get(minecraftRemoteResolveProvider.getEntry()).getAsString()));
+        customMinecraftRemoteResolveProvider.setValue(object.get(customMinecraftRemoteResolveProvider.getEntry()).getAsString());
         proxyYggdrasilAuth.setValue(object.get(proxyYggdrasilAuth.getEntry()).getAsBoolean());
         proxyPlayerSkinDownload.setValue(object.get(proxyPlayerSkinDownload.getEntry()).getAsBoolean());
         proxyServerResourceDownload.setValue(object.get(proxyServerResourceDownload.getEntry()).getAsBoolean());
