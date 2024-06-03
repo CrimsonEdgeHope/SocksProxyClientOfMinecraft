@@ -66,6 +66,7 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
                                         Requirement.isTrue(proxyMinecraft.getClothConfigEntry())
                                 )
                         )
+                        .setTooltip(Optional.of(this.getConfigEntry().getDescriptionTranslatableText().toArray(Text[]::new)))
                         .setDefaultValue(this.getConfigEntry().getDefaultValue())
                         .setSaveConsumer(this.getConfigEntry()::setValue)
                         .build();

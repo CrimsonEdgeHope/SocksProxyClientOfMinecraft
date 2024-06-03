@@ -18,7 +18,7 @@ public final class ServerConfig extends SocksProxyClientConfig {
     private static final SocksProxyClientConfigEntry<Boolean> proxyMinecraft =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyMinecraft", true);
     private static final SocksProxyClientConfigEntry<Boolean> minecraftRemoteResolve =
-            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "minecraftRemoteResolve", false);
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "minecraftRemoteResolve", false, 1);
     private static final SocksProxyClientConfigEntry<DNSOverHTTPSProvider> minecraftRemoteResolveProvider =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "minecraftRemoteResolveProvider", DNSOverHTTPSProvider.CLOUDFLARE);
     private static final SocksProxyClientConfigEntry<String> customMinecraftRemoteResolveProvider =
