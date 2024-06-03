@@ -12,6 +12,7 @@ on:
       - "settings.gradle"
       - "!README.md"
       - "!LICENSE"
+      - "!CHANGELOG.md"
   workflow_dispatch:
 
 jobs:
