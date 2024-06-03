@@ -4,8 +4,6 @@
 &nbsp;![Environment: Client](https://img.shields.io/badge/environment-client-1976d2?style=for-the-badge)
 &nbsp;![Minecraft version: 1.20.1](https://img.shields.io/badge/minecraft%20version-1.20.1-1976d2?style=for-the-badge)
 
-<!--<img src="https://i.postimg.cc/85ccwZSY/cloth-config-api-badge.png" alt="Requires Cloth Config API" width="149" height="50" />-->
-
 Modern Minecraft Java client relies on Netty to connect to multiplayer servers,
 and this simple mod is able to proxy Minecraft server traffic through designated SOCKS proxy as desired.
 
@@ -32,7 +30,7 @@ open the latest successful workflow run and download artifacts. (Artifacts will 
 - ~~Turn to GitHub releases and download jar there. (Coming soon. Haven't decided mod's versioning.)~~
 - ~~Go to Modrinth (Planning. Not live yet.)~~
 
-Choose the jar with "local" suffix.
+Choose the jar with "SNAPSHOT" suffix.
 
 ### CurseForge?
 

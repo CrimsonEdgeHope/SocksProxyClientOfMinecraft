@@ -30,14 +30,14 @@ jobs:
       - name: Changelog body
         id: get_changelog_body
         run: |
-          CHANGELOG_BODY=$(./gradlew getChangelog --console=plain --quiet --no-links --no-empty-sections --no-summary)
-          echo "$CHANGELOG_BODY" >> $GITHUB_OUTPUT
+          touch tmp_changelog_body.txt
+          echo "$(./gradlew getChangelog --console=plain --quiet --no-links --no-empty-sections --no-summary)" > tmp_changelog_body.txt
         shell: bash
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
           name: ${{ github.ref_name }}
-          body: ${{ steps.get_changelog_body.outputs.CHANGELOG_BODY }}
+          body_path: tmp_changelog_body.txt
           prerelease: ${{ contains(github.event.head_commit.message, '[prerelease]') }}
           files: |
             build/libs/*-SNAPSHOT.jar

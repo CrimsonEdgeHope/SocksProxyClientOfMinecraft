@@ -2,6 +2,7 @@ plugins {
 	id "fabric-loom" version "1.5-SNAPSHOT"
 	id "java-library"
 	id "com.github.johnrengelman.shadow" version "8.1.1"
+	id "org.jetbrains.changelog" version "2.2.0"
 }
 
 version = "${project.mod_version}+${project.minecraft_version}"
@@ -35,7 +36,7 @@ shadowJar {
 remapJar {
 	dependsOn(shadowJar)
 	inputFile = tasks.shadowJar.archiveFile
-	archiveClassifier.set("local")
+	archiveClassifier.set("SNAPSHOT")
 }
 
 repositories {
@@ -75,4 +76,9 @@ processResources {
 	filesMatching("fabric.mod.json") {
 		expand v
 	}
+}
+
+changelog {
+	combinePreReleases = false
+	repositoryUrl = "https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft"
 }
