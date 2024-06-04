@@ -33,7 +33,7 @@ public final class ClothConfigScreen {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            HttpProxyServerUtils.createAuthenticationService();
+            HttpProxyServerUtils.recreateYggdrasilService();
         });
         builder = builder.setAlwaysShowTabs(true)
                 .setShouldTabsSmoothScroll(true)

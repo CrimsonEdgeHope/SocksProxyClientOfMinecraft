@@ -50,7 +50,7 @@ public class MultiplayerScreenMixin {
                 TranslateKeyUtil.itemAsText(Arrays.asList("screen", "recreateAuth")),
                 button -> {
                     button.active = false;
-                    HttpProxyServerUtils.recreateAuthenticationService().thenRun(() -> button.active = true);
+                    HttpProxyServerUtils.recreateYggdrasilService().thenRun(() -> button.active = true);
                 }
         ).width(152).build();
         ((ScreenAccessor) this).invokeAddDrawableChild(recreateAuthButton);

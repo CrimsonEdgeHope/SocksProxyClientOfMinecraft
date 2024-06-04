@@ -32,6 +32,8 @@ import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.proxy.Socks4ProxyHandler;
 import io.netty.handler.proxy.Socks5ProxyHandler;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -71,6 +73,10 @@ public class HttpToSocksServer {
     }
 
     public void fire() {
+        fire(f -> {});
+    }
+
+    public void fire(final GenericFutureListener<Future<? super Void>> firedCallback) {
         if (!GeneralConfig.usingProxy()) {
             LOGGER.info("Not starting internal http proxy.");
             return;
@@ -104,7 +110,7 @@ public class HttpToSocksServer {
                         fired = true;
                         LOGGER.info("Internal http proxy listening on {}", future.channel().localAddress());
                     }
-                }).channel();
+                }).addListener(firedCallback).channel();
                 channel = channel.closeFuture().sync().addListener(f -> {
                     LOGGER.info("Internal http proxy shutting off!");
                 }).channel();

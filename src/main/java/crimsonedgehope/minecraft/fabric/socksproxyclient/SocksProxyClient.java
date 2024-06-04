@@ -23,8 +23,8 @@ public class SocksProxyClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		if (((MinecraftClientAccessor) MinecraftClient.getInstance()).getUserApiService().equals(UserApiService.OFFLINE)) {
-			LOGGER.info("Trying to recreate Yggdrasil user api service");
-			HttpProxyServerUtils.recreateAuthenticationService();
+			LOGGER.warn("Offline mode! Now attempt to recreate Yggdrasil service");
+			HttpProxyServerUtils.recreateYggdrasilService();
 		}
 	}
 }

@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.ProxyCredential;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.InetSocketAddress;
@@ -79,19 +80,19 @@ public final class GeneralConfig extends SocksProxyClientConfig {
         return useProxy.getValue();
     }
 
-    @Nullable
+    @NotNull
     public static Proxy getProxy() {
         return getProxy(usingProxy());
     }
 
-    @Nullable
+    @NotNull
     public static Proxy getProxy(
             boolean useProxy
     ) {
         LOGGER.debug("useProxy {}", useProxy);
 
         if (!useProxy) {
-            return null;
+            return Proxy.NO_PROXY;
         }
 
         return new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(customProxyHost.getValue(), customProxyPort.getValue()));

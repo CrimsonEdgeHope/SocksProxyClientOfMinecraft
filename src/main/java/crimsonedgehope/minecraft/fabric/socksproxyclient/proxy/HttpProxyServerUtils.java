@@ -35,28 +35,33 @@ public final class HttpProxyServerUtils {
         }
     }
 
-    public static CompletableFuture<Void> recreateAuthenticationService() {
-        return HttpProxyServerUtils.createAuthenticationService();
+    public static CompletableFuture<Void> recreateYggdrasilService() {
+        return HttpProxyServerUtils.createYggdrasilService();
     }
 
-    public static CompletableFuture<Void> createAuthenticationService() {
+    public static CompletableFuture<Void> createYggdrasilService() {
         final MinecraftClient client = MinecraftClient.getInstance();
         return client.submit(() -> {
-            SocksProxyClient.LOGGER.debug("recreateAuthenticationService");
-            SocksProxyClient.LOGGER.info("Attempt to recreate authentication service");
+            SocksProxyClient.LOGGER.debug("createYggdrasilService");
+            SocksProxyClient.LOGGER.info("Attempt to recreate Yggdrasil service");
             HttpToSocksServer.INSTANCE.cease();
-            HttpToSocksServer.INSTANCE.fire();
-            RunArgs args = MinecraftClientMixinVariables.getRunArgs();
-            MinecraftClientAccessor accessor = ((MinecraftClientAccessor) client);
-            accessor.setAuthenticationService(new YggdrasilAuthenticationService(Proxy.NO_PROXY));
-            accessor.setSessionService(accessor.getAuthenticationService().createMinecraftSessionService());
-            accessor.setUserApiService(accessor.invokeCreateUserApiService(accessor.getAuthenticationService(), args));
-            accessor.setSkinProvider(new PlayerSkinProvider(accessor.getTextureManager(), new File(args.directories.assetDir, "skins"), accessor.getSessionService()));
-            accessor.setSocialInteractionsManager(new SocialInteractionsManager(client, accessor.getUserApiService()));
-            accessor.setTelemetryManager(new TelemetryManager(client, accessor.getUserApiService(), args.network.session));
-            accessor.setProfileKeys(ProfileKeys.create(accessor.getUserApiService(), args.network.session, client.runDirectory.toPath()));
-            accessor.setAbuseReportContext(AbuseReportContext.create(ReporterEnvironment.ofIntegratedServer(), accessor.getUserApiService()));
-            SocksProxyClient.LOGGER.info("Recreated authentication service.");
+            HttpToSocksServer.INSTANCE.fire(future -> {
+                if (future.isSuccess()) {
+                    RunArgs args = MinecraftClientMixinVariables.getRunArgs();
+                    MinecraftClientAccessor accessor = ((MinecraftClientAccessor) client);
+                    accessor.setAuthenticationService(new YggdrasilAuthenticationService(HttpProxyServerUtils.getProxyObject()));
+                    accessor.setSessionService(accessor.getAuthenticationService().createMinecraftSessionService());
+                    accessor.setUserApiService(accessor.invokeCreateUserApiService(accessor.getAuthenticationService(), args));
+                    accessor.setSkinProvider(new PlayerSkinProvider(accessor.getTextureManager(), new File(args.directories.assetDir, "skins"), accessor.getSessionService()));
+                    accessor.setSocialInteractionsManager(new SocialInteractionsManager(client, accessor.getUserApiService()));
+                    accessor.setTelemetryManager(new TelemetryManager(client, accessor.getUserApiService(), args.network.session));
+                    accessor.setProfileKeys(ProfileKeys.create(accessor.getUserApiService(), args.network.session, client.runDirectory.toPath()));
+                    accessor.setAbuseReportContext(AbuseReportContext.create(ReporterEnvironment.ofIntegratedServer(), accessor.getUserApiService()));
+                    SocksProxyClient.LOGGER.info("Recreated Yggdrasil service.");
+                } else {
+                    SocksProxyClient.LOGGER.warn("Failed to recreate Yggdrasil service.");
+                }
+            });
         });
     }
 }

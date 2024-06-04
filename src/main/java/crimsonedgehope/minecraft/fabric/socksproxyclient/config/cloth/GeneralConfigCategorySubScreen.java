@@ -2,9 +2,8 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.config.cloth;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeyUtil;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpToSocksServer;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.Requirement;
@@ -37,14 +36,8 @@ final class GeneralConfigCategorySubScreen extends ClothCategorySubScreen<Genera
                                 this.getConfigEntry().getValue()
                         )
                         .setDefaultValue(this.getConfigEntry().getDefaultValue())
-                        .setSaveConsumer(v -> {
-                            this.getConfigEntry().setValue(v);
-                            if (v) {
-                                HttpToSocksServer.INSTANCE.fire();
-                            } else {
-                                HttpToSocksServer.INSTANCE.cease();
-                            }
-                        }).build();
+                        .setSaveConsumer(this.getConfigEntry()::setValue)
+                        .build();
             }
         };
 
