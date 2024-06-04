@@ -3,18 +3,25 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 import com.mojang.authlib.HttpAuthenticationService;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.net.Proxy;
 
 @Environment(EnvType.CLIENT)
 @Mixin(HttpAuthenticationService.class)
 public abstract class HttpAuthenticationServiceMixin {
-    @Inject(method = "getProxy", at = @At("RETURN"), cancellable = true, remap = false)
-    protected void redirectedGet(CallbackInfoReturnable<Proxy> cir) {
+    @Redirect(method = "getProxy",
+            at = @At(value = "FIELD", target = "Lcom/mojang/authlib/HttpAuthenticationService;proxy:Ljava/net/Proxy;", opcode = Opcodes.GETFIELD),
+            remap = false
+    )
+    protected abstract Proxy redirectedGet0(HttpAuthenticationService instance);
 
-    }
+    @Redirect(method = "createUrlConnection",
+            at = @At(value = "FIELD", target = "Lcom/mojang/authlib/HttpAuthenticationService;proxy:Ljava/net/Proxy;", opcode = Opcodes.GETFIELD),
+            remap = false
+    )
+    protected abstract Proxy redirectedGet1(HttpAuthenticationService instance);
 }

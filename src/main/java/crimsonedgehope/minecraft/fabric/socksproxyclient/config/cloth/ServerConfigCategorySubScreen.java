@@ -24,7 +24,7 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
     ClothConfigEntry<DNSOverHTTPSProvider> minecraftRemoteResolveProvider;
     ClothConfigEntry<String> customMinecraftRemoteResolveProvider;
 
-    ClothConfigEntry<Boolean> proxyYggdrasilAuth;
+    ClothConfigEntry<Boolean> proxyYggdrasil;
     ClothConfigEntry<Boolean> proxyPlayerSkinDownload;
     ClothConfigEntry<Boolean> proxyServerResourceDownload;
     ClothConfigEntry<Boolean> proxyBlockListSupplier;
@@ -135,7 +135,7 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
             }
         };
 
-        proxyYggdrasilAuth = new ClothConfigEntry<>(clothAccess.configEntryBuilder(), entryField("proxyYggdrasilAuth", Boolean.class)) {
+        proxyYggdrasil = new ClothConfigEntry<>(clothAccess.configEntryBuilder(), entryField("proxyYggdrasil", Boolean.class)) {
             @Override
             protected AbstractConfigListEntry<Boolean> buildClothConfigEntry() {
                 return this.getBuilder().startBooleanToggle(
@@ -249,7 +249,7 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
         SubCategoryBuilder subServicesBuilder = clothAccess.configEntryBuilder().startSubCategory(TranslateKeyUtil.itemAsText(transKey, "services"));
         subServicesBuilder.setExpanded(true);
 
-        subServicesBuilder.add(proxyYggdrasilAuth.getClothConfigEntry());
+        subServicesBuilder.add(proxyYggdrasil.getClothConfigEntry());
         subServicesBuilder.add(proxyPlayerSkinDownload.getClothConfigEntry());
         subServicesBuilder.add(proxyServerResourceDownload.getClothConfigEntry());
         subServicesBuilder.add(proxyBlockListSupplier.getClothConfigEntry());

@@ -262,7 +262,7 @@ public class HttpToSocksServer {
                 }).channel();
                 remote = remote.closeFuture().addListener(f -> {
                     if (f.isDone()) {
-                        LOGGER.info("Tunnel to {}:{} closed.", remoteHttpHost, remoteHttpPort);
+                        LOGGER.info("Tunnel to remote {}:{} closed.", remoteHttpHost, remoteHttpPort);
                         shutOffActiveChannel(client);
                     }
                 }).channel();

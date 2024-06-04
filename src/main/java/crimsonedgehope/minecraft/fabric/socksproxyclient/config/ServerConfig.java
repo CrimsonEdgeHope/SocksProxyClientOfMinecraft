@@ -23,8 +23,8 @@ public final class ServerConfig extends SocksProxyClientConfig {
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "minecraftRemoteResolveProvider", DNSOverHTTPSProvider.CLOUDFLARE);
     private static final SocksProxyClientConfigEntry<String> customMinecraftRemoteResolveProvider =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "customMinecraftRemoteResolveProvider", DNSOverHTTPSProvider.CLOUDFLARE.url);
-    private static final SocksProxyClientConfigEntry<Boolean> proxyYggdrasilAuth =
-            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyYggdrasilAuth", true, 1);
+    private static final SocksProxyClientConfigEntry<Boolean> proxyYggdrasil =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyYggdrasil", true, 1);
     private static final SocksProxyClientConfigEntry<Boolean> proxyPlayerSkinDownload =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyPlayerSkinDownload", true, 1);
     private static final SocksProxyClientConfigEntry<Boolean> proxyServerResourceDownload =
@@ -62,8 +62,8 @@ public final class ServerConfig extends SocksProxyClientConfig {
         return getProxyForMinecraft(minecraftLoopbackProxyOption());
     }
 
-    public static boolean shouldProxyYggdrasilAuth() {
-        return GeneralConfig.usingProxy() && proxyYggdrasilAuth.getValue();
+    public static boolean shouldProxyYggdrasil() {
+        return GeneralConfig.usingProxy() && proxyYggdrasil.getValue();
     }
 
     public static boolean shouldProxyPlayerSkinDownload() {
@@ -111,7 +111,7 @@ public final class ServerConfig extends SocksProxyClientConfig {
         obj.addProperty(minecraftRemoteResolve.getEntry(), minecraftRemoteResolve.getDefaultValue());
         obj.addProperty(minecraftRemoteResolveProvider.getEntry(), minecraftRemoteResolveProvider.getDefaultValue().name());
         obj.addProperty(customMinecraftRemoteResolveProvider.getEntry(), customMinecraftRemoteResolveProvider.getDefaultValue());
-        obj.addProperty(proxyYggdrasilAuth.getEntry(), proxyYggdrasilAuth.getDefaultValue());
+        obj.addProperty(proxyYggdrasil.getEntry(), proxyYggdrasil.getDefaultValue());
         obj.addProperty(proxyPlayerSkinDownload.getEntry(), proxyPlayerSkinDownload.getDefaultValue());
         obj.addProperty(proxyServerResourceDownload.getEntry(), proxyServerResourceDownload.getDefaultValue());
         obj.addProperty(proxyBlockListSupplier.getEntry(), proxyBlockListSupplier.getDefaultValue());
@@ -127,7 +127,7 @@ public final class ServerConfig extends SocksProxyClientConfig {
         obj.addProperty(minecraftRemoteResolve.getEntry(), minecraftRemoteResolve.getValue());
         obj.addProperty(minecraftRemoteResolveProvider.getEntry(), minecraftRemoteResolveProvider.getValue().name());
         obj.addProperty(customMinecraftRemoteResolveProvider.getEntry(), customMinecraftRemoteResolveProvider.getValue());
-        obj.addProperty(proxyYggdrasilAuth.getEntry(), proxyYggdrasilAuth.getValue());
+        obj.addProperty(proxyYggdrasil.getEntry(), proxyYggdrasil.getValue());
         obj.addProperty(proxyPlayerSkinDownload.getEntry(), proxyPlayerSkinDownload.getValue());
         obj.addProperty(proxyServerResourceDownload.getEntry(), proxyServerResourceDownload.getValue());
         obj.addProperty(proxyBlockListSupplier.getEntry(), proxyBlockListSupplier.getValue());
@@ -142,7 +142,7 @@ public final class ServerConfig extends SocksProxyClientConfig {
         minecraftRemoteResolve.setValue(object.get(minecraftRemoteResolve.getEntry()).getAsBoolean());
         minecraftRemoteResolveProvider.setValue(DNSOverHTTPSProvider.valueOf(object.get(minecraftRemoteResolveProvider.getEntry()).getAsString()));
         customMinecraftRemoteResolveProvider.setValue(object.get(customMinecraftRemoteResolveProvider.getEntry()).getAsString());
-        proxyYggdrasilAuth.setValue(object.get(proxyYggdrasilAuth.getEntry()).getAsBoolean());
+        proxyYggdrasil.setValue(object.get(proxyYggdrasil.getEntry()).getAsBoolean());
         proxyPlayerSkinDownload.setValue(object.get(proxyPlayerSkinDownload.getEntry()).getAsBoolean());
         proxyServerResourceDownload.setValue(object.get(proxyServerResourceDownload.getEntry()).getAsBoolean());
         proxyBlockListSupplier.setValue(object.get(proxyBlockListSupplier.getEntry()).getAsBoolean());

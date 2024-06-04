@@ -12,13 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Environment(EnvType.CLIENT)
 @Mixin(Main.class)
 public class MainMixin {
-    @Inject(method = "main",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/main/Main;getOption(Ljoptsimple/OptionSet;Ljoptsimple/OptionSpec;)Ljava/lang/Object;",
-                    ordinal = 0,
-                    shift = At.Shift.BEFORE)
-    )
+    @Inject(method = "main", at = @At(value = "HEAD"))
     private static void injected(String[] args, CallbackInfo ci) throws Exception {
         SocksProxyClient.preInit();
     }
