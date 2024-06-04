@@ -79,6 +79,9 @@ processResources {
 }
 
 changelog {
+	header.set(provider {
+		"${version.get()}"
+	})
 	combinePreReleases = false
 	repositoryUrl = "https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft"
 }
