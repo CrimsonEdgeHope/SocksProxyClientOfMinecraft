@@ -45,23 +45,6 @@ Navigate to your game's directory (usually `.minecraft`), open `config/socksprox
 
 <!-- modrinth_exclude.start -->
 
-## Troubleshooting
-
-I think I have everything live, but proxy isn't working! (Can't join server. Can't accept resource pack. etc.)
-
-- Make sure your game doesn't have other mods causing conflicts with this mod.
-- Make sure your proxy is reachable live from your PC, socks version, host address, port, username and password correct.
-- Make sure your dream desired Minecraft server reachable from your proxy, including
-  Mojang Yggdrasil auth service to verify your Minecraft character's identity.
-- Make sure your ISP isn't polluting DNS. If confirmed or unsure, navigate to "Server settings" section, turn on:
-  - "Use proxy on DNS resolve for Minecraft server when using Socks 5"
-  - "Use proxy on DNS resolve for HTTP when using SOCKS5"
-  - and any other option you desire.
-    (By default they are on)
-    (Should your proxy be polluting DNS as well, or just simply offers no DNS support, you will have to seek for other possible solution.)
-- If, in the worst case, unsure about or no clue of cause (you may encounter a bug),
-  open an issue and elaborate on what issue or problem you face using this mod.
-
 ## FAQs
 
 ### Where/How to get this mod?
@@ -104,10 +87,6 @@ FabricLoader 100% required.
 ### Fabric server applicable?
 
 No. This mod is client-side.
-
-### Realms applicable?
-
-No. Realms requires vanilla client. This mod won't cover Realms part.
 
 ### Compatibility with (mod name) mod?
 

@@ -12,6 +12,8 @@
 
 ### Fixed
 
+- Fixed missed out proxying on Yggdrasil
+
 ### Security
 
 ## [0.0.1-alpha+1.20.1] - 2024-06-03
