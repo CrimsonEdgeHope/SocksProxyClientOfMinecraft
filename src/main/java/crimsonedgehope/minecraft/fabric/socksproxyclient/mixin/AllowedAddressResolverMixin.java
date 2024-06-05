@@ -35,6 +35,7 @@ public class AllowedAddressResolverMixin {
     @Shadow @Final private AddressResolver addressResolver;
     @Shadow @Final private RedirectResolver redirectResolver;
 
+    @Unique
     private static DohResolver RESOLVER;
 
     @Redirect(method = "resolve", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/AllowedAddressResolver;addressResolver:Lnet/minecraft/client/network/AddressResolver;"))
@@ -42,14 +43,17 @@ public class AllowedAddressResolverMixin {
         if (!ServerConfig.minecraftRemoteResolve()) {
             return addressResolver;
         }
-        return address -> {
+        return serverAddress -> {
             try {
-                if (InetAddresses.isInetAddress(address.getAddress())) {
-                    return Optional.of(Address.create(new InetSocketAddress(address.getAddress(), address.getPort())));
+                if (InetAddresses.isInetAddress(serverAddress.getAddress())) {
+                    InetAddress inet = InetAddress.getByName(serverAddress.getAddress());
+                    byte[] bytes = inet.getAddress();
+                    // TODO: ?
+                    return Optional.of(Address.create(new InetSocketAddress(InetAddress.getByAddress(inet.getHostAddress(), bytes), serverAddress.getPort())));
                 }
-                return addressResolver(address);
+                return addressResolver(serverAddress);
             } catch (Throwable e) {
-                SocksProxyClient.LOGGER.debug("Couldn't resolve server {} address", address.getAddress(), e);
+                SocksProxyClient.LOGGER.debug("Couldn't resolve server {} address", serverAddress.getAddress(), e);
             }
             return Optional.empty();
         };
@@ -60,15 +64,15 @@ public class AllowedAddressResolverMixin {
         if (!ServerConfig.minecraftRemoteResolve()) {
             return redirectResolver;
         }
-        return address -> {
-            if (address.getPort() == 25565) {
+        return serverAddress -> {
+            if (serverAddress.getPort() == 25565) {
                 try {
-                    if (InetAddresses.isInetAddress(address.getAddress())) {
-                        return Optional.of(new ServerAddress(address.getAddress(), address.getPort()));
+                    if (InetAddresses.isInetAddress(serverAddress.getAddress())) {
+                        return Optional.of(new ServerAddress(serverAddress.getAddress(), serverAddress.getPort()));
                     }
-                    return redirectResolver(address);
+                    return redirectResolver(serverAddress);
                 } catch (Throwable e) {
-                    SocksProxyClient.LOGGER.debug("Couldn't resolve server {} address", address.getAddress(), e);
+                    SocksProxyClient.LOGGER.debug("Couldn't resolve server {} address", serverAddress.getAddress(), e);
                 }
             }
             return Optional.empty();
@@ -76,7 +80,7 @@ public class AllowedAddressResolverMixin {
     }
 
     @Unique
-    private static Record[] resolver(final String address, final int recordType) throws Exception {
+    private static Record[] resolver(final String domainName, final int recordType) throws Exception {
         if (RESOLVER == null) {
             RESOLVER = new DohResolver(ServerConfig.minecraftRemoteResolveProviderUrl(), 2, Duration.ofSeconds(2L));
             RESOLVER.setUsePost(true);
@@ -84,7 +88,7 @@ public class AllowedAddressResolverMixin {
             RESOLVER.setUriTemplate(ServerConfig.minecraftRemoteResolveProviderUrl());
         }
         Lookup lookup;
-        lookup = new Lookup(address, recordType);
+        lookup = new Lookup(domainName, recordType);
         lookup.setResolver(RESOLVER);
         lookup.setHostsFileParser(null);
         lookup.run();
@@ -96,18 +100,20 @@ public class AllowedAddressResolverMixin {
     }
 
     @Unique
-    private Optional<Address> addressResolver(ServerAddress address) throws Exception {
-        Record[] records = resolver(address.getAddress(), Type.A);
-        ARecord arec = (ARecord) records[0];
+    private Optional<Address> addressResolver(ServerAddress serverAddress) throws Exception {
+        Record[] records = resolver(serverAddress.getAddress(), Type.A);
+        final ARecord arec = (ARecord) records[0];
         SocksProxyClient.LOGGER.debug(arec.toString());
         InetAddress inetAddress = arec.getAddress();
-        SocksProxyClient.LOGGER.info("Resolve {} to {}", address.getAddress(), inetAddress.getHostAddress());
-        return Optional.of(Address.create(new InetSocketAddress(inetAddress.getHostAddress(), address.getPort())));
+        SocksProxyClient.LOGGER.info("Resolve {} to {}", serverAddress.getAddress(), inetAddress.getHostAddress());
+        byte[] bytes = inetAddress.getAddress();
+        // TODO: ?
+        return Optional.of(Address.create(new InetSocketAddress(InetAddress.getByAddress(serverAddress.getAddress(), bytes), serverAddress.getPort())));
     }
 
     @Unique
-    private Optional<ServerAddress> redirectResolver(ServerAddress address) throws Exception {
-        String addr0 = "_minecraft._tcp." + address.getAddress();
+    private Optional<ServerAddress> redirectResolver(ServerAddress serverAddress) throws Exception {
+        String addr0 = "_minecraft._tcp." + serverAddress.getAddress();
         Record[] records = resolver(addr0, Type.SRV);
         final SRVRecord srv = (SRVRecord) records[0];
         SocksProxyClient.LOGGER.debug(records[0].toString());
