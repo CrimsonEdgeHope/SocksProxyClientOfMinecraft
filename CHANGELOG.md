@@ -18,13 +18,13 @@
 
 ### Added
 
-- Toggle communication with Realms going through proxy as much as possible.
+- Let communication with Realms going through proxy as much as possible.
 
 ### Changed
 
 - Renamed config option "Use proxy on Yggdrasil authentication service"("proxyYggdrasilAuth")
   to "Use proxy on Yggdrasil service interaction"("proxyYggdrasil") in "Server settings" section.
-- Make patches to Mixins fetching or setting Proxy object properties.
+- Made patches to Mixins fetching or setting Proxy object properties.
 - If game client is in offline mode, the mod will try to recreate auth services once.
   (reopen communication with Yggdrasil, and other essential services engaged in joining servers.)
 
