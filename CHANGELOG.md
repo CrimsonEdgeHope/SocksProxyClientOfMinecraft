@@ -6,6 +6,8 @@
 
 ### Changed
 
+- Compatability with [Fast IP Ping](https://modrinth.com/mod/fast-ip-ping)
+
 ### Deprecated
 
 ### Removed

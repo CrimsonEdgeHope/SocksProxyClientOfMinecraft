@@ -40,6 +40,7 @@
     "modmenu": "^${modmenu_version}"
   },
   "conflicts": {
+    "fastipping": "*",
     "viafabricplus": ">=2.7.7"
   },
   "breaks": {
