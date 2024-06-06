@@ -42,28 +42,18 @@ public interface MinecraftClientAccessor {
     @Accessor
     TextureManager getTextureManager();
 
-    @Accessor
-    PlayerSkinProvider getSkinProvider();
     @Accessor("skinProvider") @Mutable
     void setSkinProvider(PlayerSkinProvider provider);
 
-    @Accessor
-    SocialInteractionsManager getSocialInteractionsManager();
     @Accessor("socialInteractionsManager") @Mutable
     void setSocialInteractionsManager(SocialInteractionsManager manager);
 
-    @Accessor
-    TelemetryManager getTelemetryManager();
     @Accessor("telemetryManager") @Mutable
     void setTelemetryManager(TelemetryManager manager);
 
-    @Accessor
-    ProfileKeys getProfileKeys();
     @Accessor("profileKeys") @Mutable
     void setProfileKeys(ProfileKeys keys);
 
-    @Accessor
-    AbuseReportContext getAbuseReportContext();
     @Accessor("abuseReportContext")
     void setAbuseReportContext(AbuseReportContext context);
 }
