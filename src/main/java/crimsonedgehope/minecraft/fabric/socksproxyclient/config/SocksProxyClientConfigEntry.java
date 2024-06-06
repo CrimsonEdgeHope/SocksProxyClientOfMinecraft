@@ -4,6 +4,7 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeyUtil;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class SocksProxyClientConfigEntry<T> {
     private final String translateKey;
 
     public Text getTranslatableText() {
-        return Text.translatable(translateKey);
+        return new TranslatableText(translateKey);
     }
 
     @Getter
@@ -41,7 +42,7 @@ public class SocksProxyClientConfigEntry<T> {
                     r.add(TranslateKeyUtil.itemAsText(key, String.valueOf(i)));
                 }
             } else {
-                r.add(Text.translatable(key));
+                r.add(new TranslatableText(key));
             }
         }
         return r;

@@ -22,19 +22,19 @@ import java.net.Proxy;
 @Mixin(MinecraftClient.class)
 public class MinecraftClientMixin {
     @Mutable
-    @Shadow @Final private Proxy networkProxy;
+    @Shadow @Final private Proxy netProxy;
 
     @Inject(method = "<init>", at = @At(value = "INVOKE", target = "Lcom/mojang/authlib/yggdrasil/YggdrasilAuthenticationService;<init>(Ljava/net/Proxy;)V", shift = At.Shift.BEFORE, remap = false))
     private void injected(RunArgs args, CallbackInfo ci) {
         MinecraftClientMixinVariables.setRunArgs(args);
     }
 
-    @Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;networkProxy:Ljava/net/Proxy;", opcode = Opcodes.PUTFIELD))
+    @Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;netProxy:Ljava/net/Proxy;", opcode = Opcodes.PUTFIELD))
     private void redirectedPut(MinecraftClient instance, Proxy value) {
-        this.networkProxy = HttpProxyServerUtils.getProxyObject();
+        this.netProxy = HttpProxyServerUtils.getProxyObject();
     }
 
-    @Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;networkProxy:Ljava/net/Proxy;", opcode = Opcodes.GETFIELD))
+    @Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;netProxy:Ljava/net/Proxy;", opcode = Opcodes.GETFIELD))
     private Proxy redirectedGet(MinecraftClient instance) {
         return HttpProxyServerUtils.getProxyObject();
     }

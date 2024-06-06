@@ -12,7 +12,6 @@
   "socksproxyclient.config.general.customProxyPort.error": "Invalid port number",
   "socksproxyclient.config.general.customProxyUsername": "Custom proxy username",
   "socksproxyclient.config.general.customProxyPassword": "Custom proxy password",
-  "socksproxyclient.config.general.buttonsInMultiplayerScreen": "Show buttons in multiplayer screen",
 
   "socksproxyclient.config.server": "Server settings",
   "socksproxyclient.config.server.proxyMinecraft": "Use proxy on Minecraft server",
@@ -29,8 +28,6 @@
   "socksproxyclient.config.server.proxyPlayerSkinDownload.tooltip": "HTTP protocol.",
   "socksproxyclient.config.server.proxyServerResourceDownload": "Use proxy on Minecraft server resource pack downloading",
   "socksproxyclient.config.server.proxyServerResourceDownload.tooltip": "HTTP protocol.",
-  "socksproxyclient.config.server.proxyBlockListSupplier": "Use proxy on Server blocklist supplier",
-  "socksproxyclient.config.server.proxyBlockListSupplier.tooltip": "HTTP protocol.",
   "socksproxyclient.config.server.httpRemoteResolve": "Use proxy on DNS resolve for HTTP when using Socks 5",
   "socksproxyclient.config.server.advanced": "Advanced",
   "socksproxyclient.config.server.imposeProxyOnMinecraftLoopback": "Impose proxy on Minecraft server (Loopback address)",

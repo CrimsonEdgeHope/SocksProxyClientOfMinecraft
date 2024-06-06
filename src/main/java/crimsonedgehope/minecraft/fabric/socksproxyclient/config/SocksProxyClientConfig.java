@@ -2,12 +2,13 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import lombok.Getter;
 import net.fabricmc.loader.api.FabricLoader;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileReader;
@@ -20,7 +21,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public abstract class SocksProxyClientConfig {
 
@@ -104,8 +107,8 @@ public abstract class SocksProxyClientConfig {
         }
         LOGGER.info("Reading config json {}", this.configFile.getName());
         try {
-            for (String key : defaults.keySet()) {
-                if (!object.has(key)) {
+            for (Map.Entry<String, JsonElement> entries : defaults.entrySet()) {
+                if (!object.has(entries.getKey())) {
                     writeConfigFile(defaults);
                     load();
                     return;
@@ -132,7 +135,7 @@ public abstract class SocksProxyClientConfig {
 
     public List<SocksProxyClientConfigEntry<?>> entryFields(final Predicate<Field> listFilter) throws Exception {
         List<SocksProxyClientConfigEntry<?>> entries = new ArrayList<>();
-        List<Field> fields = Arrays.stream(this.getClass().getDeclaredFields()).filter(listFilter).toList();
+        List<Field> fields = Arrays.stream(this.getClass().getDeclaredFields()).filter(listFilter).collect(Collectors.toList());
         for (Field field : fields) {
             SocksProxyClientConfigEntry<?> entry = (SocksProxyClientConfigEntry<?>) field.get(null);
             Class<?> clazz = entry.getDefaultValue().getClass();

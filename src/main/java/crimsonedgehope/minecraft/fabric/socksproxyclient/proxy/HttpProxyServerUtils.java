@@ -9,11 +9,7 @@ import lombok.NoArgsConstructor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.network.SocialInteractionsManager;
-import net.minecraft.client.report.AbuseReportContext;
-import net.minecraft.client.report.ReporterEnvironment;
 import net.minecraft.client.texture.PlayerSkinProvider;
-import net.minecraft.client.util.ProfileKeys;
-import net.minecraft.client.util.telemetry.TelemetryManager;
 
 import java.io.File;
 import java.net.Proxy;
@@ -49,14 +45,11 @@ public final class HttpProxyServerUtils {
                 if (future.isSuccess()) {
                     RunArgs args = MinecraftClientMixinVariables.getRunArgs();
                     MinecraftClientAccessor accessor = ((MinecraftClientAccessor) client);
-                    accessor.setAuthenticationService(new YggdrasilAuthenticationService(HttpProxyServerUtils.getProxyObject()));
-                    accessor.setSessionService(accessor.getAuthenticationService().createMinecraftSessionService());
-                    accessor.setUserApiService(accessor.invokeCreateUserApiService(accessor.getAuthenticationService(), args));
+                    YggdrasilAuthenticationService yggdrasilAuthenticationService = new YggdrasilAuthenticationService(HttpProxyServerUtils.getProxyObject());
+                    accessor.setSessionService(yggdrasilAuthenticationService.createMinecraftSessionService());
+                    accessor.setSocialInteractionsService(accessor.invokeCreateSocialInteractionsService(yggdrasilAuthenticationService, args));
                     accessor.setSkinProvider(new PlayerSkinProvider(accessor.getTextureManager(), new File(args.directories.assetDir, "skins"), accessor.getSessionService()));
-                    accessor.setSocialInteractionsManager(new SocialInteractionsManager(client, accessor.getUserApiService()));
-                    accessor.setTelemetryManager(new TelemetryManager(client, accessor.getUserApiService(), args.network.session));
-                    accessor.setProfileKeys(ProfileKeys.create(accessor.getUserApiService(), args.network.session, client.runDirectory.toPath()));
-                    accessor.setAbuseReportContext(AbuseReportContext.create(ReporterEnvironment.ofIntegratedServer(), accessor.getUserApiService()));
+                    accessor.setSocialInteractionsManager(new SocialInteractionsManager(client, accessor.getSocialInteractionService()));
                     SocksProxyClient.LOGGER.info("Recreated Yggdrasil service.");
                 } else {
                     SocksProxyClient.LOGGER.warn("Failed to recreate Yggdrasil service.");

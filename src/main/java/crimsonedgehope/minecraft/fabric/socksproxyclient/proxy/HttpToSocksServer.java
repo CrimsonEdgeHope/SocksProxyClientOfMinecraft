@@ -32,11 +32,12 @@ import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.proxy.Socks4ProxyHandler;
 import io.netty.handler.proxy.Socks5ProxyHandler;
+import io.netty.resolver.NoopAddressResolverGroup;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import lombok.Getter;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -213,7 +214,7 @@ public class HttpToSocksServer {
                         .option(ChannelOption.TCP_NODELAY, true)
                         .option(ChannelOption.SO_KEEPALIVE, true);
                 if (noResolver) {
-                    b = b.disableResolver();
+                    b = b.resolver(NoopAddressResolverGroup.INSTANCE);
                 }
                 LOGGER.debug("noResolver: {}", noResolver);
                 ChannelFuture future = b.connect(remoteHttpHost, remoteHttpPort);

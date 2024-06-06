@@ -1,9 +1,9 @@
-name: Jar
+name: Build jar 1.16.5
 
 on:
   push:
     branches:
-      - "1.20.1"
+      - "1.16.5"
     paths:
       - src/**/*.java
       - src/resources/
@@ -17,7 +17,7 @@ on:
 
 jobs:
   buildJar:
-    name: Build jar
+    name: Build jar 1.16.5
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout

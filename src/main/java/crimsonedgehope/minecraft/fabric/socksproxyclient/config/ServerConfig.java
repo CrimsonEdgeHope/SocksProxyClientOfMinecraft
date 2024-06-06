@@ -29,8 +29,6 @@ public final class ServerConfig extends SocksProxyClientConfig {
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyPlayerSkinDownload", true, 1);
     private static final SocksProxyClientConfigEntry<Boolean> proxyServerResourceDownload =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyServerResourceDownload", true, 1);
-    private static final SocksProxyClientConfigEntry<Boolean> proxyBlockListSupplier =
-            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyBlockListSupplier", true, 1);
     private static final SocksProxyClientConfigEntry<Boolean> httpRemoteResolve =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "httpRemoteResolve", true);
     private static final SocksProxyClientConfigEntry<Boolean> imposeProxyOnMinecraftLoopback =
@@ -74,10 +72,6 @@ public final class ServerConfig extends SocksProxyClientConfig {
         return GeneralConfig.usingProxy() && proxyServerResourceDownload.getValue();
     }
 
-    public static boolean shouldProxyBlockListSupplier() {
-        return GeneralConfig.usingProxy() && proxyBlockListSupplier.getValue();
-    }
-
     public static ProxyCredential getProxyCredential() {
         return GeneralConfig.getProxyCredential();
     }
@@ -114,7 +108,6 @@ public final class ServerConfig extends SocksProxyClientConfig {
         obj.addProperty(proxyYggdrasil.getEntry(), proxyYggdrasil.getDefaultValue());
         obj.addProperty(proxyPlayerSkinDownload.getEntry(), proxyPlayerSkinDownload.getDefaultValue());
         obj.addProperty(proxyServerResourceDownload.getEntry(), proxyServerResourceDownload.getDefaultValue());
-        obj.addProperty(proxyBlockListSupplier.getEntry(), proxyBlockListSupplier.getDefaultValue());
         obj.addProperty(httpRemoteResolve.getEntry(), httpRemoteResolve.getDefaultValue());
         obj.addProperty(imposeProxyOnMinecraftLoopback.getEntry(), imposeProxyOnMinecraftLoopback.getDefaultValue());
         return obj;
@@ -130,7 +123,6 @@ public final class ServerConfig extends SocksProxyClientConfig {
         obj.addProperty(proxyYggdrasil.getEntry(), proxyYggdrasil.getValue());
         obj.addProperty(proxyPlayerSkinDownload.getEntry(), proxyPlayerSkinDownload.getValue());
         obj.addProperty(proxyServerResourceDownload.getEntry(), proxyServerResourceDownload.getValue());
-        obj.addProperty(proxyBlockListSupplier.getEntry(), proxyBlockListSupplier.getValue());
         obj.addProperty(httpRemoteResolve.getEntry(), httpRemoteResolve.getValue());
         obj.addProperty(imposeProxyOnMinecraftLoopback.getEntry(), imposeProxyOnMinecraftLoopback.getValue());
         return obj;
@@ -145,7 +137,6 @@ public final class ServerConfig extends SocksProxyClientConfig {
         proxyYggdrasil.setValue(object.get(proxyYggdrasil.getEntry()).getAsBoolean());
         proxyPlayerSkinDownload.setValue(object.get(proxyPlayerSkinDownload.getEntry()).getAsBoolean());
         proxyServerResourceDownload.setValue(object.get(proxyServerResourceDownload.getEntry()).getAsBoolean());
-        proxyBlockListSupplier.setValue(object.get(proxyBlockListSupplier.getEntry()).getAsBoolean());
         httpRemoteResolve.setValue(object.get(httpRemoteResolve.getEntry()).getAsBoolean());
         imposeProxyOnMinecraftLoopback.setValue(object.get(imposeProxyOnMinecraftLoopback.getEntry()).getAsBoolean());
     }

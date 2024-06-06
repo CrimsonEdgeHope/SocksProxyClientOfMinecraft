@@ -9,6 +9,7 @@ import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.Requirement;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
 import java.net.URL;
 import java.util.Optional;
@@ -27,7 +28,6 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
     ClothConfigEntry<Boolean> proxyYggdrasil;
     ClothConfigEntry<Boolean> proxyPlayerSkinDownload;
     ClothConfigEntry<Boolean> proxyServerResourceDownload;
-    ClothConfigEntry<Boolean> proxyBlockListSupplier;
     ClothConfigEntry<Boolean> httpRemoteResolve;
 
     ClothConfigEntry<Boolean> imposeProxyOnMinecraftLoopback;
@@ -180,21 +180,6 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
             }
         };
 
-        proxyBlockListSupplier = new ClothConfigEntry<>(clothAccess.configEntryBuilder(), entryField("proxyBlockListSupplier", Boolean.class)) {
-            @Override
-            protected AbstractConfigListEntry<Boolean> buildClothConfigEntry() {
-                return this.getBuilder().startBooleanToggle(
-                                this.getConfigEntry().getTranslatableText(),
-                                this.getConfigEntry().getValue()
-                        )
-                        .setTooltip(Optional.of(this.getConfigEntry().getDescriptionTranslatableText().toArray(Text[]::new)))
-                        .setRequirement(Requirement.isTrue(generalConfigCategorySubScreen.useProxy.getClothConfigEntry()))
-                        .setDefaultValue(this.getConfigEntry().getDefaultValue())
-                        .setSaveConsumer(this.getConfigEntry()::setValue)
-                        .build();
-            }
-        };
-
         httpRemoteResolve = new ClothConfigEntry<>(clothAccess.configEntryBuilder(), entryField("httpRemoteResolve", Boolean.class)) {
             @Override
             protected AbstractConfigListEntry<Boolean> buildClothConfigEntry() {
@@ -232,7 +217,7 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
 
     private ConfigCategory buildCategory0(ClothAccess cloth) throws Exception {
         String transKey = TranslateKeyUtil.configItem(categoryField(this.configClass));
-        Text text = Text.translatable(transKey);
+        Text text = new TranslatableText(transKey);
 
         ConfigCategory serverCategory = cloth.configCategory(text);
 
@@ -252,7 +237,6 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
         subServicesBuilder.add(proxyYggdrasil.getClothConfigEntry());
         subServicesBuilder.add(proxyPlayerSkinDownload.getClothConfigEntry());
         subServicesBuilder.add(proxyServerResourceDownload.getClothConfigEntry());
-        subServicesBuilder.add(proxyBlockListSupplier.getClothConfigEntry());
         subServicesBuilder.add(httpRemoteResolve.getClothConfigEntry());
         serverCategory.addEntry(subServicesBuilder.build());
 

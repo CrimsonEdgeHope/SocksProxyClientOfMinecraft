@@ -32,8 +32,6 @@ public final class GeneralConfig extends SocksProxyClientConfig {
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "customProxyUsername", "");
     private static final SocksProxyClientConfigEntry<String> customProxyPassword =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "customProxyPassword", "");
-    private static final SocksProxyClientConfigEntry<Boolean> buttonsInMultiplayerScreen =
-            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "buttonsInMultiplayerScreen", true);
 
     private GeneralConfig() {
         super(CATEGORY + ".json");
@@ -48,7 +46,6 @@ public final class GeneralConfig extends SocksProxyClientConfig {
         obj.addProperty(customProxyPort.getEntry(), customProxyPort.getDefaultValue());
         obj.addProperty(customProxyUsername.getEntry(), customProxyUsername.getDefaultValue());
         obj.addProperty(customProxyPassword.getEntry(), customProxyPassword.getDefaultValue());
-        obj.addProperty(buttonsInMultiplayerScreen.getEntry(), buttonsInMultiplayerScreen.getDefaultValue());
         return obj;
     }
 
@@ -60,7 +57,6 @@ public final class GeneralConfig extends SocksProxyClientConfig {
         customProxyPort.setValue(entries.get(customProxyPort.getEntry()).getAsInt());
         customProxyUsername.setValue(entries.get(customProxyUsername.getEntry()).getAsString());
         customProxyPassword.setValue(entries.get(customProxyPassword.getEntry()).getAsString());
-        buttonsInMultiplayerScreen.setValue(entries.get(buttonsInMultiplayerScreen.getEntry()).getAsBoolean());
     }
 
     @Override
@@ -72,7 +68,6 @@ public final class GeneralConfig extends SocksProxyClientConfig {
         obj.addProperty(customProxyPort.getEntry(), customProxyPort.getValue());
         obj.addProperty(customProxyUsername.getEntry(), customProxyUsername.getValue());
         obj.addProperty(customProxyPassword.getEntry(), customProxyPassword.getValue());
-        obj.addProperty(buttonsInMultiplayerScreen.getEntry(), buttonsInMultiplayerScreen.getValue());
         return obj;
     }
 
@@ -120,9 +115,5 @@ public final class GeneralConfig extends SocksProxyClientConfig {
 
     public static SocksVersion getSocksVersion() {
         return socksVersion.getValue();
-    }
-
-    public static boolean showButtonsInMultiplayerScreen() {
-        return buttonsInMultiplayerScreen.getValue();
     }
 }

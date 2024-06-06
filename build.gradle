@@ -1,5 +1,5 @@
 plugins {
-	id "fabric-loom" version "1.5-SNAPSHOT"
+	id "fabric-loom" version "1.6-SNAPSHOT"
 	id "java-library"
 	id "com.github.johnrengelman.shadow" version "8.1.1"
 	id "org.jetbrains.changelog" version "2.2.0"
@@ -7,6 +7,13 @@ plugins {
 
 version = "${project.mod_version}+${project.minecraft_version}"
 group = project.maven_group
+
+configurations.all {
+	resolutionStrategy {
+		force "net.java.dev.jna:jna:5.12.1"
+		force "net.java.dev.jna:jna-platform:5.12.1"
+	}
+}
 
 base {
 	archivesName = project.archives_base_name
@@ -54,10 +61,10 @@ dependencies {
 	modApi("com.terraformersmc:modmenu:${project.modmenu_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	shadow(implementation("io.netty:netty-handler-proxy:4.1.110.Final"))
-	shadow(implementation("dnsjava:dnsjava:3.5.2") {
-		exclude(group: "org.slf4j")
-	})
+	shadow(implementation("io.netty:netty-handler-proxy:4.1.25.Final"))
+	shadow(implementation("dnsjava:dnsjava:3.5.2"))
+	shadow(implementation("net.java.dev.jna:jna:5.12.1"))
+	shadow(implementation("net.java.dev.jna:jna-platform:5.12.1"))
 
 	compileOnly "org.projectlombok:lombok:1.18.30"
 	annotationProcessor "org.projectlombok:lombok:1.18.30"
