@@ -8,7 +8,7 @@ public enum DNSOverHTTPSProvider {
     CISCO_UMBRELLA("Cisco OpenDNS/Cisco Umbrella", "https://doh.opendns.com/dns-query"),
     YANDEX("Yandex DNS", "https://common.dot.dns.yandex.net/dns-query"),
     ADGUARD("AdGuard DNS", "https://dns.adguard-dns.com/dns-query"),
-    CUSTOM("Custom", null);
+    CUSTOM("Custom url", null);
 
     public final String displayName;
     public final String url;

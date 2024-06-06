@@ -38,7 +38,7 @@ public class ClientConnectionMixin {
     )
     private static void injected(InetSocketAddress address, boolean useEpoll, ClientConnection connection, CallbackInfoReturnable<ChannelFuture> cir) {
         REMOTE = address;
-        LOGGER.debug("Remote Minecraft server {}", address.getAddress());
+        LOGGER.debug("Remote Minecraft server {}", address);
     }
 
     @Inject(
@@ -58,7 +58,7 @@ public class ClientConnectionMixin {
             proxySelection = ServerConfig.getProxyForMinecraft();
         }
 
-        if (proxySelection == null) {
+        if (proxySelection.equals(Proxy.NO_PROXY)) {
             LOGGER.info("No proxy on host {}", address);
             return;
         }
