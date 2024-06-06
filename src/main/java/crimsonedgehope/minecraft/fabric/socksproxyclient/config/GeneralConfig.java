@@ -104,8 +104,6 @@ public final class GeneralConfig extends SocksProxyClientConfig {
 
     @Getter
     private static ProxyCredential customCredential = new ProxyCredential(null, null);
-    @Getter
-    private static ProxyCredential credentialFromGameParam;
 
     public static void setCustomCredential(@Nullable String username, @Nullable String password) {
         setCustomCredentialUsername(username);

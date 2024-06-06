@@ -1,4 +1,4 @@
-name: Jar
+name: Build jar 1.20.1
 
 on:
   push:
@@ -17,7 +17,7 @@ on:
 
 jobs:
   buildJar:
-    name: Build jar
+    name: Build jar 1.20.1
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
