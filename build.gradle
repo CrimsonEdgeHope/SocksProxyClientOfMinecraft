@@ -3,6 +3,7 @@ plugins {
 	id "java-library"
 	id "com.github.johnrengelman.shadow" version "8.1.1"
 	id "org.jetbrains.changelog" version "2.2.0"
+	id "com.modrinth.minotaur" version "2.+"
 }
 
 version = "${project.mod_version}+${project.minecraft_version}"
@@ -84,4 +85,47 @@ changelog {
 	})
 	combinePreReleases = false
 	repositoryUrl = "https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft"
+}
+
+modrinth {
+	def verbose = Boolean.valueOf(project.getProperties().getOrDefault("verbose", false))
+
+	def releaseType = project.getProperties().getOrDefault("releaseType", null)
+	if (Objects.isNull(releaseType)) {
+		if (version.toLowerCase().contains("alpha")) {
+			releaseType = "alpha"
+		} else if (version.toLowerCase().contains("beta")) {
+			releaseType = "beta"
+		}
+	}
+	if (releaseType != "alpha" && releaseType != "beta" && releaseType != "release") {
+		throw new IllegalArgumentException("releaseType: alpha, beta or release")
+	}
+
+	if (verbose) {
+		println "\n========== Properties =========="
+		println "Mod version (gradle project.version): ${version}"
+		println "Release type: ${releaseType}"
+		println "Minecraft version: ${minecraft_version}"
+		println "Cloth config version: ${cloth_config_version}"
+		println "Modmenu version: ${modmenu_version}"
+		println "========== Properties ==========\n"
+	}
+
+	token = System.getenv("MODRINTH_TOKEN")
+	projectId = "PtUSravz"
+	versionNumber = version
+	versionName = "[Fabric ${minecraft_version}] ${version}"
+	versionType = releaseType
+	uploadFile = tasks.remapJar.archiveFile
+	gameVersions = [minecraft_version]
+	loaders = ["fabric"]
+
+	dependencies {
+		optional.project "fabric-api"
+		optional.project "cloth-config"
+		optional.project "modmenu"
+		incompatible.project "proxy-server"
+		incompatible.project "respectproxyoptions"
+	}
 }
