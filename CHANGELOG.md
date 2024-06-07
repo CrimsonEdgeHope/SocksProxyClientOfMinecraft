@@ -6,8 +6,6 @@
 
 ### Changed
 
-- Compatability with [Fast IP Ping](https://modrinth.com/mod/fast-ip-ping)
-
 ### Deprecated
 
 ### Removed
@@ -15,6 +13,20 @@
 ### Fixed
 
 ### Security
+
+## [0.1.0-alpha+1.16.5]
+
+### Changed
+
+- Port to Minecraft 1.16.5 (Java 17 minimum required.)
+- Compatability with [Fast IP Ping](https://modrinth.com/mod/fast-ip-ping)
+
+### Removed
+
+- The mod will do nothing should game client be in offline mode at launch.
+- Removed cosmetic buttons of this mod from the multiplayer screen.
+- Removed "Show buttons in multiplayer screen" option from "General settings" section.
+- Removed "Use proxy on Server blocklist supplier" option from "Server settings" section.
 
 ## [0.0.2-alpha+1.20.1]
 
@@ -42,6 +54,7 @@
 - Convert SOCKS proxy to HTTP(S) proxy. Proxy communications with Mojang Yggdrasil auth service, player skin download endpoint, and server resource pack downloading.
 - Remotely resolve Minecraft server's domain name through SOCKS proxy with the help of [DNS over HTTPS (DoH)](https://www.rfc-editor.org/rfc/rfc8484)
 
-[Unreleased]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.2-alpha+1.20.1...HEAD
+[Unreleased]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.1.0-alpha+1.16.5...HEAD
+[0.1.0-alpha+1.16.5]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.2-alpha+1.20.1...v0.1.0-alpha+1.16.5
 [0.0.2-alpha+1.20.1]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.1-alpha+1.20.1...v0.0.2-alpha+1.20.1
 [0.0.1-alpha+1.20.1]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/commits/v0.0.1-alpha+1.20.1
