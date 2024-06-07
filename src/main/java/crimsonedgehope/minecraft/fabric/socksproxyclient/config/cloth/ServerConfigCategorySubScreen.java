@@ -21,6 +21,7 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
 
     ClothConfigEntry<Boolean> proxyMinecraft;
     ClothConfigEntry<Boolean> minecraftRemoteResolve;
+    ClothConfigEntry<Boolean> minecraftRemoteResolveDismissSystemHosts;
     ClothConfigEntry<DNSOverHTTPSProvider> minecraftRemoteResolveProvider;
     ClothConfigEntry<String> customMinecraftRemoteResolveProvider;
 
@@ -67,6 +68,26 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
                                 )
                         )
                         .setTooltip(Optional.of(this.getConfigEntry().getDescriptionTranslatableText().toArray(Text[]::new)))
+                        .setDefaultValue(this.getConfigEntry().getDefaultValue())
+                        .setSaveConsumer(this.getConfigEntry()::setValue)
+                        .build();
+            }
+        };
+
+        minecraftRemoteResolveDismissSystemHosts = new ClothConfigEntry<>(clothAccess.configEntryBuilder(), entryField("minecraftRemoteResolveDismissSystemHosts", Boolean.class)) {
+            @Override
+            protected AbstractConfigListEntry<Boolean> buildClothConfigEntry() {
+                return this.getBuilder().startBooleanToggle(
+                                this.getConfigEntry().getTranslatableText(),
+                                this.getConfigEntry().getValue()
+                        )
+                        .setRequirement(
+                                Requirement.all(
+                                        Requirement.isTrue(generalConfigCategorySubScreen.useProxy.getClothConfigEntry()),
+                                        Requirement.isTrue(proxyMinecraft.getClothConfigEntry()),
+                                        Requirement.isTrue(minecraftRemoteResolve.getClothConfigEntry())
+                                )
+                        )
                         .setDefaultValue(this.getConfigEntry().getDefaultValue())
                         .setSaveConsumer(this.getConfigEntry()::setValue)
                         .build();
@@ -237,14 +258,22 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
         ConfigCategory serverCategory = cloth.configCategory(text);
 
         serverCategory.addEntry(proxyMinecraft.getClothConfigEntry());
-        serverCategory.addEntry(minecraftRemoteResolve.getClothConfigEntry());
 
-        SubCategoryBuilder subDOHBuilder = clothAccess.configEntryBuilder().startSubCategory(TranslateKeyUtil.itemAsText(transKey, "doh"));
+        SubCategoryBuilder subMcDomainBuilder = clothAccess.configEntryBuilder().startSubCategory(TranslateKeyUtil.itemAsText(transKey, "minecraftDomainName"));
+
+        subMcDomainBuilder.add(minecraftRemoteResolve.getClothConfigEntry());
+        subMcDomainBuilder.add(minecraftRemoteResolveDismissSystemHosts.getClothConfigEntry());
+
+        SubCategoryBuilder subDOHBuilder = clothAccess.configEntryBuilder().startSubCategory(TranslateKeyUtil.itemAsText(transKey, "minecraftDomainName", "doh"));
 
         subDOHBuilder.add(minecraftRemoteResolveProvider.getClothConfigEntry());
         subDOHBuilder.add(customMinecraftRemoteResolveProvider.getClothConfigEntry());
         subDOHBuilder.setExpanded(true);
-        serverCategory.addEntry(subDOHBuilder.build());
+
+        subMcDomainBuilder.add(subDOHBuilder.build());
+        subMcDomainBuilder.setExpanded(true);
+
+        serverCategory.addEntry(subMcDomainBuilder.build());
 
         SubCategoryBuilder subServicesBuilder = clothAccess.configEntryBuilder().startSubCategory(TranslateKeyUtil.itemAsText(transKey, "services"));
         subServicesBuilder.setExpanded(true);
