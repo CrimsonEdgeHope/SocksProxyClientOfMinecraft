@@ -16,9 +16,11 @@
 
   "socksproxyclient.config.server": "Server settings",
   "socksproxyclient.config.server.proxyMinecraft": "Use proxy on Minecraft server",
+  "socksproxyclient.config.server.minecraftDomainName": "Minecraft server domain name",
   "socksproxyclient.config.server.minecraftRemoteResolve": "Use proxy on DNS resolve for Minecraft server when using Socks 5",
   "socksproxyclient.config.server.minecraftRemoteResolve.tooltip": "This relies on DNS over HTTPS (DoH).",
-  "socksproxyclient.config.server.doh": "DNS over HTTPS (DoH)",
+  "socksproxyclient.config.server.minecraftRemoteResolveDismissSystemHosts": "Dismiss system hosts file",
+  "socksproxyclient.config.server.minecraftDomainName.doh": "DNS over HTTPS (DoH)",
   "socksproxyclient.config.server.minecraftRemoteResolveProvider": "DNS over HTTPS provider",
   "socksproxyclient.config.server.customMinecraftRemoteResolveProvider": "DNS over HTTPS url",
   "socksproxyclient.config.server.customMinecraftRemoteResolveProvider.error": "Invalid url",
