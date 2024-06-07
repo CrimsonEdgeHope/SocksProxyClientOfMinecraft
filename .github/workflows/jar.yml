@@ -1,4 +1,4 @@
-name: Build jar 1.16.5
+name: Build jars
 
 on:
   push:
