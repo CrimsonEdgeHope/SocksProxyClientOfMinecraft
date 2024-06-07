@@ -12,6 +12,7 @@ import org.xbill.DNS.Lookup;
 import org.xbill.DNS.Record;
 import org.xbill.DNS.SRVRecord;
 import org.xbill.DNS.Type;
+import org.xbill.DNS.hosts.HostsFileParser;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -34,7 +35,11 @@ public final class DNSUtils {
         }
         final Lookup lookup = new Lookup(domainName, recordType);
         lookup.setResolver(RESOLVER);
-        lookup.setHostsFileParser(null);
+        if (ServerConfig.minecraftRemoteResolveDismissSystemHosts()) {
+            lookup.setHostsFileParser(null);
+        } else {
+            lookup.setHostsFileParser(new HostsFileParser());
+        }
         lookup.run();
         Record[] records = lookup.getAnswers();
         if (records == null || records.length <= 0) {
