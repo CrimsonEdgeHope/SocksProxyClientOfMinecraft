@@ -4,7 +4,6 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.cloth.ClothConfigScreen;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeyUtil;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.MinecraftUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
@@ -45,16 +44,6 @@ public class MultiplayerScreenMixin {
         directionalLayoutWidget.add(EmptyWidget.ofHeight(4));
         AxisGridWidget axisGridWidget3 = directionalLayoutWidget.add(new AxisGridWidget(308, 20, AxisGridWidget.DisplayAxis.HORIZONTAL));
 
-        ButtonWidget recreateAuthButton = ButtonWidget.builder(
-                TranslateKeyUtil.itemAsText(Arrays.asList("screen", "recreateAuth")),
-                button -> {
-                    button.active = false;
-                    MinecraftUtils.recreateYggdrasilService().thenRun(() -> button.active = true);
-                }
-        ).width(152).build();
-        ((ScreenAccessor) this).invokeAddDrawableChild(recreateAuthButton);
-        axisGridWidget3.add(recreateAuthButton);
-
         ButtonWidget openConfigScreenButton = ButtonWidget.builder(
                 TranslateKeyUtil.itemAsText(Arrays.asList("screen", "config")),
                 button -> {
@@ -64,7 +53,7 @@ public class MultiplayerScreenMixin {
                         SocksProxyClient.LOGGER.error("Where's my config screen?", e);
                         button.active = false;
                     }
-                }).width(152).build();
+                }).width(308).build();
         ((ScreenAccessor) this).invokeAddDrawableChild(openConfigScreenButton);
         axisGridWidget3.add(openConfigScreenButton);
         try {
