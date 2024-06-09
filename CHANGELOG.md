@@ -10,6 +10,8 @@
 
 ### Removed
 
+- The mod will do nothing should game client be in offline mode at launch.
+
 ### Fixed
 
 ### Security
