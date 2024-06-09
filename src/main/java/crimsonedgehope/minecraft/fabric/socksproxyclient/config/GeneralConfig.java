@@ -113,7 +113,11 @@ public final class GeneralConfig extends SocksProxyClientConfig {
         customCredential.setPassword(password);
     }
 
+    @Nullable
     public static SocksVersion getSocksVersion() {
+        if (!usingProxy()) {
+            return null;
+        }
         return socksVersion.getValue();
     }
 }
