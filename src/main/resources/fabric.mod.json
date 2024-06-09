@@ -40,5 +40,8 @@
   },
   "conflicts": {
     "fastipping": "*"
+  },
+  "breaks": {
+    "viafabric": ">=0.4.6"
   }
 }
