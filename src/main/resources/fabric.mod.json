@@ -42,6 +42,7 @@
     "fastipping": "*"
   },
   "breaks": {
-    "viafabric": ">=0.4.6"
+    "viafabric": ">=0.4.6",
+    "proxyserver": "*"
   }
 }

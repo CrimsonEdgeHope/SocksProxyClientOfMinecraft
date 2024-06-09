@@ -127,7 +127,7 @@ modrinth {
 	uploadFile = tasks.remapJar.archiveFile
 	gameVersions = [minecraft_version]
 	loaders = ["fabric"]
-	changelog = "See changelog at" +
+	changelog = "See changelog at " +
 			"[GitHub](https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/releases/tag/v${version})"
 
 	dependencies {
