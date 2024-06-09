@@ -10,6 +10,8 @@
 
 ### Removed
 
+- Removed "Recreate auth service".
+
 ### Fixed
 
 ### Security
