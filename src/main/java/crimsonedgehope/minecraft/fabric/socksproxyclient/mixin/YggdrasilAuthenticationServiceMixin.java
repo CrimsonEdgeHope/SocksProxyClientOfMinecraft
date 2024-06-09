@@ -17,9 +17,4 @@ public class YggdrasilAuthenticationServiceMixin extends HttpAuthenticationServi
     protected Proxy redirectedGet0(HttpAuthenticationService instance) {
         return HttpProxyServerUtils.getProxyObject(ServerConfig.shouldProxyYggdrasil());
     }
-
-    @Override
-    protected Proxy redirectedGet1(HttpAuthenticationService instance) {
-        return redirectedGet0(instance);
-    }
 }

@@ -10,8 +10,8 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.AxisGridWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.DirectionalLayoutWidget;
 import net.minecraft.client.gui.widget.EmptyWidget;
-import net.minecraft.client.gui.widget.GridWidget;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,7 +26,7 @@ public class MultiplayerScreenMixin {
     @Inject(method = "init",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/widget/GridWidget;refreshPositions()V",
+                    target = "Lnet/minecraft/client/gui/widget/DirectionalLayoutWidget;refreshPositions()V",
                     shift = At.Shift.BEFORE
             ), locals = LocalCapture.CAPTURE_FAILHARD)
     private void injected(
@@ -35,16 +35,15 @@ public class MultiplayerScreenMixin {
             ButtonWidget buttonWidget2,
             ButtonWidget buttonWidget3,
             ButtonWidget buttonWidget4,
-            GridWidget gridWidget,
-            GridWidget.Adder adder,
+            DirectionalLayoutWidget directionalLayoutWidget,
             AxisGridWidget axisGridWidget,
             AxisGridWidget axisGridWidget2
     ) {
         if (!GeneralConfig.showButtonsInMultiplayerScreen()) {
             return;
         }
-        adder.add(EmptyWidget.ofHeight(4));
-        AxisGridWidget axisGridWidget3 = adder.add(new AxisGridWidget(308, 20, AxisGridWidget.DisplayAxis.HORIZONTAL));
+        directionalLayoutWidget.add(EmptyWidget.ofHeight(4));
+        AxisGridWidget axisGridWidget3 = directionalLayoutWidget.add(new AxisGridWidget(308, 20, AxisGridWidget.DisplayAxis.HORIZONTAL));
 
         ButtonWidget recreateAuthButton = ButtonWidget.builder(
                 TranslateKeyUtil.itemAsText(Arrays.asList("screen", "recreateAuth")),

@@ -18,10 +18,4 @@ public abstract class HttpAuthenticationServiceMixin {
             remap = false
     )
     protected abstract Proxy redirectedGet0(HttpAuthenticationService instance);
-
-    @Redirect(method = "createUrlConnection",
-            at = @At(value = "FIELD", target = "Lcom/mojang/authlib/HttpAuthenticationService;proxy:Ljava/net/Proxy;", opcode = Opcodes.GETFIELD),
-            remap = false
-    )
-    protected abstract Proxy redirectedGet1(HttpAuthenticationService instance);
 }

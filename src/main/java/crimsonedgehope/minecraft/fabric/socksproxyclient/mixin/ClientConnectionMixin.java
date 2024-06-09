@@ -11,6 +11,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkSide;
+import net.minecraft.network.handler.PacketSizeLogger;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -45,7 +46,7 @@ public class ClientConnectionMixin {
             method = "addHandlers",
             at = @At("HEAD")
     )
-    private static void injected(ChannelPipeline pipeline, NetworkSide side, CallbackInfo ci) {
+    private static void injected(ChannelPipeline pipeline, NetworkSide side, PacketSizeLogger packetSizeLogger, CallbackInfo ci) {
         if (REMOTE == null) {
             return;
         }
