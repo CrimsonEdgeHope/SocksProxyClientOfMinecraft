@@ -4,7 +4,7 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.cloth.ClothConfigScreen;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeyUtil;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyServerUtils;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.MinecraftUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
@@ -50,7 +50,7 @@ public class MultiplayerScreenMixin {
                 TranslateKeyUtil.itemAsText(Arrays.asList("screen", "recreateAuth")),
                 button -> {
                     button.active = false;
-                    HttpProxyServerUtils.recreateYggdrasilService().thenRun(() -> button.active = true);
+                    MinecraftUtils.recreateYggdrasilService().thenRun(() -> button.active = true);
                 }
         ).width(152).build();
         ((ScreenAccessor) this).invokeAddDrawableChild(recreateAuthButton);
