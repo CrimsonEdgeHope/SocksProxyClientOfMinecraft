@@ -7,7 +7,6 @@
     "AllowedAddressResolverMixin",
     "AuthlibMinecraftClientMixin",
     "ClientConnectionMixin",
-    "ConnectScreenMixinInner",
     "HandshakeC2SPacketAccessor",
     "HttpAuthenticationServiceMixin",
     "MainMixin",
