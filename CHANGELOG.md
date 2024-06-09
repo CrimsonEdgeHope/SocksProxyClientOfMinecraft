@@ -6,17 +6,24 @@
 
 ### Changed
 
-- Port to Minecraft 1.20.2
-
 ### Deprecated
 
 ### Removed
 
-- The mod will do nothing should game client be in offline mode at launch.
-
 ### Fixed
 
 ### Security
+
+## [0.2.0-alpha+1.20.2]
+
+### Changed
+
+- Port to Minecraft 1.20.2
+
+### Removed
+
+- The mod will do nothing should game client be in offline mode at launch.
+- Removed "Recreate auth service" button, and all its corresponding functions.
 
 ## [0.0.3-alpha+1.20.1]
 
@@ -54,7 +61,8 @@
 - Convert SOCKS proxy to HTTP(S) proxy. Proxy communications with Mojang Yggdrasil auth service, player skin download endpoint, and server resource pack downloading.
 - Remotely resolve Minecraft server's domain name through SOCKS proxy with the help of [DNS over HTTPS (DoH)](https://www.rfc-editor.org/rfc/rfc8484)
 
-[Unreleased]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.3-alpha+1.20.1...HEAD
+[Unreleased]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.2.0-alpha+1.20.2...HEAD
+[0.2.0-alpha+1.20.2]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.3-alpha+1.20.1...v0.2.0-alpha+1.20.2
 [0.0.3-alpha+1.20.1]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.2-alpha+1.20.1...v0.0.3-alpha+1.20.1
 [0.0.2-alpha+1.20.1]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.1-alpha+1.20.1...v0.0.2-alpha+1.20.1
 [0.0.1-alpha+1.20.1]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/commits/v0.0.1-alpha+1.20.1
