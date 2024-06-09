@@ -127,7 +127,5 @@ modrinth {
 		optional.project "fabric-api"
 		optional.project "cloth-config"
 		optional.project "modmenu"
-		incompatible.project "proxy-server"
-		incompatible.project "respectproxyoptions"
 	}
 }
