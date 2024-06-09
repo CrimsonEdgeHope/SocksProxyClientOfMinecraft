@@ -183,21 +183,26 @@ public class HttpToSocksServer {
                 ChannelHandler handler;
                 Proxy proxySelection = GeneralConfig.getProxy();
                 ProxyCredential proxyCredential = GeneralConfig.getProxyCredential();
-                switch (GeneralConfig.getSocksVersion()) {
-                    case SOCKS4:
-                        LOGGER.debug("http - Socks4. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
-                        handler = new Socks4ProxyHandler(proxySelection.address(), proxyCredential.getUsername());
-                        noResolver = false;
-                        break;
-                    case SOCKS5:
-                        LOGGER.debug("http - Socks5. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
-                        handler = new Socks5ProxyHandler(proxySelection.address(), proxyCredential.getUsername(), proxyCredential.getPassword());
-                        break;
-                    default:
-                        LOGGER.debug("http. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
-                        handler = new ChannelDuplexHandler();
-                        noResolver = false;
-                        break;
+                if (proxySelection.equals(Proxy.NO_PROXY)) {
+                    handler = new ChannelDuplexHandler();
+                    noResolver = false;
+                } else {
+                    switch (GeneralConfig.getSocksVersion()) {
+                        case SOCKS4:
+                            LOGGER.debug("http - Socks4. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
+                            handler = new Socks4ProxyHandler(proxySelection.address(), proxyCredential.getUsername());
+                            noResolver = false;
+                            break;
+                        case SOCKS5:
+                            LOGGER.debug("http - Socks5. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
+                            handler = new Socks5ProxyHandler(proxySelection.address(), proxyCredential.getUsername(), proxyCredential.getPassword());
+                            break;
+                        default:
+                            LOGGER.debug("http. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
+                            handler = new ChannelDuplexHandler();
+                            noResolver = false;
+                            break;
+                    }
                 }
 
                 Bootstrap b = new Bootstrap().group(client.eventLoop())

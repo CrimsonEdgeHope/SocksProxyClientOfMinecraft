@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.DNSOverHTTPSProvider;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.ProxyCredential;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.Proxy;
 
@@ -84,6 +85,7 @@ public final class ServerConfig extends SocksProxyClientConfig {
         return GeneralConfig.getProxyCredential();
     }
 
+    @Nullable
     public static SocksVersion getSocksVersion() {
         return GeneralConfig.getSocksVersion();
     }
