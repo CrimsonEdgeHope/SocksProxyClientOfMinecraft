@@ -35,6 +35,5 @@
   "socksproxyclient.config.server.imposeProxyOnMinecraftLoopback": "Impose proxy on Minecraft server (Loopback address)",
   "socksproxyclient.config.server.imposeProxyOnMinecraftLoopback.tooltip": "Mostly you don't need to enable this.",
 
-  "socksproxyclient.screen.recreateAuth": "Recreate auth service",
   "socksproxyclient.screen.config": "Open SocksProxyClient config"
 }
