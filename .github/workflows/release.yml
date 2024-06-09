@@ -1,9 +1,21 @@
 name: Publish release
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_call:
+    inputs:
+      tag-ref:
+        type: string
+        required: true
+      java-version:
+        type: string
+        required: true
+      java-distribution:
+        type: string
+        required: false
+        default: "oracle"
+    secrets:
+      MODRINTH_TOKEN:
+        required: true
 
 permissions:
   contents: write
@@ -16,12 +28,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}
-      - name: Setup Java 17
+          ref: ${{ inputs.tag-ref }}
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          java-version: "17"
-          distribution: "oracle"
+          java-version: "${{ inputs.java-version }}"
+          distribution: "${{ inputs.java-distribution }}"
           cache: "gradle"
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
@@ -41,3 +53,7 @@ jobs:
           prerelease: ${{ contains(github.event.head_commit.message, '[prerelease]') }}
           files: |
             build/libs/*-SNAPSHOT.jar
+      - name: Publish to Modrinth
+        run: ./gradlew modrinth -Pverbose=true
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}

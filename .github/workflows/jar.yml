@@ -1,26 +1,33 @@
 name: Build jars
 
 on:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      build-ref:
+        type: string
+        required: true
+      java-version:
+        type: string
+        required: true
+      java-distribution:
+        type: string
+        required: false
+        default: "oracle"
 
 jobs:
   buildJar:
-    strategy:
-      fail-fast: false
-      matrix:
-        versions_branch: ["master", "1.16.5", "1.20.1"]
-    name: Build jar (${{ matrix.versions_branch }})
+    name: Build jar (${{ inputs.build-ref }})
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: "${{ matrix.versions_branch }}"
-      - name: Setup Java 17
+          ref: "${{ inputs.build-ref }}"
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          java-version: "17"
-          distribution: "oracle"
+          java-version: "${{ inputs.java-version }}"
+          distribution: "${{ inputs.java-distribution }}"
           cache: "gradle"
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
@@ -29,7 +36,7 @@ jobs:
       - name: Upload jar artifact
         uses: actions/upload-artifact@v4
         with:
-          name: buildJar-${{ matrix.versions_branch }}-${{ github.run_id }}-java17
+          name: buildJar-${{ inputs.build-ref }}-${{ github.run_id }}
           path: './build/libs/*.jar'
           retention-days: 30
           overwrite: "true"
