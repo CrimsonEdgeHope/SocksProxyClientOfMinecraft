@@ -201,8 +201,6 @@ public class HttpToSocksServer {
                         break;
                 }
 
-                this.client.config().setAutoRead(false);
-
                 Bootstrap b = new Bootstrap().group(client.eventLoop())
                         .channel(client.getClass())
                         .handler(new ChannelInitializer<SocketChannel>() {
@@ -221,7 +219,6 @@ public class HttpToSocksServer {
                 future.addListener(f -> {
                     if (f.isSuccess()) {
                         remote = future.channel();
-                        this.client.config().setAutoRead(true);
                         if (connectMethod) {
                             client.pipeline().addLast("temp_http_res_enc", new HttpResponseEncoder());
                             client.writeAndFlush(

@@ -116,7 +116,7 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
             }
         };
 
-        customMinecraftRemoteResolveProvider = new ClothConfigEntry<String>(clothAccess.configEntryBuilder(), entryField("customMinecraftRemoteResolveProvider", String.class)) {
+        customMinecraftRemoteResolveProvider = new ClothConfigEntry<>(clothAccess.configEntryBuilder(), entryField("customMinecraftRemoteResolveProvider", String.class)) {
             @Override
             protected AbstractConfigListEntry<String> buildClothConfigEntry() {
                 AbstractConfigListEntry<String> r = this.getBuilder().startStrField(

@@ -1,7 +1,6 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.config.cloth;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeyUtil;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyServerUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
@@ -33,7 +32,6 @@ public final class ClothConfigScreen {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            HttpProxyServerUtils.recreateYggdrasilService();
         });
         builder = builder.setAlwaysShowTabs(true)
                 .setShouldTabsSmoothScroll(true)

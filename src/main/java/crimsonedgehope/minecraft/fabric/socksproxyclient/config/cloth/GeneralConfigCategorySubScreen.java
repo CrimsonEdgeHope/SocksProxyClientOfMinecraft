@@ -36,6 +36,7 @@ final class GeneralConfigCategorySubScreen extends ClothCategorySubScreen<Genera
                         )
                         .setDefaultValue(this.getConfigEntry().getDefaultValue())
                         .setSaveConsumer(this.getConfigEntry()::setValue)
+                        .requireRestart()
                         .build();
             }
         };
@@ -55,6 +56,7 @@ final class GeneralConfigCategorySubScreen extends ClothCategorySubScreen<Genera
                         .setRequirement(Requirement.isTrue(useProxy.getClothConfigEntry()))
                         .setDefaultValue(this.getConfigEntry().getDefaultValue())
                         .setSaveConsumer(this.getConfigEntry()::setValue)
+                        .requireRestart()
                         .build();
             }
         };
@@ -78,6 +80,7 @@ final class GeneralConfigCategorySubScreen extends ClothCategorySubScreen<Genera
                         })
                         .setDefaultValue(this.getConfigEntry().getDefaultValue())
                         .setSaveConsumer(this.getConfigEntry()::setValue)
+                        .requireRestart()
                         .build();
             }
         };
@@ -101,6 +104,7 @@ final class GeneralConfigCategorySubScreen extends ClothCategorySubScreen<Genera
                         })
                         .setDefaultValue(this.getConfigEntry().getDefaultValue())
                         .setSaveConsumer(this.getConfigEntry()::setValue)
+                        .requireRestart()
                         .build();
             }
         };
@@ -118,6 +122,7 @@ final class GeneralConfigCategorySubScreen extends ClothCategorySubScreen<Genera
                             this.getConfigEntry().setValue(v);
                             GeneralConfig.setCustomCredentialUsername(v);
                         })
+                        .requireRestart()
                         .build();
             }
         };
@@ -138,6 +143,7 @@ final class GeneralConfigCategorySubScreen extends ClothCategorySubScreen<Genera
                             this.getConfigEntry().setValue(v);
                             GeneralConfig.setCustomCredentialPassword(v);
                         })
+                        .requireRestart()
                         .build();
             }
         };
