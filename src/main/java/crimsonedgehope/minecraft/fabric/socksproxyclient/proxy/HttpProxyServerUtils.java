@@ -9,13 +9,12 @@ import lombok.NoArgsConstructor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.network.SocialInteractionsManager;
-import net.minecraft.client.report.AbuseReportContext;
-import net.minecraft.client.report.ReporterEnvironment;
+import net.minecraft.client.session.ProfileKeys;
+import net.minecraft.client.session.report.AbuseReportContext;
+import net.minecraft.client.session.report.ReporterEnvironment;
+import net.minecraft.client.session.telemetry.TelemetryManager;
 import net.minecraft.client.texture.PlayerSkinProvider;
-import net.minecraft.client.util.ProfileKeys;
-import net.minecraft.client.util.telemetry.TelemetryManager;
 
-import java.io.File;
 import java.net.Proxy;
 import java.util.concurrent.CompletableFuture;
 
@@ -52,7 +51,7 @@ public final class HttpProxyServerUtils {
                     accessor.setAuthenticationService(new YggdrasilAuthenticationService(HttpProxyServerUtils.getProxyObject()));
                     accessor.setSessionService(accessor.getAuthenticationService().createMinecraftSessionService());
                     accessor.setUserApiService(accessor.invokeCreateUserApiService(accessor.getAuthenticationService(), args));
-                    accessor.setSkinProvider(new PlayerSkinProvider(accessor.getTextureManager(), new File(args.directories.assetDir, "skins"), accessor.getSessionService()));
+                    accessor.setSkinProvider(new PlayerSkinProvider(accessor.getTextureManager(), args.directories.assetDir.toPath().resolve("skins"), accessor.getSessionService(), client));
                     accessor.setSocialInteractionsManager(new SocialInteractionsManager(client, accessor.getUserApiService()));
                     accessor.setTelemetryManager(new TelemetryManager(client, accessor.getUserApiService(), args.network.session));
                     accessor.setProfileKeys(ProfileKeys.create(accessor.getUserApiService(), args.network.session, client.runDirectory.toPath()));
