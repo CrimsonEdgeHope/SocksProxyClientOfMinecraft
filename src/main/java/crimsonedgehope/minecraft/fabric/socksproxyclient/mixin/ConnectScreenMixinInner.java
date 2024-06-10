@@ -1,5 +1,6 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 
+import crimsonedgehope.minecraft.fabric.socksproxyclient.access.IConnectScreenMixinInner;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.network.ServerAddress;
@@ -13,9 +14,19 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Environment(EnvType.CLIENT)
 @Mixin(targets = "net.minecraft.client.gui.screen.ConnectScreen$1")
-public class ConnectScreenMixinInner {
+public class ConnectScreenMixinInner implements IConnectScreenMixinInner {
     @Unique
-    private static ServerAddress ADDR;
+    private ServerAddress serverAddress;
+
+    @Override
+    public ServerAddress socksProxyClient$getServerAddress() {
+        return this.serverAddress;
+    }
+
+    @Override
+    public void socksProxyClient$setServerAddress(ServerAddress serverAddress) {
+        this.serverAddress = serverAddress;
+    }
 
     @ModifyArg(
             method = "run",
@@ -25,7 +36,7 @@ public class ConnectScreenMixinInner {
             )
     )
     private ServerAddress modified(ServerAddress address) {
-        ADDR = address;
+        ((IConnectScreenMixinInner) this).socksProxyClient$setServerAddress(address);
         return address;
     }
 
@@ -41,7 +52,7 @@ public class ConnectScreenMixinInner {
             )
     )
     private void redirected(ClientConnection instance, Packet<?> packet) {
-        ((HandshakeC2SPacketAccessor) packet).setAddress(ADDR.getAddress());
+        ((HandshakeC2SPacketAccessor) packet).setAddress(((IConnectScreenMixinInner) this).socksProxyClient$getServerAddress().getAddress());
         instance.send(packet);
     }
 }

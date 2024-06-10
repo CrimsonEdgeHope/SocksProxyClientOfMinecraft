@@ -3,6 +3,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 import com.google.common.net.InetAddresses;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.access.IAllowedAddressResolverMixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.network.Address;
@@ -28,16 +29,31 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.time.Duration;
+import java.util.Objects;
 import java.util.Optional;
 
 @Environment(value= EnvType.CLIENT)
 @Mixin(AllowedAddressResolver.class)
-public class AllowedAddressResolverMixin {
+public class AllowedAddressResolverMixin implements IAllowedAddressResolverMixin {
     @Shadow @Final private AddressResolver addressResolver;
     @Shadow @Final private RedirectResolver redirectResolver;
 
     @Unique
-    private static DohResolver RESOLVER;
+    private DohResolver resolver;
+
+    @Override
+    public DohResolver socksProxyClient$getDohResolver() {
+        resolver.setUriTemplate(ServerConfig.minecraftRemoteResolveProviderUrl());
+        return resolver;
+    }
+
+    @Override
+    public void socksProxyClient$setDohResolver() {
+        if (Objects.isNull(this.resolver)) {
+            this.resolver = new DohResolver(ServerConfig.minecraftRemoteResolveProviderUrl(), 2, Duration.ofSeconds(2L));
+            this.resolver.setUsePost(true);
+        }
+    }
 
     @Redirect(method = "resolve", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/AllowedAddressResolver;addressResolver:Lnet/minecraft/client/network/AddressResolver;"))
     private AddressResolver redirectGetAddressResolver(AllowedAddressResolver instance) {
@@ -81,16 +97,11 @@ public class AllowedAddressResolverMixin {
     }
 
     @Unique
-    private static Record[] resolver(final String domainName, final int recordType) throws Exception {
-        if (RESOLVER == null) {
-            RESOLVER = new DohResolver(ServerConfig.minecraftRemoteResolveProviderUrl(), 2, Duration.ofSeconds(2L));
-            RESOLVER.setUsePost(true);
-        } else {
-            RESOLVER.setUriTemplate(ServerConfig.minecraftRemoteResolveProviderUrl());
-        }
+    private Record[] resolver(final String domainName, final int recordType) throws Exception {
+        ((IAllowedAddressResolverMixin) this).socksProxyClient$setDohResolver();
         Lookup lookup;
         lookup = new Lookup(domainName, recordType);
-        lookup.setResolver(RESOLVER);
+        lookup.setResolver(((IAllowedAddressResolverMixin) this).socksProxyClient$getDohResolver());
         if (ServerConfig.minecraftRemoteResolveDismissSystemHosts()) {
             lookup.setHostsFileParser(null);
         } else {
