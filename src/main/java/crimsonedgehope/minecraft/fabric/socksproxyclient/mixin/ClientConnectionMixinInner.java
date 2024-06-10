@@ -1,10 +1,12 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.access.IClientConnectionMixin;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.access.IClientConnectionMixinInner;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.mixin_variables.ClientConnectionMixinVariables;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.ProxyCredential;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.handler.proxy.Socks4ProxyHandler;
 import io.netty.handler.proxy.Socks5ProxyHandler;
 import net.fabricmc.api.EnvType;
@@ -23,16 +25,27 @@ import java.net.SocketAddress;
 
 @Environment(EnvType.CLIENT)
 @Mixin(targets = "net.minecraft.network.ClientConnection$1")
-public class ClientConnectionMixinInner {
+public class ClientConnectionMixinInner implements IClientConnectionMixinInner {
     @Unique
     private static final Logger LOGGER = SocksProxyClient.LOGGER;
 
-    @Inject(
-            method = "initChannel",
-            at = @At("TAIL")
-    )
+    @Unique
+    private ChannelHandler clientConnection;
+
+    @Override
+    public ChannelHandler socksProxyClient$getClientConnection() {
+        return this.clientConnection;
+    }
+
+    @Override
+    public void socksProxyClient$setClientConnection(ChannelHandler clientConnection) {
+        this.clientConnection = clientConnection;
+    }
+
+    @Inject(method = "initChannel", at = @At("TAIL"), remap = false)
     private void injected(Channel channel, CallbackInfo ci) {
-        InetSocketAddress remote = ClientConnectionMixinVariables.getRemote();
+        ((IClientConnectionMixinInner) this).socksProxyClient$setClientConnection(channel.pipeline().get("packet_handler"));
+        InetSocketAddress remote = ((IClientConnectionMixin) ((IClientConnectionMixinInner) this).socksProxyClient$getClientConnection()).socksProxyClient$getRemote();
         if (remote == null) {
             return;
         }
