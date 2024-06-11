@@ -15,7 +15,7 @@
     "PlayerSkinTextureMixin",
     "RealmsClientConfigMixin",
     "ScreenAccessor",
-    "ServerResourcePackProviderMixin",
+    "ServerResourcePackLoaderMixin",
     "YggdrasilAuthenticationServiceMixin"
   ],
   "injectors": {
