@@ -1,6 +1,8 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.config.cloth;
 
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeyUtil;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpToSocksServer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
@@ -29,6 +31,11 @@ public final class ClothConfigScreen {
         builder.setSavingRunnable(() -> {
             try {
                 ClothUtils.saveAll();
+                if (GeneralConfig.usingProxy()) {
+                    HttpToSocksServer.INSTANCE.fire();
+                } else {
+                    HttpToSocksServer.INSTANCE.cease();
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
