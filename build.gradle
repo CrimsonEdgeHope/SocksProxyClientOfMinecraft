@@ -43,6 +43,7 @@ remapJar {
 repositories {
 	maven { url "https://maven.shedaniel.me/" }
 	maven { url "https://maven.terraformersmc.com/releases/" }
+	maven { url "https://repo.viaversion.com/" }
 }
 
 dependencies {
@@ -50,15 +51,30 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.fabricloader_version}"
 	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
+		exclude(group: "net.fabricmc")
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 	modApi("com.terraformersmc:modmenu:${project.modmenu_version}") {
+		exclude(group: "net.fabricmc")
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 	shadow(implementation("io.netty:netty-handler-proxy:4.1.110.Final"))
 	shadow(implementation("dnsjava:dnsjava:3.5.2") {
 		exclude(group: "org.slf4j")
 	})
+	modCompileOnly("de.florianmichael:viafabricplus:2.7.6") {
+		exclude(group: "org.cloudburstmc.netty")
+		exclude(group: "com.viaversion")
+		exclude(group: "net.raphimc")
+		exclude(group: "net.fabricmc")
+		exclude(group: "net.fabricmc.fabric-api")
+		exclude(group: "net.lenni0451")
+		exclude(group: "net.lenni0451.mcstructs")
+		exclude(group: "com.github.FlorianMichael")
+		exclude(group: "org.yaml", module: "snakeyaml")
+		exclude(group: "com.terraformersmc", module: "modmenu")
+		exclude(group: "com.github.llamalad7.mixinextras", module: "mixinextras-fabric")
+	}
 
 	compileOnly "org.projectlombok:lombok:1.18.30"
 	annotationProcessor "org.projectlombok:lombok:1.18.30"

@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "crimsonedgehope.minecraft.fabric.socksproxyclient.mixin.viafabricplus",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "LegacyServerAddressMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
