@@ -10,11 +10,19 @@
 
 ### Removed
 
-- Removed "Recreate auth service".
-
 ### Fixed
 
 ### Security
+
+## [0.1.2-alpha+1.16.5]
+
+### Changed
+
+- Minor patch.
+
+### Removed
+
+- Removed "Recreate auth service".
 
 ## [0.1.1-alpha+1.16.5]
 
@@ -66,7 +74,8 @@
 - Convert SOCKS proxy to HTTP(S) proxy. Proxy communications with Mojang Yggdrasil auth service, player skin download endpoint, and server resource pack downloading.
 - Remotely resolve Minecraft server's domain name through SOCKS proxy with the help of [DNS over HTTPS (DoH)](https://www.rfc-editor.org/rfc/rfc8484)
 
-[Unreleased]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.1.1-alpha+1.16.5...HEAD
+[Unreleased]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.1.2-alpha+1.16.5...HEAD
+[0.1.2-alpha+1.16.5]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.1.1-alpha+1.16.5...v0.1.2-alpha+1.16.5
 [0.1.1-alpha+1.16.5]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.1.0-alpha+1.16.5...v0.1.1-alpha+1.16.5
 [0.1.0-alpha+1.16.5]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.2-alpha+1.20.1...v0.1.0-alpha+1.16.5
 [0.0.2-alpha+1.20.1]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.1-alpha+1.20.1...v0.0.2-alpha+1.20.1
