@@ -118,7 +118,7 @@ modrinth {
 	versionName = "[Fabric ${minecraft_version}] ${version}"
 	versionType = releaseType
 	uploadFile = tasks.remapJar.archiveFile
-	gameVersions = [minecraft_version]
+	gameVersions = ["1.20.3", "1.20.4"]
 	loaders = ["fabric"]
 	changelog = "See changelog at " +
 			"[GitHub](https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/releases/tag/v${version})"
