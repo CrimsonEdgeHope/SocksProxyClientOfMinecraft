@@ -62,7 +62,8 @@ dependencies {
 	shadow(implementation("dnsjava:dnsjava:3.5.2") {
 		exclude(group: "org.slf4j")
 	})
-	modCompileOnly("de.florianmichael:viafabricplus:2.7.6") {
+	modCompileOnly("de.florianmichael:viafabricplus:2.7.7") {
+		exclude(group: "de.florianmichael", module: "Classic4J")
 		exclude(group: "org.cloudburstmc.netty")
 		exclude(group: "com.viaversion")
 		exclude(group: "net.raphimc")
