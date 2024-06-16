@@ -91,6 +91,8 @@ public class ClientConnectionMixin {
             argsOnly = true
     )
     private String modified(String address) {
-        return REMOTE.getHostString();
+        String r = REMOTE.getHostString();
+        LOGGER.debug("Modifying connect parameter whilst handshaking. From {} to {}", address, r);
+        return r;
     }
 }
