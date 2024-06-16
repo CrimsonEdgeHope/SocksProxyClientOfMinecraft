@@ -47,7 +47,7 @@ public class ClientConnectionMixin {
             method = "addHandlers",
             at = @At("HEAD")
     )
-    private static void injected(ChannelPipeline pipeline, NetworkSide side, PacketSizeLogger packetSizeLogger, CallbackInfo ci) {
+    private static void injected(ChannelPipeline pipeline, NetworkSide side, boolean local, PacketSizeLogger packetSizeLogger, CallbackInfo ci) {
         if (REMOTE == null) {
             return;
         }
@@ -86,11 +86,13 @@ public class ClientConnectionMixin {
     }
 
     @ModifyVariable(
-            method = "connect(Ljava/lang/String;ILnet/minecraft/network/listener/PacketListener;Lnet/minecraft/network/packet/c2s/handshake/ConnectionIntent;)V",
+            method = "method_52900",
             at = @At("HEAD"),
             argsOnly = true
     )
     private String modified(String address) {
-        return REMOTE.getHostString();
+        String r = REMOTE.getHostString();
+        LOGGER.debug("Modifying method_52900 parameter. From {} to {}", address, r);
+        return r;
     }
 }
