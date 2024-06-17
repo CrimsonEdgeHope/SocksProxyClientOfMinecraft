@@ -11,8 +11,10 @@ import net.minecraft.client.network.AddressResolver;
 import net.minecraft.client.network.AllowedAddressResolver;
 import net.minecraft.client.network.RedirectResolver;
 import net.minecraft.client.network.ServerAddress;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -35,32 +37,41 @@ import java.util.Optional;
 @Environment(value= EnvType.CLIENT)
 @Mixin(AllowedAddressResolver.class)
 public class AllowedAddressResolverMixin implements IAllowedAddressResolverMixin {
-    @Shadow @Final private AddressResolver addressResolver;
-    @Shadow @Final private RedirectResolver redirectResolver;
+    @Shadow @Final @Mutable
+    private AddressResolver addressResolver;
+    @Shadow @Final @Mutable
+    private RedirectResolver redirectResolver;
 
     @Unique
-    private DohResolver resolver;
+    private DohResolver dohResolver;
 
     @Override
     public DohResolver socksProxyClient$getDohResolver() {
-        resolver.setUriTemplate(ServerConfig.minecraftRemoteResolveProviderUrl());
-        return resolver;
+        dohResolver.setUriTemplate(ServerConfig.minecraftRemoteResolveProviderUrl());
+        return dohResolver;
     }
 
     @Override
     public void socksProxyClient$setDohResolver() {
-        if (Objects.isNull(this.resolver)) {
-            this.resolver = new DohResolver(ServerConfig.minecraftRemoteResolveProviderUrl(), 2, Duration.ofSeconds(2L));
-            this.resolver.setUsePost(true);
+        if (Objects.isNull(this.dohResolver)) {
+            this.dohResolver = new DohResolver(ServerConfig.minecraftRemoteResolveProviderUrl(), 2, Duration.ofSeconds(2L));
+            this.dohResolver.setUsePost(true);
         }
     }
 
-    @Redirect(method = "resolve", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/AllowedAddressResolver;addressResolver:Lnet/minecraft/client/network/AddressResolver;"))
-    private AddressResolver redirectGetAddressResolver(AllowedAddressResolver instance) {
-        if (!ServerConfig.minecraftRemoteResolve()) {
-            return addressResolver;
-        }
-        return serverAddress -> {
+    @Redirect(
+            method = "<init>",
+            at = @At(
+                    value = "FIELD",
+                    target = "Lnet/minecraft/client/network/AllowedAddressResolver;addressResolver:Lnet/minecraft/client/network/AddressResolver;",
+                    opcode = Opcodes.PUTFIELD
+            )
+    )
+    private void redirectGetAddressResolver(AllowedAddressResolver instance, final AddressResolver originalAddressResolver) {
+        this.addressResolver = serverAddress -> {
+            if (!ServerConfig.minecraftRemoteResolve()) {
+                return originalAddressResolver.resolve(serverAddress);
+            }
             try {
                 if (InetAddresses.isInetAddress(serverAddress.getAddress())) {
                     InetAddress inet = InetAddress.getByName(serverAddress.getAddress());
@@ -76,12 +87,19 @@ public class AllowedAddressResolverMixin implements IAllowedAddressResolverMixin
         };
     }
 
-    @Redirect(method = "resolve", at = @At(value = "FIELD", target = "Lnet/minecraft/client/network/AllowedAddressResolver;redirectResolver:Lnet/minecraft/client/network/RedirectResolver;"))
-    private RedirectResolver redirectGetRedirectResolver(AllowedAddressResolver instance) {
-        if (!ServerConfig.minecraftRemoteResolve()) {
-            return redirectResolver;
-        }
-        return serverAddress -> {
+    @Redirect(
+            method = "<init>",
+            at = @At(
+                    value = "FIELD",
+                    target = "Lnet/minecraft/client/network/AllowedAddressResolver;redirectResolver:Lnet/minecraft/client/network/RedirectResolver;",
+                    opcode = Opcodes.PUTFIELD
+            )
+    )
+    private void redirectGetRedirectResolver(AllowedAddressResolver instance, final RedirectResolver originalRedirectResolver) {
+        this.redirectResolver = serverAddress -> {
+            if (!ServerConfig.minecraftRemoteResolve()) {
+                return originalRedirectResolver.lookupRedirect(serverAddress);
+            }
             if (serverAddress.getPort() == 25565) {
                 try {
                     if (InetAddresses.isInetAddress(serverAddress.getAddress())) {
