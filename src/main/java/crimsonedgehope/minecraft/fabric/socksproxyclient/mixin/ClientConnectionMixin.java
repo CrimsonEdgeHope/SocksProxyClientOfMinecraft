@@ -1,84 +1,44 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 
-import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.ProxyCredential;
-import io.netty.channel.ChannelPipeline;
-import io.netty.handler.proxy.Socks4ProxyHandler;
-import io.netty.handler.proxy.Socks5ProxyHandler;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.access.IClientConnectionMixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.ClientConnection;
-import net.minecraft.network.NetworkSide;
-import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.SocketAddress;
+
+import static crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient.LOGGER;
 
 @Environment(EnvType.CLIENT)
 @Mixin(ClientConnection.class)
-public class ClientConnectionMixin {
+public class ClientConnectionMixin implements IClientConnectionMixin {
     @Unique
-    private static final Logger LOGGER = SocksProxyClient.LOGGER;
-    @Unique
-    private static InetSocketAddress REMOTE;
+    private InetSocketAddress remote;
 
-    @Inject(
-            method = "connect",
-            at = @At("HEAD")
-    )
-    private static void injected(InetSocketAddress address, boolean useEpoll, CallbackInfoReturnable<ClientConnection> cir) {
-        REMOTE = address;
-        LOGGER.debug("Remote Minecraft server {}", address);
+    @Override
+    public InetSocketAddress socksProxyClient$getInetSocketAddress() {
+        return remote;
+    }
+
+    @Override
+    public void socksProxyClient$setInetSocketAddress(InetSocketAddress inetSocketAddress) {
+        this.remote = inetSocketAddress;
     }
 
     @Inject(
-            method = "addHandlers",
-            at = @At("HEAD")
+            method = "connect",
+            at = @At(value = "INVOKE", target = "Lio/netty/bootstrap/Bootstrap;<init>()V", shift = At.Shift.BEFORE),
+            locals = LocalCapture.CAPTURE_FAILHARD,
+            remap = false
     )
-    private static void injected(ChannelPipeline pipeline, NetworkSide side, CallbackInfo ci) {
-        if (REMOTE == null) {
-            return;
-        }
-        InetAddress address = REMOTE.getAddress();
-
-        Proxy proxySelection;
-        if (address.isLoopbackAddress()) {
-            proxySelection = ServerConfig.getProxyForMinecraftLoopback();
-        } else {
-            proxySelection = ServerConfig.getProxyForMinecraft();
-        }
-
-        if (proxySelection.equals(Proxy.NO_PROXY)) {
-            LOGGER.info("No proxy on host {}", address);
-            return;
-        }
-
-        ProxyCredential proxyCredential = ServerConfig.getProxyCredential();
-
-        final SocketAddress sa = proxySelection.address();
-        switch (ServerConfig.getSocksVersion()) {
-            case SOCKS4:
-                LOGGER.info("Using Socks4 proxy {} on {}", sa, REMOTE);
-                pipeline.addFirst("socks",
-                        new Socks4ProxyHandler(sa, proxyCredential.getUsername()));
-                break;
-            case SOCKS5:
-                LOGGER.info("Using Socks5 proxy {} on {}", sa, REMOTE);
-                pipeline.addFirst("socks",
-                        new Socks5ProxyHandler(sa, proxyCredential.getUsername(), proxyCredential.getPassword()));
-                break;
-            default:
-                LOGGER.info("No proxy on host {}", address);
-                break;
-        }
+    private static void injected(InetSocketAddress address, boolean useEpoll, CallbackInfoReturnable<ClientConnection> cir, ClientConnection clientConnection) {
+        ((IClientConnectionMixin) clientConnection).socksProxyClient$setInetSocketAddress(address);
+        LOGGER.debug("Remote Minecraft server {}", address);
     }
 }
