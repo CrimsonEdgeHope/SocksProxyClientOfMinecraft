@@ -7,6 +7,7 @@
     "AllowedAddressResolverMixin",
     "AuthlibMinecraftClientMixin",
     "ClientConnectionMixin",
+    "ClientConnectionMixinInner",
     "HttpAuthenticationServiceMixin",
     "MainMixin",
     "MinecraftClientMixin",
