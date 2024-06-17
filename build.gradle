@@ -62,20 +62,6 @@ dependencies {
 	shadow(implementation("dnsjava:dnsjava:3.5.2") {
 		exclude(group: "org.slf4j")
 	})
-	modCompileOnly("de.florianmichael:viafabricplus:2.7.7") {
-		exclude(group: "de.florianmichael", module: "Classic4J")
-		exclude(group: "org.cloudburstmc.netty")
-		exclude(group: "com.viaversion")
-		exclude(group: "net.raphimc")
-		exclude(group: "net.fabricmc")
-		exclude(group: "net.fabricmc.fabric-api")
-		exclude(group: "net.lenni0451")
-		exclude(group: "net.lenni0451.mcstructs")
-		exclude(group: "com.github.FlorianMichael")
-		exclude(group: "org.yaml", module: "snakeyaml")
-		exclude(group: "com.terraformersmc", module: "modmenu")
-		exclude(group: "com.github.llamalad7.mixinextras", module: "mixinextras-fabric")
-	}
 
 	compileOnly "org.projectlombok:lombok:1.18.30"
 	annotationProcessor "org.projectlombok:lombok:1.18.30"
