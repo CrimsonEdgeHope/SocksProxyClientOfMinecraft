@@ -1,5 +1,5 @@
 plugins {
-	id "fabric-loom" version "1.5-SNAPSHOT"
+	id "fabric-loom" version "1.6-SNAPSHOT"
 	id "java-library"
 	id "com.github.johnrengelman.shadow" version "8.1.1"
 	id "org.jetbrains.changelog" version "2.2.0"
@@ -15,12 +15,12 @@ base {
 
 java {
 	withSourcesJar()
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 17
+	it.options.release = 21
 	it.options.encoding = "UTF-8"
 }
 
@@ -118,7 +118,7 @@ modrinth {
 	versionName = "[Fabric ${minecraft_version}] ${version}"
 	versionType = releaseType
 	uploadFile = tasks.remapJar.archiveFile
-	gameVersions = ["1.20.3", "1.20.4"]
+	gameVersions = ["1.20.5", "1.20.6"]
 	loaders = ["fabric"]
 	changelog = "See changelog at " +
 			"[GitHub](https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/releases/tag/v${version})"
@@ -127,7 +127,5 @@ modrinth {
 		optional.project "fabric-api"
 		optional.project "cloth-config"
 		optional.project "modmenu"
-		incompatible.project "proxy-server"
-		incompatible.project "respectproxyoptions"
 	}
 }
