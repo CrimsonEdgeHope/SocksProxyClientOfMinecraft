@@ -1,8 +1,8 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.ProxyCredential;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.ProxyCredential;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.proxy.Socks4ProxyHandler;
@@ -17,7 +17,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -83,16 +82,5 @@ public class ClientConnectionMixin {
                 LOGGER.info("No proxy on host {}", address);
                 break;
         }
-    }
-
-    @ModifyVariable(
-            method = "method_52900",
-            at = @At("HEAD"),
-            argsOnly = true
-    )
-    private String modified(String address) {
-        String r = REMOTE.getHostString();
-        LOGGER.debug("Modifying method_52900 parameter. From {} to {}", address, r);
-        return r;
     }
 }
