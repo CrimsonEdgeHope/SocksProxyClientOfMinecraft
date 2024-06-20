@@ -1,6 +1,7 @@
-package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
+package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.screen;
 
-import crimsonedgehope.minecraft.fabric.socksproxyclient.access.IConnectScreenMixinInner;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.injection.access.IConnectScreenMixinInner;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.network.HandshakeC2SPacketAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.network.ServerAddress;

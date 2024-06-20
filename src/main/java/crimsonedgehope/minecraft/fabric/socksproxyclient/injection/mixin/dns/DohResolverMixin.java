@@ -1,4 +1,4 @@
-package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin.proxy;
+package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.dns;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyServerUtils;

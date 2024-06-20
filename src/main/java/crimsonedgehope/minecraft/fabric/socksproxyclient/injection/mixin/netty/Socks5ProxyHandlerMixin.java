@@ -1,7 +1,7 @@
-package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin.proxy;
+package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.netty;
 
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.proxy.Socks4ProxyHandler;
+import io.netty.handler.proxy.Socks5ProxyHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,13 +11,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
 @Environment(EnvType.CLIENT)
-@Mixin(Socks4ProxyHandler.class)
-public abstract class Socks4ProxyHandlerMixin extends ProxyHandlerMixin {
+@Mixin(Socks5ProxyHandler.class)
+public abstract class Socks5ProxyHandlerMixin extends ProxyHandlerMixin {
 
     @Inject(method = "newInitialMessage", at = @At("HEAD"), remap = false)
     private void injected(ChannelHandlerContext ctx, CallbackInfoReturnable<Object> cir) {
         if (destinationAddress().equals(proxyAddress())) {
-            throw new IllegalArgumentException("You are not supposed to connect to the Socks4 proxy through itself.");
+            throw new IllegalArgumentException("You are not supposed to connect to the Socks5 proxy through itself.");
         }
     }
 }
