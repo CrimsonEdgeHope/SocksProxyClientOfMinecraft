@@ -10,4 +10,16 @@
 Modern Minecraft Java client relies on Netty to connect to multiplayer servers,
 and this simple mod is able to proxy Minecraft game traffic through designated SOCKS proxy as desired.
 
+## Features
+
+- SOCKS proxy support. Explicitly proxy Minecraft game traffic.
+- Convert SOCKS proxy to HTTP(S) proxy. Proxy communications with Mojang Yggdrasil auth service, player skin download endpoint, and server resource pack downloading.
+- Remotely resolve Minecraft server's domain name through SOCKS proxy with the help of [DNS over HTTPS (DoH)](https://www.rfc-editor.org/rfc/rfc8484)
+
+## When to/Why should use this mod?
+
+- You have a better network route through a proxy and want to lower your ping as much as possible.
+- You have trouble accepting server resource pack because it's hosted on a provider that's blocked in your residence.
+- You care about your privacy.
+
 Documentation at [here](https://crimsonedgehope.github.io/SocksProxyClientOfMinecraft)
