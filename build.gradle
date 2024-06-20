@@ -4,6 +4,7 @@ plugins {
 	id "com.github.johnrengelman.shadow" version "8.1.1"
 	id "org.jetbrains.changelog" version "2.2.0"
 	id "com.modrinth.minotaur" version "2.+"
+	id "com.matthewprenger.cursegradle" version "1.4.0"
 }
 
 version = "${project.mod_version}+${project.minecraft_version}"
@@ -43,7 +44,6 @@ remapJar {
 repositories {
 	maven { url "https://maven.shedaniel.me/" }
 	maven { url "https://maven.terraformersmc.com/releases/" }
-	maven { url "https://repo.viaversion.com/" }
 }
 
 dependencies {
