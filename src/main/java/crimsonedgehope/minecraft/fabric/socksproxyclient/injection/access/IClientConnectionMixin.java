@@ -1,4 +1,4 @@
-package crimsonedgehope.minecraft.fabric.socksproxyclient.access;
+package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.access;
 
 import java.net.InetSocketAddress;
 

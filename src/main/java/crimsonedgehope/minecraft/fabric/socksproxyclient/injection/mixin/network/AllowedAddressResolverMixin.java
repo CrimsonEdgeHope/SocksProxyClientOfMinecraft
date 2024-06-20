@@ -1,9 +1,9 @@
-package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
+package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.network;
 
 import com.google.common.net.InetAddresses;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.access.IAllowedAddressResolverMixin;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.injection.access.IAllowedAddressResolverMixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.network.Address;
@@ -34,7 +34,7 @@ import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;
 
-@Environment(value= EnvType.CLIENT)
+@Environment(EnvType.CLIENT)
 @Mixin(AllowedAddressResolver.class)
 public class AllowedAddressResolverMixin implements IAllowedAddressResolverMixin {
     @Shadow @Final @Mutable

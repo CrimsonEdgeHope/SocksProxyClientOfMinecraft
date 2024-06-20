@@ -24,8 +24,7 @@
     ]
   },
   "mixins": [
-    "socksproxyclient.mixins.json",
-    "socksproxyclient.proxy.mixins.json"
+    "socksproxyclient.mixins.json"
   ],
   "depends": {
     "minecraft": "${minecraft_version}",
