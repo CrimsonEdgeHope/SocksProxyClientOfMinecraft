@@ -1,4 +1,4 @@
-package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
+package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.client;
 
 import com.mojang.authlib.minecraft.client.MinecraftClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
