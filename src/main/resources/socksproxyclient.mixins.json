@@ -12,6 +12,7 @@
     "client.RealmsClientConfigMixin",
     "client.YggdrasilAuthenticationServiceMixin",
     "dns.DohResolverMixin",
+    "netty.ChannelInitializerAccessor",
     "netty.ProxyHandlerMixin",
     "netty.Socks4ProxyHandlerMixin",
     "netty.Socks5ProxyHandlerMixin",
