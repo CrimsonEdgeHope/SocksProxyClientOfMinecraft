@@ -48,7 +48,7 @@ public class HttpToSocksServer {
 
     public static final HttpToSocksServer INSTANCE;
 
-    private static final Logger LOGGER = SocksProxyClient.LOGGER;
+    private static final Logger LOGGER = SocksProxyClient.logger("HttpProxy");
 
     static {
         INSTANCE = new HttpToSocksServer();

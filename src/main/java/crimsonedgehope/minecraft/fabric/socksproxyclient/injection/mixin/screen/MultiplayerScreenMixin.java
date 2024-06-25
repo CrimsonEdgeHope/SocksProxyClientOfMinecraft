@@ -50,7 +50,7 @@ public class MultiplayerScreenMixin {
                     try {
                         ((ScreenAccessor) this).getClient().setScreen(ClothConfigScreen.getScreen((MultiplayerScreen) (Object) this));
                     } catch (Exception e) {
-                        SocksProxyClient.LOGGER.error("Where's my config screen?", e);
+                        SocksProxyClient.logger(this.getClass().getSimpleName()).error("Where's my config screen?", e);
                         button.active = false;
                     }
                 }).width(308).build();
