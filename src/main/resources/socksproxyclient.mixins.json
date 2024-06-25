@@ -3,6 +3,7 @@
   "minVersion": "0.8",
   "package": "crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin",
   "compatibilityLevel": "JAVA_21",
+  "plugin": "crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.SocksProxyClientMixinPlugin",
   "client": [
     "client.AuthlibMinecraftClientMixin",
     "client.HttpAuthenticationServiceMixin",
