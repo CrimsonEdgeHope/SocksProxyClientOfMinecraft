@@ -12,6 +12,7 @@ import net.minecraft.client.network.AllowedAddressResolver;
 import net.minecraft.client.network.RedirectResolver;
 import net.minecraft.client.network.ServerAddress;
 import org.objectweb.asm.Opcodes;
+import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -37,6 +38,9 @@ import java.util.Optional;
 @Environment(EnvType.CLIENT)
 @Mixin(AllowedAddressResolver.class)
 public class AllowedAddressResolverMixin implements IAllowedAddressResolverMixin {
+    @Unique
+    private static final Logger LOGGER = SocksProxyClient.logger("Resolve");
+    
     @Shadow @Final @Mutable
     private AddressResolver addressResolver;
     @Shadow @Final @Mutable
@@ -81,7 +85,7 @@ public class AllowedAddressResolverMixin implements IAllowedAddressResolverMixin
                 }
                 return addressResolver(serverAddress);
             } catch (Throwable e) {
-                SocksProxyClient.LOGGER.debug("Couldn't resolve server {} address", serverAddress.getAddress(), e);
+                LOGGER.debug("Couldn't resolve server {} address", serverAddress.getAddress(), e);
             }
             return Optional.empty();
         };
@@ -107,7 +111,7 @@ public class AllowedAddressResolverMixin implements IAllowedAddressResolverMixin
                     }
                     return redirectResolver(serverAddress);
                 } catch (Throwable e) {
-                    SocksProxyClient.LOGGER.debug("Couldn't resolve server {} address", serverAddress.getAddress(), e);
+                    LOGGER.debug("Couldn't resolve server {} address", serverAddress.getAddress(), e);
                 }
             }
             return Optional.empty();
@@ -137,9 +141,9 @@ public class AllowedAddressResolverMixin implements IAllowedAddressResolverMixin
     private Optional<Address> addressResolver(ServerAddress serverAddress) throws Exception {
         Record[] records = resolver(serverAddress.getAddress(), Type.A);
         final ARecord arec = (ARecord) records[0];
-        SocksProxyClient.LOGGER.debug(arec.toString());
+        LOGGER.debug(arec.toString());
         InetAddress inetAddress = arec.getAddress();
-        SocksProxyClient.LOGGER.info("Resolve {} to {}", serverAddress.getAddress(), inetAddress.getHostAddress());
+        LOGGER.info("Resolve {} to {}", serverAddress.getAddress(), inetAddress.getHostAddress());
         byte[] bytes = inetAddress.getAddress();
         // TODO: ?
         return Optional.of(Address.create(new InetSocketAddress(InetAddress.getByAddress(serverAddress.getAddress(), bytes), serverAddress.getPort())));
@@ -150,9 +154,9 @@ public class AllowedAddressResolverMixin implements IAllowedAddressResolverMixin
         String addr0 = "_minecraft._tcp." + serverAddress.getAddress();
         Record[] records = resolver(addr0, Type.SRV);
         final SRVRecord srv = (SRVRecord) records[0];
-        SocksProxyClient.LOGGER.debug(records[0].toString());
+        LOGGER.debug(records[0].toString());
         String host = srv.getTarget().toString(true);
-        SocksProxyClient.LOGGER.info("Resolve {} to {}:{}", addr0, host, srv.getPort());
+        LOGGER.info("Resolve {} to {}:{}", addr0, host, srv.getPort());
         return Optional.of(new ServerAddress(host, srv.getPort()));
     }
 }

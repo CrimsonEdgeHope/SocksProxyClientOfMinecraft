@@ -1,11 +1,13 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
 
 import com.google.gson.JsonObject;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.ProxyCredential;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -17,6 +19,8 @@ public final class GeneralConfig extends SocksProxyClientConfig {
     static {
         INSTANCE = new GeneralConfig();
     }
+
+    private static final Logger LOGGER = SocksProxyClient.logger(GeneralConfig.class.getSimpleName());
 
     public static final String CATEGORY = "general";
 

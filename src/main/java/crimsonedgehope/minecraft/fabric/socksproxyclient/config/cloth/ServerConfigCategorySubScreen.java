@@ -299,7 +299,7 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
         try {
             return buildCategory0(this.clothAccess);
         } catch (Exception e) {
-            SocksProxyClient.LOGGER.error("Error building cloth category screen!", e);
+            SocksProxyClient.logger(this.getClass().getSimpleName()).error("Error building cloth category screen!", e);
             throw new RuntimeException(e);
         }
     }
