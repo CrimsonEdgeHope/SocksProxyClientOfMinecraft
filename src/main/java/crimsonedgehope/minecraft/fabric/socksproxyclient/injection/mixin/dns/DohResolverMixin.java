@@ -1,6 +1,5 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.dns;
 
-import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyServerUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -50,7 +49,7 @@ public class DohResolverMixin {
 
             @Override
             public void connectFailed(URI uri, SocketAddress sa, IOException ioe) {
-                SocksProxyClient.LOGGER.error("Failed to reach " + sa.toString() + " through proxy!", ioe);
+
             }
         });
     }
