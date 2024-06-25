@@ -1,5 +1,6 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.network;
 
+import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.injection.access.IClientConnectionMixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -12,8 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.net.InetSocketAddress;
-
-import static crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient.LOGGER;
 
 @Environment(EnvType.CLIENT)
 @Mixin(ClientConnection.class)
@@ -39,6 +38,6 @@ public class ClientConnectionMixin implements IClientConnectionMixin {
     )
     private static void injected(InetSocketAddress address, boolean useEpoll, CallbackInfoReturnable<ClientConnection> cir, ClientConnection clientConnection) {
         ((IClientConnectionMixin) clientConnection).socksProxyClient$setInetSocketAddress(address);
-        LOGGER.debug("Remote Minecraft server {}", address);
+        SocksProxyClient.logger("Connect").debug("Remote Minecraft server {}", address);
     }
 }

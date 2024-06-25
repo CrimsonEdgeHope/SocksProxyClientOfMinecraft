@@ -14,7 +14,7 @@ public final class HttpProxyServerUtils {
     }
 
     public static Proxy getProxyObject(boolean useProxy) {
-        SocksProxyClient.LOGGER.debug("getProxyObject: {}", useProxy);
+        SocksProxyClient.logger("HttpProxy").debug("getProxyObject: {}", useProxy);
         if (!useProxy || !HttpToSocksServer.INSTANCE.isFired()) {
             return Proxy.NO_PROXY;
         } else {
