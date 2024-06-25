@@ -24,7 +24,7 @@ public final class DNSUtils {
 
     private static DohResolver RESOLVER;
 
-    private static final Logger LOGGER = SocksProxyClient.LOGGER;
+    private static final Logger LOGGER = SocksProxyClient.logger(DNSUtils.class.getSimpleName());
 
     private static Record[] resolve(final String domainName, final int recordType) throws Exception {
         if (Objects.isNull(RESOLVER)) {
@@ -42,7 +42,7 @@ public final class DNSUtils {
         }
         lookup.run();
         Record[] records = lookup.getAnswers();
-        if (records == null || records.length <= 0) {
+        if (Objects.isNull(records) || records.length <= 0) {
             throw new UnknownHostException();
         }
         return records;

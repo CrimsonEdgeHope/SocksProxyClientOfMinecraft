@@ -1,5 +1,6 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
 
+import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.injection.access.IClientConnectionMixin;
 import io.netty.channel.ChannelPipeline;
@@ -8,6 +9,7 @@ import io.netty.handler.proxy.Socks5ProxyHandler;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.minecraft.network.ClientConnection;
+import org.apache.logging.log4j.Logger;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -15,10 +17,10 @@ import java.net.Proxy;
 import java.net.SocketAddress;
 import java.util.Objects;
 
-import static crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient.LOGGER;
-
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ClientConnectionProxySelection {
+    private static final Logger LOGGER = SocksProxyClient.logger("Connect");
+
     public static void fire(ClientConnection instance, ChannelPipeline pipeline) {
         InetSocketAddress remote = ((IClientConnectionMixin) instance).socksProxyClient$getInetSocketAddress();
         fire(remote, pipeline);

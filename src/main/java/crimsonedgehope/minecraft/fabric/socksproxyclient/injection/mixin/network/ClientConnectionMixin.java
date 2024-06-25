@@ -38,6 +38,6 @@ public class ClientConnectionMixin implements IClientConnectionMixin {
     )
     private static void injected(InetAddress address, int port, boolean shouldUseNativeTransport, CallbackInfoReturnable<ClientConnection> cir, ClientConnection clientConnection) {
         ((IClientConnectionMixin) clientConnection).socksProxyClient$setInetSocketAddress(new InetSocketAddress(address, port));
-        SocksProxyClient.LOGGER.debug("Remote Minecraft server {}", address);
+        SocksProxyClient.logger("Connect").debug("Remote Minecraft server {}", address);
     }
 }
