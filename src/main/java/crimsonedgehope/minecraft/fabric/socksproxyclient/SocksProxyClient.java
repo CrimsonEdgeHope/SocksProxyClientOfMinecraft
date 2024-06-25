@@ -8,9 +8,6 @@ import org.slf4j.LoggerFactory;
 
 public class SocksProxyClient implements ClientModInitializer {
 
-	private static final String LOGGER_NAME = "SocksProxyClient";
-	public static final Logger LOGGER = LoggerFactory.getLogger(LOGGER_NAME);
-
 	public static void preInit() throws Exception {
 		ConfigUtils.loadAll();
 		HttpToSocksServer.INSTANCE.fire();
@@ -19,5 +16,9 @@ public class SocksProxyClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 
+	}
+
+	public static Logger logger(final String path) {
+		return LoggerFactory.getLogger("SocksProxyClient/" + path);
 	}
 }
