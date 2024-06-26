@@ -14,6 +14,18 @@
 
 ### Security
 
+## [0.0.7-alpha+1.20.1]
+
+### Changed
+
+- Explicitly declare dependency on [FabricLoader](https://github.com/FabricMC/fabric-loader/releases/tag/0.15.0) no lower than 0.15.0.
+- Logger names.
+- Internally refactored.
+
+### Fixed
+
+- Fixed missed out part of proxying legacy pinging requests.
+
 ## [0.0.6-alpha+1.20.1]
 
 ### Changed
@@ -69,7 +81,8 @@
 - Convert SOCKS proxy to HTTP(S) proxy. Proxy communications with Mojang Yggdrasil auth service, player skin download endpoint, and server resource pack downloading.
 - Remotely resolve Minecraft server's domain name through SOCKS proxy with the help of [DNS over HTTPS (DoH)](https://www.rfc-editor.org/rfc/rfc8484)
 
-[Unreleased]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.6-alpha+1.20.1...HEAD
+[Unreleased]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.7-alpha+1.20.1...HEAD
+[0.0.7-alpha+1.20.1]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.6-alpha+1.20.1...v0.0.7-alpha+1.20.1
 [0.0.6-alpha+1.20.1]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.5-alpha+1.20.1...v0.0.6-alpha+1.20.1
 [0.0.5-alpha+1.20.1]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.4-alpha+1.20.1...v0.0.5-alpha+1.20.1
 [0.0.4-alpha+1.20.1]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.3-alpha+1.20.1...v0.0.4-alpha+1.20.1
