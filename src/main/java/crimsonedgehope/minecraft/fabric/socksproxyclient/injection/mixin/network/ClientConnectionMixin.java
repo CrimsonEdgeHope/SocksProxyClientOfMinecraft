@@ -32,9 +32,8 @@ public class ClientConnectionMixin implements IClientConnectionMixin {
 
     @Inject(
             method = "connect",
-            at = @At(value = "INVOKE", target = "Lio/netty/bootstrap/Bootstrap;<init>()V", shift = At.Shift.BEFORE),
-            locals = LocalCapture.CAPTURE_FAILHARD,
-            remap = false
+            at = @At(value = "INVOKE", target = "Lio/netty/bootstrap/Bootstrap;<init>()V", shift = At.Shift.BEFORE, remap = false),
+            locals = LocalCapture.CAPTURE_FAILHARD
     )
     private static void injected(InetSocketAddress address, boolean useEpoll, CallbackInfoReturnable<ClientConnection> cir, ClientConnection clientConnection) {
         ((IClientConnectionMixin) clientConnection).socksProxyClient$setInetSocketAddress(address);
