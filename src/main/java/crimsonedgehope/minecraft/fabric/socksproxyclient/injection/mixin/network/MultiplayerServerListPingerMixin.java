@@ -21,9 +21,9 @@ public class MultiplayerServerListPingerMixin {
     @WrapOperation(method = "ping",
             at = @At(
                     value = "INVOKE",
-                    target = "Lio/netty/bootstrap/Bootstrap;connect(Ljava/net/InetAddress;I)Lio/netty/channel/ChannelFuture;"
-            ),
-            remap = false
+                    target = "Lio/netty/bootstrap/Bootstrap;connect(Ljava/net/InetAddress;I)Lio/netty/channel/ChannelFuture;",
+                    remap = false
+            )
     )
     private ChannelFuture injected(Bootstrap instance, InetAddress inetHost, int inetPort, Operation<ChannelFuture> original) {
         final InetSocketAddress remote = new InetSocketAddress(inetHost, inetPort);
