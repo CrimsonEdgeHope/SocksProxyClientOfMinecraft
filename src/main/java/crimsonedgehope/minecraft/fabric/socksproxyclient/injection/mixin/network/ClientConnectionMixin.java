@@ -22,12 +22,12 @@ public class ClientConnectionMixin implements IClientConnectionMixin {
     private InetSocketAddress remote;
 
     @Override
-    public void socksProxyClient$setRemote(InetSocketAddress socketAddress) {
+    public void socksProxyClient$setInetSocketAddress(InetSocketAddress socketAddress) {
         this.remote = socketAddress;
     }
 
     @Override
-    public InetSocketAddress socksProxyClient$getRemote() {
+    public InetSocketAddress socksProxyClient$getInetSocketAddress() {
         return this.remote;
     }
 
@@ -37,7 +37,7 @@ public class ClientConnectionMixin implements IClientConnectionMixin {
             locals = LocalCapture.CAPTURE_FAILHARD
     )
     private static void injected(InetAddress address, int port, boolean shouldUseNativeTransport, CallbackInfoReturnable<ClientConnection> cir, ClientConnection clientConnection) {
-        ((IClientConnectionMixin) clientConnection).socksProxyClient$setRemote(new InetSocketAddress(address, port));
+        ((IClientConnectionMixin) clientConnection).socksProxyClient$setInetSocketAddress(new InetSocketAddress(address, port));
         SocksProxyClient.LOGGER.debug("Remote Minecraft server {}", address);
     }
 }
