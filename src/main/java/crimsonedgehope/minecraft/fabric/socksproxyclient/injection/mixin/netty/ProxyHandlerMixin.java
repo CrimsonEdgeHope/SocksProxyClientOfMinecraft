@@ -1,4 +1,4 @@
-package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin.proxy;
+package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.netty;
 
 import io.netty.handler.proxy.ProxyHandler;
 import net.fabricmc.api.EnvType;

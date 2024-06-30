@@ -1,4 +1,4 @@
-package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
+package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.network;
 
 import com.google.common.net.InetAddresses;
 import com.mojang.datafixers.util.Pair;

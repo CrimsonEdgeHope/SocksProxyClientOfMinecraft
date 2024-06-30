@@ -1,8 +1,8 @@
-package crimsonedgehope.minecraft.fabric.socksproxyclient.mixin;
+package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.network;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.access.IClientConnectionMixin;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.access.IClientConnectionMixinInner;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.injection.access.IClientConnectionMixin;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.injection.access.IClientConnectionMixinInner;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.ProxyCredential;
 import io.netty.channel.Channel;
