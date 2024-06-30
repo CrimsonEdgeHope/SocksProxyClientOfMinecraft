@@ -7,7 +7,6 @@
     "client.ClientBuiltinResourcePackProviderMixin",
     "client.HttpAuthenticationServiceMixin",
     "client.MainMixin",
-    "client.MinecraftClientAccessor",
     "client.MinecraftClientMixin",
     "client.PlayerSkinTextureMixin",
     "client.RealmsClientConfigMixin",

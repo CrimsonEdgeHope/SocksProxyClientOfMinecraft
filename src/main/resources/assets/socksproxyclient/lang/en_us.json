@@ -33,7 +33,5 @@
   "socksproxyclient.config.server.httpRemoteResolve": "Use proxy on DNS resolve for HTTP when using Socks 5",
   "socksproxyclient.config.server.advanced": "Advanced",
   "socksproxyclient.config.server.imposeProxyOnMinecraftLoopback": "Impose proxy on Minecraft server (Loopback address)",
-  "socksproxyclient.config.server.imposeProxyOnMinecraftLoopback.tooltip": "Mostly you don't need to enable this.",
-
-  "socksproxyclient.screen.config": "Open SocksProxyClient config"
+  "socksproxyclient.config.server.imposeProxyOnMinecraftLoopback.tooltip": "Mostly you don't need to enable this."
 }
