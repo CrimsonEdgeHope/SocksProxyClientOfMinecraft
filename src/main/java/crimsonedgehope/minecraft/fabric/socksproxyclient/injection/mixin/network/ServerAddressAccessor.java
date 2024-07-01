@@ -14,4 +14,9 @@ public interface ServerAddressAccessor {
     static Pair<String, Integer> invokeResolveServer(String address) throws Exception {
         throw new NoSuchMethodException();
     }
+
+    @Invoker("<init>")
+    static ServerAddress createServerAddressObject(String host, int port) throws Exception {
+        throw new InstantiationException();
+    }
 }
