@@ -22,6 +22,7 @@
     "network.MultiplayerServerListPingerMixinInner",
     "network.ServerAddressAccessor",
     "network.ServerAddressMixin",
+    "screen.ConnectScreenMixin",
     "screen.ConnectScreenMixinInner"
   ],
   "injectors": {
