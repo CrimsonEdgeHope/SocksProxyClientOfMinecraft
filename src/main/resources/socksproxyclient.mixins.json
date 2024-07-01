@@ -20,7 +20,6 @@
     "network.ClientConnectionMixinInner",
     "network.HandshakeC2SPacketAccessor",
     "network.MultiplayerServerListPingerMixin",
-    "network.MultiplayerServerListPingerMixinInner",
     "network.ServerAddressAccessor",
     "network.ServerAddressMixin",
     "screen.ConnectScreenMixin",
