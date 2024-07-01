@@ -40,6 +40,7 @@ sourcesJar {
 shadowJar {
 	configurations = [ project.configurations.shadow ]
 	archiveClassifier.set("shadow")
+	mergeServiceFiles()
 }
 
 remapJar {
@@ -63,6 +64,7 @@ dependencies {
 	modApi("com.terraformersmc:modmenu:${project.modmenu_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
+	include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.3.5")))
 	shadow(implementation("io.netty:netty-handler-proxy:4.1.25.Final"))
 	shadow(implementation("dnsjava:dnsjava:3.5.2"))
 	shadow(implementation("net.java.dev.jna:jna:5.12.1"))
