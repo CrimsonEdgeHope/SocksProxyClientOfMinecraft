@@ -2,6 +2,8 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.networ
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.ClientConnectionProxySelection;
 import io.netty.channel.Channel;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -12,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.net.InetSocketAddress;
 
 @Mixin(targets = "net.minecraft.client.network.MultiplayerServerListPinger$2")
+@Environment(EnvType.CLIENT)
 public class MultiplayerServerListPingerMixinInner {
 
     @Shadow(aliases = "field_3778") @Final
