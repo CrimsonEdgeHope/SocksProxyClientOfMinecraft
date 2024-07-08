@@ -11,6 +11,8 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.network.MultiplayerServerListPinger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import java.net.InetSocketAddress;
 
+@Environment(EnvType.CLIENT)
 @Mixin(MultiplayerServerListPinger.class)
 public class MultiplayerServerListPingerMixin {
 
