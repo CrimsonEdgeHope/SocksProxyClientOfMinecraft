@@ -12,7 +12,6 @@
   "socksproxyclient.config.general.customProxyPort.error": "Invalid port number",
   "socksproxyclient.config.general.customProxyUsername": "Custom proxy username",
   "socksproxyclient.config.general.customProxyPassword": "Custom proxy password",
-  "socksproxyclient.config.general.buttonsInMultiplayerScreen": "Show buttons in multiplayer screen",
 
   "socksproxyclient.config.server": "Server settings",
   "socksproxyclient.config.server.proxyMinecraft": "Use proxy on Minecraft server",

@@ -11,11 +11,6 @@ import java.net.SocketAddress;
 @Environment(EnvType.CLIENT)
 @Mixin(ProxyHandler.class)
 public abstract class ProxyHandlerMixin {
-    /**
-     * Combination with ViaFabricPlus could fire a connection to the SOCKS proxy through itself.
-     * Root cause unclear.
-     */
-
     @Shadow(remap = false)
     public abstract <T extends SocketAddress> T proxyAddress();
 

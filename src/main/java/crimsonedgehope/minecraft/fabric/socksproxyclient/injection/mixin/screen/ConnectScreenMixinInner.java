@@ -6,7 +6,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.network.ServerAddress;
 import net.minecraft.network.ClientConnection;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.Packet;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -41,14 +41,11 @@ public class ConnectScreenMixinInner implements IConnectScreenMixinInner {
         return address;
     }
 
-    /**
-     ViaFabricPlus redirects the construction of {@code HandshakeC2SPacket}, at the method call {@code inetSocketAddress.getHostName()}
-    */
     @Redirect(
             method = "run",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/packet/Packet;)V",
+                    target = "Lnet/minecraft/network/ClientConnection;send(Lnet/minecraft/network/Packet;)V",
                     ordinal = 0
             )
     )
