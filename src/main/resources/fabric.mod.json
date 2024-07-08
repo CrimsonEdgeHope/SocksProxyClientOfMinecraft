@@ -3,7 +3,7 @@
   "id": "socksproxyclient",
   "version": "${mod_version}",
   "name": "SocksProxyClient",
-  "description": "Explicitly use SOCKS proxy to connect to Minecraft servers.",
+  "description": "Use SOCKS proxy to connect to Minecraft server.",
   "authors": [
     "CrimsonEdgeHope"
   ],
