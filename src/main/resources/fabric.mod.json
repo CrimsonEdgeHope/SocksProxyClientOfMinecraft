@@ -27,7 +27,7 @@
     "socksproxyclient.mixins.json"
   ],
   "depends": {
-    "minecraft": "${minecraft_version}",
+    "minecraft": ">=1.19 <=1.19.1",
     "java": ">=17",
     "fabricloader": ">=${fabricloader_version}"
   },
