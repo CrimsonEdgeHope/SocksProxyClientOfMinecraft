@@ -27,7 +27,7 @@
     "socksproxyclient.mixins.json"
   ],
   "depends": {
-    "minecraft": ">=1.19 <=1.19.2",
+    "minecraft": "${minecraft_version}",
     "java": ">=17",
     "fabricloader": ">=${fabricloader_version}"
   },
@@ -40,7 +40,7 @@
   },
   "conflicts": {
     "fastipping": "*",
-    "viafabric": ">=0.4.7"
+    "viafabricplus": ">=1.5.6"
   },
   "breaks": {
     "proxyserver": "*"

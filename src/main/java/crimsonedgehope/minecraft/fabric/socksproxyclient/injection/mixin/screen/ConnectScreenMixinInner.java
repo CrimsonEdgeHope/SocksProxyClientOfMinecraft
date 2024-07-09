@@ -41,6 +41,9 @@ public class ConnectScreenMixinInner implements IConnectScreenMixinInner {
         return address;
     }
 
+    /**
+     ViaFabricPlus redirects the construction of {@code HandshakeC2SPacket}, at the method call {@code inetSocketAddress.getHostName()}
+    */
     @Redirect(
             method = "run",
             at = @At(

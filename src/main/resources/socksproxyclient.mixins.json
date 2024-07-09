@@ -11,7 +11,7 @@
     "client.MojangBlockListSupplierMixin",
     "client.PlayerSkinTextureMixin",
     "client.RealmsClientConfigMixin",
-    "client.ClientBuiltinResourcePackProviderMixin",
+    "client.ServerResourcePackProviderMixin",
     "client.YggdrasilAuthenticationServiceMixin",
     "dns.DohResolverMixin",
     "netty.ProxyHandlerMixin",

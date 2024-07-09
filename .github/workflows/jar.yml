@@ -3,7 +3,7 @@ name: Build jars
 on:
   push:
     branches:
-      - "1.19.2"
+      - "1.19.3"
     paths:
       - src/**/*.java
       - src/resources/
@@ -17,9 +17,9 @@ on:
 
 jobs:
   buildJar:
-    name: Build jar 1.19.2
+    name: Build jar 1.19.3
     uses: CrimsonEdgeHope/SocksProxyClientOfMinecraft/.github/workflows/jar.yml@master
     with:
-      build-ref: "1.19.2"
+      build-ref: "1.19.3"
       java-version: "17"
       java-distribution: "oracle"
