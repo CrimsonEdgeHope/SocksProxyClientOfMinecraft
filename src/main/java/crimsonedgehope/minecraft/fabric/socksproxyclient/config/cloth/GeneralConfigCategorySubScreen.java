@@ -23,6 +23,8 @@ final class GeneralConfigCategorySubScreen extends ClothCategorySubScreen<Genera
     ClothConfigEntry<String> customProxyUsername;
     ClothConfigEntry<String> customProxyPassword;
 
+    ClothConfigEntry<Boolean> buttonsInMultiplayerScreen;
+
     public GeneralConfigCategorySubScreen(ClothAccess clothAccess) throws Exception {
         super(clothAccess, GeneralConfig.class);
 
@@ -146,6 +148,19 @@ final class GeneralConfigCategorySubScreen extends ClothCategorySubScreen<Genera
                         .build();
             }
         };
+
+        buttonsInMultiplayerScreen = new ClothConfigEntry<>(clothAccess.configEntryBuilder(), entryField("buttonsInMultiplayerScreen", Boolean.class)) {
+            @Override
+            protected AbstractConfigListEntry<Boolean> buildClothConfigEntry() {
+                return this.getBuilder().startBooleanToggle(
+                                this.getConfigEntry().getTranslatableText(),
+                                this.getConfigEntry().getValue()
+                        )
+                        .setDefaultValue(this.getConfigEntry().getDefaultValue())
+                        .setSaveConsumer(this.getConfigEntry()::setValue)
+                        .build();
+            }
+        };
     }
 
     private ConfigCategory buildCategory0(ClothAccess cloth) throws Exception {
@@ -167,6 +182,7 @@ final class GeneralConfigCategorySubScreen extends ClothCategorySubScreen<Genera
         subProxyCateBuild.add(customProxyPassword.getClothConfigEntry());
 
         generalCategory.addEntry(subProxyCateBuild.build());
+        generalCategory.addEntry(buttonsInMultiplayerScreen.getClothConfigEntry());
 
         return generalCategory;
     }
