@@ -6,6 +6,8 @@
 
 ### Changed
 
+- Use Minecraft 1.21.1 Fabric Yarn mappings
+
 ### Deprecated
 
 ### Removed
