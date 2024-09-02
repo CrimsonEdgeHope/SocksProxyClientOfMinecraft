@@ -58,13 +58,13 @@ dependencies {
 		exclude(group: "net.fabricmc")
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	shadow(implementation("io.netty:netty-handler-proxy:4.1.110.Final"))
-	shadow(implementation("dnsjava:dnsjava:3.5.2") {
+	shadow(implementation("io.netty:netty-handler-proxy:${project.netty_version}"))
+	shadow(implementation("dnsjava:dnsjava:${project.dnsjava_version}") {
 		exclude(group: "org.slf4j")
 	})
 
-	compileOnly "org.projectlombok:lombok:1.18.30"
-	annotationProcessor "org.projectlombok:lombok:1.18.30"
+	compileOnly "org.projectlombok:lombok:${project.lombok_version}"
+	annotationProcessor "org.projectlombok:lombok:${project.lombok_version}"
 }
 
 processResources {
