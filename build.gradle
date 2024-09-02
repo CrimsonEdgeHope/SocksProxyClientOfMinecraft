@@ -69,11 +69,14 @@ dependencies {
 
 processResources {
 	def v = [
+			mod_id: mod_id,
+			mod_name: archives_base_name,
 			mod_version: version,
 			minecraft_version: minecraft_version,
 			modmenu_version: modmenu_version,
 			cloth_config_version: cloth_config_version,
-			fabricloader_version: fabricloader_version
+			fabricloader_version: fabricloader_version,
+			github_repository: github_repository
 	]
 	inputs.properties v
 
@@ -87,7 +90,7 @@ changelog {
 		"${version.get()}"
 	})
 	combinePreReleases = false
-	repositoryUrl = "https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft"
+	repositoryUrl = "${github_repository}"
 }
 
 modrinth {
@@ -116,7 +119,7 @@ modrinth {
 	}
 
 	token = System.getenv("MODRINTH_TOKEN")
-	projectId = "PtUSravz"
+	projectId = "${modrinth_project_id}"
 	versionNumber = version
 	versionName = "[Fabric ${minecraft_version}] ${version}"
 	versionType = releaseType
@@ -124,7 +127,7 @@ modrinth {
 	gameVersions = ["1.19.4"]
 	loaders = ["fabric"]
 	changelog = "See changelog at " +
-			"[GitHub](https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/releases/tag/v${version})"
+			"[GitHub](${github_repository}/releases/tag/v${version})"
 
 	dependencies {
 		optional.project "fabric-api"
