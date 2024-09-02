@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "id": "socksproxyclient",
+  "id": "${mod_id}",
   "version": "${mod_version}",
-  "name": "SocksProxyClient",
+  "name": "${mod_name}",
   "description": "Use SOCKS proxy to connect to Minecraft server.",
   "authors": [
     "CrimsonEdgeHope"
   ],
   "license": "WTFPL",
   "contact": {
-    "homepage": "https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft",
-    "sources": "https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft",
-    "issues": "https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/issues"
+    "homepage": "${github_repository}",
+    "sources": "${github_repository}",
+    "issues": "${github_repository}/issues"
   },
   "icon": "assets/socksproxyclient/icon.png",
   "environment": "client",
