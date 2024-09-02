@@ -2,6 +2,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
@@ -20,6 +21,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 public abstract class SocksProxyClientConfig {
@@ -92,24 +94,29 @@ public abstract class SocksProxyClientConfig {
         FileReader reader = readFile(this.configFile);
         Gson gson = new Gson();
         JsonObject object = gson.fromJson(new JsonReader(reader), JsonObject.class);
-        readConfigJson(object);
+        parseConfigJson(object);
     }
 
-    private void readConfigJson(JsonObject object) {
-        JsonObject defaults = defaultEntries();
+    private void parseConfigJson(JsonObject object) {
+        final JsonObject defaults = defaultEntries();
         if (object == null || object.size() == 0) {
             writeConfigFile(defaults);
             load();
             return;
         }
-        LOGGER.info("Reading config json {}", this.configFile.getName());
+        LOGGER.info("Parsing config json {}", this.configFile.getName());
+        boolean reload = false;
         try {
-            for (String key : defaults.keySet()) {
-                if (!object.has(key)) {
-                    writeConfigFile(defaults);
-                    load();
-                    return;
+            for (Map.Entry<String, JsonElement> entry : defaults.entrySet()) {
+                if (!object.has(entry.getKey())) {
+                    object.add(entry.getKey(), entry.getValue());
+                    reload = true;
                 }
+            }
+            if (reload) {
+                writeConfigFile(object);
+                load();
+                return;
             }
         } catch (Exception e) {
             LOGGER.error("Error reading config json " + this.configFile.getName(), e);
