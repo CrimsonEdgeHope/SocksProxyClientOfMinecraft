@@ -95,24 +95,29 @@ public abstract class SocksProxyClientConfig {
         FileReader reader = readFile(this.configFile);
         Gson gson = new Gson();
         JsonObject object = gson.fromJson(new JsonReader(reader), JsonObject.class);
-        readConfigJson(object);
+        parseConfigJson(object);
     }
 
-    private void readConfigJson(JsonObject object) {
-        JsonObject defaults = defaultEntries();
+    private void parseConfigJson(JsonObject object) {
+        final JsonObject defaults = defaultEntries();
         if (object == null || object.size() == 0) {
             writeConfigFile(defaults);
             load();
             return;
         }
-        LOGGER.info("Reading config json {}", this.configFile.getName());
+        LOGGER.info("Parsing config json {}", this.configFile.getName());
+        boolean reload = false;
         try {
-            for (Map.Entry<String, JsonElement> entries : defaults.entrySet()) {
-                if (!object.has(entries.getKey())) {
-                    writeConfigFile(defaults);
-                    load();
-                    return;
+            for (Map.Entry<String, JsonElement> entry : defaults.entrySet()) {
+                if (!object.has(entry.getKey())) {
+                    object.add(entry.getKey(), entry.getValue());
+                    reload = true;
                 }
+            }
+            if (reload) {
+                writeConfigFile(object);
+                load();
+                return;
             }
         } catch (Exception e) {
             LOGGER.error("Error reading config json " + this.configFile.getName(), e);
