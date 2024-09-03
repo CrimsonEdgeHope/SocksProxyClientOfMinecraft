@@ -9,6 +9,7 @@ import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.Requirement;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
 import java.net.URL;
 import java.util.Optional;
@@ -253,7 +254,7 @@ final class ServerConfigCategorySubScreen extends ClothCategorySubScreen<ServerC
 
     private ConfigCategory buildCategory0(ClothAccess cloth) throws Exception {
         String transKey = TranslateKeyUtil.configItem(categoryField(this.configClass));
-        Text text = Text.translatable(transKey);
+        Text text = new TranslatableText(transKey);
 
         ConfigCategory serverCategory = cloth.configCategory(text);
 

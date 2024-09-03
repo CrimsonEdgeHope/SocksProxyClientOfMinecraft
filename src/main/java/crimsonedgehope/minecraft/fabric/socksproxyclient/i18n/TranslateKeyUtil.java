@@ -3,6 +3,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.i18n;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -22,7 +23,7 @@ public final class TranslateKeyUtil {
     }
 
     public static Text itemAsText(String prefix, Collection<String> subs) {
-        return Text.translatable(item(prefix, subs));
+        return new TranslatableText(item(prefix, subs));
     }
 
     public static String item(String prefix, String... subs) {
@@ -30,7 +31,7 @@ public final class TranslateKeyUtil {
     }
 
     public static Text itemAsText(String prefix, String... subs) {
-        return Text.translatable(item(prefix, subs));
+        return new TranslatableText(item(prefix, subs));
     }
 
     public static String item(Collection<String> subs) {
@@ -38,7 +39,7 @@ public final class TranslateKeyUtil {
     }
 
     public static Text itemAsText(Collection<String> subs) {
-        return Text.translatable(item(subs));
+        return new TranslatableText(item(subs));
     }
 
     public static String configItem(String... subs) {
@@ -46,7 +47,7 @@ public final class TranslateKeyUtil {
     }
 
     public static Text configItemAsText(String... subs) {
-        return Text.translatable(configItem(subs));
+        return new TranslatableText(configItem(subs));
     }
 
     public static String configItem(Collection<String> subs) {
@@ -54,6 +55,6 @@ public final class TranslateKeyUtil {
     }
 
     public static Text configItemAsText(Collection<String> subs) {
-        return Text.translatable(configItem(subs));
+        return new TranslatableText(configItem(subs));
     }
 }

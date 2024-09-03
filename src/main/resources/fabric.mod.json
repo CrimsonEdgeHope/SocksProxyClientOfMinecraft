@@ -32,7 +32,7 @@
     "fabricloader": ">=${fabricloader_version}"
   },
   "recommends": {
-    "fabric-api": "*",
+    "fabric": "*",
     "cloth-config": "^${cloth_config_version}"
   },
   "suggests": {
@@ -40,7 +40,7 @@
   },
   "conflicts": {
     "fastipping": "*",
-    "viafabric": ">=0.4.7"
+    "viafabric": "*"
   },
   "breaks": {
     "proxyserver": "*"

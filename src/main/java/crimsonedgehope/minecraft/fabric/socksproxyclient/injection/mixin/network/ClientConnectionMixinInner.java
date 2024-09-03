@@ -21,7 +21,7 @@ public class ClientConnectionMixinInner {
             at = @At(
                     value = "INVOKE",
                     target = "Lio/netty/channel/ChannelPipeline;addLast(Ljava/lang/String;Lio/netty/channel/ChannelHandler;)Lio/netty/channel/ChannelPipeline;",
-                    ordinal = 1
+                    ordinal = 5
             ),
             remap = false
     )
