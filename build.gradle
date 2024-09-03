@@ -72,7 +72,7 @@ processResources {
 			mod_id: mod_id,
 			mod_name: archives_base_name,
 			mod_version: version,
-			minecraft_version: minecraft_version,
+			minecraft_version: minecraft_dependency,
 			modmenu_version: modmenu_version,
 			cloth_config_version: cloth_config_version,
 			fabricloader_version: fabricloader_version,
@@ -95,7 +95,20 @@ changelog {
 
 modrinth {
 	def verbose = Boolean.valueOf(project.getProperties().getOrDefault("verbose", false))
+	def noUpload = Boolean.valueOf(project.getProperties().getOrDefault("noUpload", false))
 
+	if (verbose) {
+		println "\n========== Properties =========="
+		println "Mod version (gradle project.version): ${version}"
+		println "Minecraft version: ${minecraft_version}"
+		println "Cloth config version: ${cloth_config_version}"
+		println "Modmenu version: ${modmenu_version}"
+		println "========== Properties ==========\n"
+	}
+
+	final def modrinth_versionName = "[Fabric ${minecraft_version}] ${version}"
+	final def modrinth_gameVersions = modrinth_gameversions.split(",").toList()
+	final def modrinth_loaders = ["fabric"]
 	def releaseType = project.getProperties().getOrDefault("releaseType", null)
 	if (Objects.isNull(releaseType)) {
 		if (version.toLowerCase().contains("alpha")) {
@@ -108,24 +121,26 @@ modrinth {
 		throw new IllegalArgumentException("releaseType: alpha, beta or release")
 	}
 
-	if (verbose) {
-		println "\n========== Properties =========="
-		println "Mod version (gradle project.version): ${version}"
+	if (noUpload) {
+		println "\n========== Modrinth =========="
+		println "Project id: ${modrinth_project_id}"
+		println "Version number: ${version}"
+		println "Version name: ${modrinth_versionName}"
 		println "Release type: ${releaseType}"
-		println "Minecraft version: ${minecraft_version}"
-		println "Cloth config version: ${cloth_config_version}"
-		println "Modmenu version: ${modmenu_version}"
-		println "========== Properties ==========\n"
+		println "Game versions: ${modrinth_gameVersions}"
+		println "Loaders: ${modrinth_loaders}"
+		println "========== Modrinth ==========\n"
+		throw new IllegalArgumentException("no upload")
 	}
 
 	token = System.getenv("MODRINTH_TOKEN")
 	projectId = "${modrinth_project_id}"
 	versionNumber = version
-	versionName = "[Fabric ${minecraft_version}] ${version}"
+	versionName = modrinth_versionName
 	versionType = releaseType
 	uploadFile = tasks.remapJar.archiveFile
-	gameVersions = ["1.21", "1.21.1"]
-	loaders = ["fabric"]
+	gameVersions = modrinth_gameVersions
+	loaders = modrinth_loaders
 	changelog = "See changelog at " +
 			"[GitHub](${github_repository}/releases/tag/v${version})"
 
