@@ -40,7 +40,7 @@
   },
   "conflicts": {
     "fastipping": "*",
-    "viafabricplus": ">=3.0.0"
+    "viafabricplus": "*"
   },
   "breaks": {
     "proxyserver": "*",
