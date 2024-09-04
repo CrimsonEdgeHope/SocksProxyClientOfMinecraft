@@ -39,6 +39,6 @@
   },
   "conflicts": {
     "fastipping": "*",
-    "viafabricplus": ">=3.2.0"
+    "viafabricplus": "*"
   }
 }
