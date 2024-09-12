@@ -169,6 +169,9 @@ final class GeneralConfigCategorySubScreen extends ClothCategorySubScreen<Genera
 
         ConfigCategory generalCategory = cloth.configCategory(text);
 
+        generalCategory.addEntry(cloth.configEntryBuilder().startTextDescription(
+                TranslateKeyUtil.itemAsText(TranslateKeyUtil.PREFIX, "discontinued")
+        ).build());
         generalCategory.addEntry(useProxy.getClothConfigEntry());
 
         SubCategoryBuilder subProxyCateBuild = clothAccess.configEntryBuilder().startSubCategory(TranslateKeyUtil.itemAsText(transKey, "proxy"));
