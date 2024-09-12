@@ -14,6 +14,15 @@
 
 ### Security
 
+## [1.0.0-alpha+1.16.5]
+
+<h2>Versions for 1.16.5 will be discontinued. Turn to later versions instead.</h2>
+
+### Changed
+
+- Bump version number.
+- Internal patch.
+
 ## [0.1.3-alpha+1.16.5]
 
 ### Changed
@@ -86,7 +95,8 @@
 - Convert SOCKS proxy to HTTP(S) proxy. Proxy communications with Mojang Yggdrasil auth service, player skin download endpoint, and server resource pack downloading.
 - Remotely resolve Minecraft server's domain name through SOCKS proxy with the help of [DNS over HTTPS (DoH)](https://www.rfc-editor.org/rfc/rfc8484)
 
-[Unreleased]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.1.3-alpha+1.16.5...HEAD
+[Unreleased]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v1.0.0-alpha+1.16.5...HEAD
+[1.0.0-alpha+1.16.5]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.1.3-alpha+1.16.5...v1.0.0-alpha+1.16.5
 [0.1.3-alpha+1.16.5]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.1.2-alpha+1.16.5...v0.1.3-alpha+1.16.5
 [0.1.2-alpha+1.16.5]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.1.1-alpha+1.16.5...v0.1.2-alpha+1.16.5
 [0.1.1-alpha+1.16.5]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.1.0-alpha+1.16.5...v0.1.1-alpha+1.16.5
