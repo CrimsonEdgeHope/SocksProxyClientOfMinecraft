@@ -1,6 +1,8 @@
 {
   "modmenu.descriptionTranslation.socksproxyclient": "Use SOCKS proxy to connect to Minecraft server.",
 
+  "socksproxyclient.discontinued": "Versions for 1.16.5 will be discontinued. Turn to later versions instead.",
+
   "socksproxyclient.config": "SocksProxyClient config",
   "socksproxyclient.config.general": "General settings",
   "socksproxyclient.config.general.useProxy": "Use proxy",
