@@ -14,6 +14,14 @@
 
 ### Security
 
+## [4.0.0-alpha+1.19.3]
+
+### Changed
+
+- Port to Minecraft 1.19.3
+- Bump version number.
+- Internal patch.
+
 ## [0.0.7-alpha+1.20]
 
 ### Changed
@@ -82,7 +90,8 @@
 - Convert SOCKS proxy to HTTP(S) proxy. Proxy communications with Mojang Yggdrasil auth service, player skin download endpoint, and server resource pack downloading.
 - Remotely resolve Minecraft server's domain name through SOCKS proxy with the help of [DNS over HTTPS (DoH)](https://www.rfc-editor.org/rfc/rfc8484)
 
-[Unreleased]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.7-alpha+1.20...HEAD
+[Unreleased]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v4.0.0-alpha+1.19.3...HEAD
+[4.0.0-alpha+1.19.3]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.7-alpha+1.20...v4.0.0-alpha+1.19.3
 [0.0.7-alpha+1.20]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.6-alpha+1.20...v0.0.7-alpha+1.20
 [0.0.6-alpha+1.20]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.5-alpha+1.20...v0.0.6-alpha+1.20
 [0.0.5-alpha+1.20]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.0.4-alpha+1.20.1...v0.0.5-alpha+1.20
