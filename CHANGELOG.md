@@ -16,6 +16,8 @@
 
 ## [2.0.0-alpha+1.18.2]
 
+<h2>Versions for 1.18-1.18.2 will be discontinued. Turn to later versions instead.</h2>
+
 ### Changed
 
 - Port to Minecraft 1.18.2
