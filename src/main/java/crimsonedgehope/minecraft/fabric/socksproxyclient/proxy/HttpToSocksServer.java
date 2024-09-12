@@ -32,7 +32,6 @@ import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.proxy.Socks4ProxyHandler;
 import io.netty.handler.proxy.Socks5ProxyHandler;
-import io.netty.resolver.NoopAddressResolverGroup;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import lombok.Getter;
@@ -217,7 +216,7 @@ public class HttpToSocksServer {
                         .option(ChannelOption.TCP_NODELAY, true)
                         .option(ChannelOption.SO_KEEPALIVE, true);
                 if (noResolver) {
-                    b = b.resolver(NoopAddressResolverGroup.INSTANCE);
+                    b = b.disableResolver();
                 }
                 LOGGER.debug("noResolver: {}", noResolver);
                 ChannelFuture future = b.connect(remoteHttpHost, remoteHttpPort);
