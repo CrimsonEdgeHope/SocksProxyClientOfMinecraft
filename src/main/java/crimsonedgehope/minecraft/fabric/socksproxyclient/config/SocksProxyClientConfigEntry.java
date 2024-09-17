@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static crimsonedgehope.minecraft.fabric.socksproxyclient.config.ConfigUtils.categoryField;
+import static crimsonedgehope.minecraft.fabric.socksproxyclient.config.ConfigUtils.getCategoryField;
 
 public class SocksProxyClientConfigEntry<T> {
     @NotNull @Getter
@@ -67,7 +67,7 @@ public class SocksProxyClientConfigEntry<T> {
         this.configClass = configClass;
         String category;
         try {
-            category = categoryField(this.configClass);
+            category = getCategoryField(this.configClass);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

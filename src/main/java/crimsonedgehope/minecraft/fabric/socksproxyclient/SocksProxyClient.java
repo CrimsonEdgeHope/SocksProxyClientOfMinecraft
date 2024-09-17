@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 public class SocksProxyClient implements ClientModInitializer {
 
 	public static void preInit() throws Exception {
-		ConfigUtils.loadAll();
+		ConfigUtils.loadAllConfig();
 		HttpToSocksServer.INSTANCE.fire();
 	}
 
