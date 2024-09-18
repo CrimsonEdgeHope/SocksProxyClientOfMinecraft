@@ -41,7 +41,7 @@ public final class ClientConnectionProxySelection {
         }
 
         if (proxySelection.equals(Proxy.NO_PROXY)) {
-            LOGGER.info("No proxy on host {}", address);
+            LOGGER.info("[Direct] -> [Remote] {}", address);
             return;
         }
 
@@ -50,17 +50,17 @@ public final class ClientConnectionProxySelection {
         final SocketAddress sa = proxySelection.address();
         switch (ServerConfig.getSocksVersion()) {
             case SOCKS4:
-                LOGGER.info("Using Socks4 proxy {} on {}", sa, remote);
+                LOGGER.info("[Socks 4] {} -> [Remote] {}", sa, remote);
                 pipeline.addFirst("socks",
                         new Socks4ProxyHandler(sa, proxyCredential.getUsername()));
                 break;
             case SOCKS5:
-                LOGGER.info("Using Socks5 proxy {} on {}", sa, remote);
+                LOGGER.info("[Socks 5] {} -> [Remote] {}", sa, remote);
                 pipeline.addFirst("socks",
                         new Socks5ProxyHandler(sa, proxyCredential.getUsername(), proxyCredential.getPassword()));
                 break;
             default:
-                LOGGER.info("No proxy on host {}", address);
+                LOGGER.info("[Direct] -> [Remote] {}", address);
                 break;
         }
     }
