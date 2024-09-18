@@ -25,8 +25,6 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
     SocksProxyClientConfigEntry<String> customProxyUsername;
     SocksProxyClientConfigEntry<String> customProxyPassword;
 
-    SocksProxyClientConfigEntry<Boolean> buttonsInMultiplayerScreen;
-
     GeneralCategory(YACLAccess yacl) {
         super(yacl, GeneralConfig.class);
     }
@@ -35,7 +33,8 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
     public ConfigCategory buildConfigCategory() throws Exception {
         ConfigCategory.Builder categoryBuilder = ConfigCategory.createBuilder();
 
-        categoryBuilder.name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL));
+        categoryBuilder.name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL))
+                .tooltip(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_TOOLTIP));
 
         useProxy = entryField("useProxy", Boolean.class);
         Option<Boolean> yaclUseProxy = Option.<Boolean>createBuilder()
@@ -105,14 +104,6 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
         });
 
         categoryBuilder.group(groupBuilder.build());
-
-        buttonsInMultiplayerScreen = entryField("buttonsInMultiplayerScreen", Boolean.class);
-        Option<Boolean> yaclButtonsInMultiplayerScreen = Option.<Boolean>createBuilder()
-                .name(buttonsInMultiplayerScreen.getEntryTranslateKey())
-                .binding(buttonsInMultiplayerScreen.getDefaultValue(), buttonsInMultiplayerScreen::getValue, buttonsInMultiplayerScreen::setValue)
-                .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter())
-                .build();
-        categoryBuilder.option(yaclButtonsInMultiplayerScreen);
 
         return categoryBuilder.build();
     }
