@@ -2,7 +2,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.modmenu;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.cloth.ClothConfigScreen;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.YACLConfigScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -13,7 +13,7 @@ public final class ModMenuEntry implements ModMenuApi {
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return parent -> {
             try {
-                return ClothConfigScreen.getScreen(parent);
+                return YACLConfigScreen.getScreen(parent);
             } catch (Throwable e) {
                 return null;
             }

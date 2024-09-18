@@ -1,77 +1,47 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
 
-import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeyUtil;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.text.Text;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.text.MutableText;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static crimsonedgehope.minecraft.fabric.socksproxyclient.config.ConfigUtils.getCategoryField;
-
+@Environment(EnvType.CLIENT)
+@Getter
 public class SocksProxyClientConfigEntry<T> {
-    @NotNull @Getter
-    private final Class<? extends SocksProxyClientConfig> configClass;
-    @NotNull @Getter
-    private String entry;
+    @NotNull private final Class<? extends SocksProxyClientConfig> configClass;
 
-    @Getter
-    private final T defaultValue;
-    @Getter @Setter
-    private T value;
+    @NotNull private final String jsonEntry;
 
-    @NotNull @Getter
-    private final String translateKey;
+    @Nullable private final T defaultValue;
+    @Setter @Nullable private T value;
 
-    public Text getTranslatableText() {
-        return Text.translatable(translateKey);
-    }
+    @NotNull private final MutableText entryTranslateKey;
+    @Nullable private final MutableText descriptionTranslateKey;
 
-    @Getter
-    private final int desiredLinesOfDescription;
-
-    public List<Text> getDescriptionTranslatableText() {
-        ArrayList<Text> r = new ArrayList<>();
-        if (desiredLinesOfDescription > 0) {
-            String key = TranslateKeyUtil.item(translateKey, "tooltip");
-            if (desiredLinesOfDescription > 1) {
-                for (int i = 1; i <= desiredLinesOfDescription; ++i) {
-                    r.add(TranslateKeyUtil.itemAsText(key, String.valueOf(i)));
-                }
-            } else {
-                r.add(Text.translatable(key));
-            }
-        }
-        return r;
+    public SocksProxyClientConfigEntry(
+            @NotNull Class<? extends SocksProxyClientConfig> configClass,
+            @NotNull String jsonEntry,
+            @NotNull MutableText entryTranslateKey,
+            @Nullable T defaultValue
+    ) {
+        this(configClass, jsonEntry, entryTranslateKey, null, defaultValue);
     }
 
     public SocksProxyClientConfigEntry(
             @NotNull Class<? extends SocksProxyClientConfig> configClass,
-            @NotNull String entry,
-            T defaultValue
+            @NotNull String jsonEntry,
+            @NotNull MutableText entryTranslateKey,
+            @Nullable MutableText descriptionTranslateKey,
+            @Nullable T defaultValue
     ) {
-        this(configClass, entry, defaultValue, 0);
-    }
-
-    public SocksProxyClientConfigEntry(
-            @NotNull Class<? extends SocksProxyClientConfig> configClass,
-            @NotNull String entry,
-            T defaultValue,
-            int linesOfDescription
-    ) {
-        this.entry = entry;
+        this.configClass = configClass;
+        this.jsonEntry = jsonEntry;
+        this.entryTranslateKey = entryTranslateKey;
+        this.descriptionTranslateKey = descriptionTranslateKey;
         this.defaultValue = defaultValue;
         this.value = this.defaultValue;
-        this.configClass = configClass;
-        String category;
-        try {
-            category = getCategoryField(this.configClass);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        this.translateKey = TranslateKeyUtil.configItem(category, this.entry);
-        this.desiredLinesOfDescription = linesOfDescription;
     }
 }
