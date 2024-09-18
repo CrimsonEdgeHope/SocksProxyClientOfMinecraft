@@ -37,42 +37,45 @@ final class ServerCategory extends YACLCategory<ServerConfig> {
     public ConfigCategory buildConfigCategory() throws Exception {
         ConfigCategory.Builder categoryBuilder = ConfigCategory.createBuilder();
 
-        categoryBuilder.name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER));
+        categoryBuilder.name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER))
+                .tooltip(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_TOOLTIP));
 
         proxyMinecraft = entryField("proxyMinecraft", Boolean.class);
         Option<Boolean> yaclProxyMinecraft = Option.<Boolean>createBuilder()
                 .name(proxyMinecraft.getEntryTranslateKey())
+                .description(OptionDescription.of(proxyMinecraft.getDescriptionTranslateKey()))
                 .binding(proxyMinecraft.getDefaultValue(), proxyMinecraft::getValue, proxyMinecraft::setValue)
                 .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter())
                 .build();
         categoryBuilder.option(yaclProxyMinecraft);
 
         OptionGroup.Builder groupMinecraftServerDomainName = OptionGroup.createBuilder();
-        groupMinecraftServerDomainName.name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTDOMAINNAME));
+        groupMinecraftServerDomainName.name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTDOMAINNAMERESOLUTION));
 
         minecraftRemoteResolve = entryField("minecraftRemoteResolve", Boolean.class);
         Option<Boolean> yaclMinecraftRemoteResolve = Option.<Boolean>createBuilder()
                 .name(minecraftRemoteResolve.getEntryTranslateKey())
                 .description(OptionDescription.of(minecraftRemoteResolve.getDescriptionTranslateKey()))
                 .binding(minecraftRemoteResolve.getDefaultValue(), minecraftRemoteResolve::getValue, minecraftRemoteResolve::setValue)
+                .available(proxyMinecraft.getValue())
                 .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter())
                 .build();
 
         minecraftRemoteResolveDismissSystemHosts = entryField("minecraftRemoteResolveDismissSystemHosts", Boolean.class);
         Option<Boolean> yaclMinecraftRemoteResolveDismissSystemHosts = Option.<Boolean>createBuilder()
                 .name(minecraftRemoteResolveDismissSystemHosts.getEntryTranslateKey())
+                .description(OptionDescription.of(minecraftRemoteResolveDismissSystemHosts.getDescriptionTranslateKey()))
                 .binding(minecraftRemoteResolveDismissSystemHosts.getDefaultValue(), minecraftRemoteResolveDismissSystemHosts::getValue, minecraftRemoteResolveDismissSystemHosts::setValue)
+                .available(proxyMinecraft.getValue())
                 .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter())
                 .build();
-
-        OptionGroup.Builder groupDOH = OptionGroup.createBuilder();
-        groupDOH.name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTDOMAINNAME_DOH));
 
         minecraftRemoteResolveProvider = entryField("minecraftRemoteResolveProvider", DNSOverHTTPSProvider.class);
         Option<DNSOverHTTPSProvider> yaclMinecraftRemoteResolveProvider = Option.<DNSOverHTTPSProvider>createBuilder()
                 .name(minecraftRemoteResolveProvider.getEntryTranslateKey())
                 .binding(minecraftRemoteResolveProvider.getDefaultValue(), minecraftRemoteResolveProvider::getValue, minecraftRemoteResolveProvider::setValue)
-                .controller(opt -> EnumControllerBuilder.create(opt).enumClass(DNSOverHTTPSProvider.class))
+                .controller(opt -> EnumControllerBuilder.create(opt).enumClass(DNSOverHTTPSProvider.class).formatValue(v -> Text.literal(v.displayName)))
+                .available(proxyMinecraft.getValue())
                 .build();
 
         customMinecraftRemoteResolveProvider = entryField("customMinecraftRemoteResolveProvider", String.class);
@@ -80,15 +83,22 @@ final class ServerCategory extends YACLCategory<ServerConfig> {
                 .name(customMinecraftRemoteResolveProvider.getEntryTranslateKey())
                 .binding(customMinecraftRemoteResolveProvider.getDefaultValue(), customMinecraftRemoteResolveProvider::getValue, customMinecraftRemoteResolveProvider::setValue)
                 .controller(opt -> ValidStringControllerBuilder.create(opt).validityPredication(s -> s.startsWith("https://")))
+                .available(proxyMinecraft.getValue())
                 .build();
-
-        groupDOH.option(yaclMinecraftRemoteResolveProvider);
-        groupDOH.option(yaclCustomMinecraftRemoteResolveProvider);
 
         groupMinecraftServerDomainName.option(yaclMinecraftRemoteResolve);
         groupMinecraftServerDomainName.option(yaclMinecraftRemoteResolveDismissSystemHosts);
+        groupMinecraftServerDomainName.option(yaclMinecraftRemoteResolveProvider);
+        groupMinecraftServerDomainName.option(yaclCustomMinecraftRemoteResolveProvider);
 
-        categoryBuilder.group(groupMinecraftServerDomainName.build()).group(groupDOH.build());
+        yaclProxyMinecraft.addListener((opt, v) -> {
+            yaclMinecraftRemoteResolve.setAvailable(v);
+            yaclMinecraftRemoteResolveDismissSystemHosts.setAvailable(v);
+            yaclMinecraftRemoteResolveProvider.setAvailable(v);
+            yaclCustomMinecraftRemoteResolveProvider.setAvailable(v);
+        });
+
+        categoryBuilder.group(groupMinecraftServerDomainName.build());
 
         OptionGroup.Builder groupServices = OptionGroup.createBuilder();
         groupServices.name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_SERVICES));
@@ -124,6 +134,7 @@ final class ServerCategory extends YACLCategory<ServerConfig> {
         httpRemoteResolve = entryField("httpRemoteResolve", Boolean.class);
         Option<Boolean> yaclHttpRemoteResolve = Option.<Boolean>createBuilder()
                 .name(httpRemoteResolve.getEntryTranslateKey())
+                .description(OptionDescription.of(httpRemoteResolve.getDescriptionTranslateKey()))
                 .binding(httpRemoteResolve.getDefaultValue(), httpRemoteResolve::getValue, httpRemoteResolve::setValue)
                 .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter())
                 .build();

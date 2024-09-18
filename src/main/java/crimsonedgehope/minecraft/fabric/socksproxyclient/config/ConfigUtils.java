@@ -23,11 +23,13 @@ public final class ConfigUtils {
     public static void loadAllConfig() throws Exception {
         getConfigInstance(GeneralConfig.class).load();
         getConfigInstance(ServerConfig.class).load();
+        getConfigInstance(MiscellaneousConfig.class).load();
     }
 
     public static void saveAllConfig() throws Exception {
         getConfigInstance(GeneralConfig.class).save();
         getConfigInstance(ServerConfig.class).save();
+        getConfigInstance(MiscellaneousConfig.class).save();
     }
 
     public static <T extends SocksProxyClientConfig> String getCategoryField(Class<T> clazz) throws Exception {
