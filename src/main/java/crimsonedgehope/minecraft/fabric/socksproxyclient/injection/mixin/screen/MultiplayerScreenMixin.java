@@ -1,7 +1,7 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.screen;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.MiscellaneousConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.YACLConfigScreen;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
 import net.fabricmc.api.EnvType;
@@ -37,7 +37,7 @@ public class MultiplayerScreenMixin {
             AxisGridWidget axisGridWidget,
             AxisGridWidget axisGridWidget2
     ) {
-        if (!GeneralConfig.showButtonsInMultiplayerScreen()) {
+        if (!MiscellaneousConfig.showButtonsInMultiplayerScreen()) {
             return;
         }
         directionalLayoutWidget.add(EmptyWidget.ofHeight(4));

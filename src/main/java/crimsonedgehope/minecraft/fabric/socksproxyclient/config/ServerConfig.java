@@ -23,49 +23,56 @@ public final class ServerConfig extends SocksProxyClientConfig {
 
     private static final SocksProxyClientConfigEntry<Boolean> proxyMinecraft =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyMinecraft",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_PROXYMINECRAFT), true);
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_PROXYMINECRAFT),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_PROXYMINECRAFT_TOOLTIP),
+                    true);
     private static final SocksProxyClientConfigEntry<Boolean> minecraftRemoteResolve =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "minecraftRemoteResolve",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTREMOTERESOLVE),
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTREMOTERESOLVE_TOOLTIP),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTDOMAINNAMERESOLUTION_USEPROXY),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTDOMAINNAMERESOLUTION_USEPROXY_TOOLTIP),
                     false);
     private static final SocksProxyClientConfigEntry<Boolean> minecraftRemoteResolveDismissSystemHosts =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "minecraftRemoteResolveDismissSystemHosts",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTREMOTERESOLVEDISMISSSYSTEMHOSTS), true);
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTDOMAINNAMERESOLUTION_DISMISSSYSTEMHOSTS),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTDOMAINNAMERESOLUTION_DISMISSSYSTEMHOSTS_TOOLTIP),
+                    true);
     private static final SocksProxyClientConfigEntry<DNSOverHTTPSProvider> minecraftRemoteResolveProvider =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "minecraftRemoteResolveProvider",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTREMOTERESOLVEPROVIDER), DNSOverHTTPSProvider.CLOUDFLARE);
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTDOMAINNAMERESOLUTION_DOHPROVIDER),
+                    DNSOverHTTPSProvider.CLOUDFLARE);
     private static final SocksProxyClientConfigEntry<String> customMinecraftRemoteResolveProvider =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "customMinecraftRemoteResolveProvider",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_CUSTOMMINECRAFTREMOTERESOLVEPROVIDER), DNSOverHTTPSProvider.CLOUDFLARE.url);
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTDOMAINNAMERESOLUTION_DOHPROVIDERURL),
+                    DNSOverHTTPSProvider.CLOUDFLARE.url);
     private static final SocksProxyClientConfigEntry<Boolean> proxyYggdrasil =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyYggdrasil",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_PROXYYGGDRASIL),
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_PROXYYGGDRASIL_TOOLTIP),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_SERVICES_PROXYYGGDRASIL),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_SERVICES_PROXYYGGDRASIL_TOOLTIP),
                     true);
     private static final SocksProxyClientConfigEntry<Boolean> proxyPlayerSkinDownload =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyPlayerSkinDownload",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_PROXYPLAYERSKINDOWNLOAD),
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_PROXYPLAYERSKINDOWNLOAD_TOOLTIP),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_SERVICES_PROXYPLAYERSKINDOWNLOAD),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_SERVICES_PROXYPLAYERSKINDOWNLOAD_TOOLTIP),
                     true);
     private static final SocksProxyClientConfigEntry<Boolean> proxyServerResourceDownload =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyServerResourceDownload",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_PROXYSERVERRESOURCEDOWNLOAD),
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_PROXYSERVERRESOURCEDOWNLOAD_TOOLTIP),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_SERVICES_PROXYSERVERRESOURCEDOWNLOAD),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_SERVICES_PROXYSERVERRESOURCEDOWNLOAD_TOOLTIP),
                     true);
     private static final SocksProxyClientConfigEntry<Boolean> proxyBlockListSupplier =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyBlockListSupplier",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_PROXYBLOCKLISTSUPPLIER),
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_PROXYBLOCKLISTSUPPLIER_TOOLTIP),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_SERVICES_PROXYBLOCKLISTSUPPLIER),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_SERVICES_PROXYBLOCKLISTSUPPLIER_TOOLTIP),
                     true);
     private static final SocksProxyClientConfigEntry<Boolean> httpRemoteResolve =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "httpRemoteResolve",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_HTTPREMOTERESOLVE),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_SERVICES_HTTPREMOTERESOLVE),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_SERVICES_HTTPREMOTERESOLVE_TOOLTIP),
                     true);
     private static final SocksProxyClientConfigEntry<Boolean> imposeProxyOnMinecraftLoopback =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "imposeProxyOnMinecraftLoopback",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_IMPOSEPROXYONMINECRAFTLOOPBACK),
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_IMPOSEPROXYONMINECRAFTLOOPBACK_TOOLTIP),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_ADVANCED_IMPOSEPROXYONMINECRAFTLOOPBACK),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_ADVANCED_IMPOSEPROXYONMINECRAFTLOOPBACK_TOOLTIP),
                     false);
 
     public static final String CATEGORY = "server";
