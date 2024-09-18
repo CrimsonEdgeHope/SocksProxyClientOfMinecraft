@@ -6,6 +6,8 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.ProxyCredential;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
 import lombok.Getter;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,6 +16,7 @@ import org.slf4j.Logger;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
+@Environment(EnvType.CLIENT)
 public final class GeneralConfig extends SocksProxyClientConfig {
 
     private static final GeneralConfig INSTANCE;
@@ -31,19 +34,19 @@ public final class GeneralConfig extends SocksProxyClientConfig {
                     Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_USEPROXY), false);
     private static final SocksProxyClientConfigEntry<SocksVersion> socksVersion =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "socksVersion",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_SOCKSVERSION), SocksVersion.SOCKS5);
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_SOCKSVERSION), SocksVersion.SOCKS5);
     private static final SocksProxyClientConfigEntry<String> customProxyHost =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "customProxyHost",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_CUSTOMPROXYHOST), "localhost");
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_HOST), "localhost");
     private static final SocksProxyClientConfigEntry<Integer> customProxyPort =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "customProxyPort",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_CUSTOMPROXYPORT), 1080);
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PORT), 1080);
     private static final SocksProxyClientConfigEntry<String> customProxyUsername =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "customProxyUsername",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_CUSTOMPROXYUSERNAME), "");
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_USERNAME), "");
     private static final SocksProxyClientConfigEntry<String> customProxyPassword =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "customProxyPassword",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_CUSTOMPROXYPASSWORD), "");
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PASSWORD), "");
 
     private GeneralConfig() {
         super(CATEGORY + ".json");

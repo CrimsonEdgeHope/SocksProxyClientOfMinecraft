@@ -16,9 +16,11 @@ public final class YACLConfigScreen {
         YACLAccess yacl = new YACLAccess(parent, Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG));
         GeneralCategory general = new GeneralCategory(yacl);
         ServerCategory server = new ServerCategory(yacl);
+        MiscellaneousCategory miscellaneous = new MiscellaneousCategory(yacl);
         yacl.getConfigBuilder()
                 .category(general.buildConfigCategory())
                 .category(server.buildConfigCategory())
+                .category(miscellaneous.buildConfigCategory())
                 .save(() -> {
                     try {
                         ConfigUtils.saveAllConfig();
