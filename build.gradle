@@ -1,3 +1,5 @@
+import java.nio.file.Paths
+
 plugins {
 	id "fabric-loom" version "1.6-SNAPSHOT"
 	id "java-library"
@@ -9,6 +11,8 @@ plugins {
 
 version = "${project.mod_version}+${project.minecraft_version}"
 group = project.maven_group
+
+apply from: Paths.get("properties.gradle").toString()
 
 base {
 	archivesName = project.archives_base_name
@@ -59,13 +63,13 @@ dependencies {
 		exclude(group: "net.fabricmc")
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	shadow(implementation("io.netty:netty-handler-proxy:${project.netty_version}"))
-	shadow(implementation("dnsjava:dnsjava:${project.dnsjava_version}") {
+	shadow(implementation("io.netty:netty-handler-proxy:${project.ext.netty_version}"))
+	shadow(implementation("dnsjava:dnsjava:${project.ext.dnsjava_version}") {
 		exclude(group: "org.slf4j")
 	})
 
-	compileOnly "org.projectlombok:lombok:${project.lombok_version}"
-	annotationProcessor "org.projectlombok:lombok:${project.lombok_version}"
+	compileOnly "org.projectlombok:lombok:${project.ext.lombok_version}"
+	annotationProcessor "org.projectlombok:lombok:${project.ext.lombok_version}"
 }
 
 processResources {
