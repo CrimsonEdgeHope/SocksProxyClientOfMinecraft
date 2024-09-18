@@ -16,10 +16,10 @@ import net.minecraft.text.Text;
 final class ServerCategory extends YACLCategory<ServerConfig> {
 
     SocksProxyClientConfigEntry<Boolean> proxyMinecraft;
-    SocksProxyClientConfigEntry<Boolean> minecraftRemoteResolve;
-    SocksProxyClientConfigEntry<Boolean> minecraftRemoteResolveDismissSystemHosts;
-    SocksProxyClientConfigEntry<DNSOverHTTPSProvider> minecraftRemoteResolveProvider;
-    SocksProxyClientConfigEntry<String> customMinecraftRemoteResolveProvider;
+    SocksProxyClientConfigEntry<Boolean> minecraftDomainNameResolutionUseProxy;
+    SocksProxyClientConfigEntry<Boolean> minecraftDomainNameResolutionDismissSystemHosts;
+    SocksProxyClientConfigEntry<DNSOverHTTPSProvider> minecraftDomainNameResolutionDohProvider;
+    SocksProxyClientConfigEntry<String> minecraftDomainNameResolutionDohProviderUrl;
 
     SocksProxyClientConfigEntry<Boolean> proxyYggdrasil;
     SocksProxyClientConfigEntry<Boolean> proxyPlayerSkinDownload;
@@ -52,50 +52,50 @@ final class ServerCategory extends YACLCategory<ServerConfig> {
         OptionGroup.Builder groupMinecraftServerDomainName = OptionGroup.createBuilder();
         groupMinecraftServerDomainName.name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTDOMAINNAMERESOLUTION));
 
-        minecraftRemoteResolve = entryField("minecraftRemoteResolve", Boolean.class);
-        Option<Boolean> yaclMinecraftRemoteResolve = Option.<Boolean>createBuilder()
-                .name(minecraftRemoteResolve.getEntryTranslateKey())
-                .description(OptionDescription.of(minecraftRemoteResolve.getDescriptionTranslateKey()))
-                .binding(minecraftRemoteResolve.getDefaultValue(), minecraftRemoteResolve::getValue, minecraftRemoteResolve::setValue)
+        minecraftDomainNameResolutionUseProxy = entryField("minecraftDomainNameResolutionUseProxy", Boolean.class);
+        Option<Boolean> yaclMinecraftDomainNameResolutionUseProxy = Option.<Boolean>createBuilder()
+                .name(minecraftDomainNameResolutionUseProxy.getEntryTranslateKey())
+                .description(OptionDescription.of(minecraftDomainNameResolutionUseProxy.getDescriptionTranslateKey()))
+                .binding(minecraftDomainNameResolutionUseProxy.getDefaultValue(), minecraftDomainNameResolutionUseProxy::getValue, minecraftDomainNameResolutionUseProxy::setValue)
                 .available(proxyMinecraft.getValue())
                 .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter())
                 .build();
 
-        minecraftRemoteResolveDismissSystemHosts = entryField("minecraftRemoteResolveDismissSystemHosts", Boolean.class);
-        Option<Boolean> yaclMinecraftRemoteResolveDismissSystemHosts = Option.<Boolean>createBuilder()
-                .name(minecraftRemoteResolveDismissSystemHosts.getEntryTranslateKey())
-                .description(OptionDescription.of(minecraftRemoteResolveDismissSystemHosts.getDescriptionTranslateKey()))
-                .binding(minecraftRemoteResolveDismissSystemHosts.getDefaultValue(), minecraftRemoteResolveDismissSystemHosts::getValue, minecraftRemoteResolveDismissSystemHosts::setValue)
+        minecraftDomainNameResolutionDismissSystemHosts = entryField("minecraftDomainNameResolutionDismissSystemHosts", Boolean.class);
+        Option<Boolean> yaclMinecraftDomainNameResolutionDismissSystemHosts = Option.<Boolean>createBuilder()
+                .name(minecraftDomainNameResolutionDismissSystemHosts.getEntryTranslateKey())
+                .description(OptionDescription.of(minecraftDomainNameResolutionDismissSystemHosts.getDescriptionTranslateKey()))
+                .binding(minecraftDomainNameResolutionDismissSystemHosts.getDefaultValue(), minecraftDomainNameResolutionDismissSystemHosts::getValue, minecraftDomainNameResolutionDismissSystemHosts::setValue)
                 .available(proxyMinecraft.getValue())
                 .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter())
                 .build();
 
-        minecraftRemoteResolveProvider = entryField("minecraftRemoteResolveProvider", DNSOverHTTPSProvider.class);
-        Option<DNSOverHTTPSProvider> yaclMinecraftRemoteResolveProvider = Option.<DNSOverHTTPSProvider>createBuilder()
-                .name(minecraftRemoteResolveProvider.getEntryTranslateKey())
-                .binding(minecraftRemoteResolveProvider.getDefaultValue(), minecraftRemoteResolveProvider::getValue, minecraftRemoteResolveProvider::setValue)
+        minecraftDomainNameResolutionDohProvider = entryField("minecraftDomainNameResolutionDohProvider", DNSOverHTTPSProvider.class);
+        Option<DNSOverHTTPSProvider> yaclMinecraftDomainNameResolutionDohProvider = Option.<DNSOverHTTPSProvider>createBuilder()
+                .name(minecraftDomainNameResolutionDohProvider.getEntryTranslateKey())
+                .binding(minecraftDomainNameResolutionDohProvider.getDefaultValue(), minecraftDomainNameResolutionDohProvider::getValue, minecraftDomainNameResolutionDohProvider::setValue)
                 .controller(opt -> EnumControllerBuilder.create(opt).enumClass(DNSOverHTTPSProvider.class).formatValue(v -> Text.literal(v.displayName)))
                 .available(proxyMinecraft.getValue())
                 .build();
 
-        customMinecraftRemoteResolveProvider = entryField("customMinecraftRemoteResolveProvider", String.class);
-        Option<String> yaclCustomMinecraftRemoteResolveProvider = Option.<String>createBuilder()
-                .name(customMinecraftRemoteResolveProvider.getEntryTranslateKey())
-                .binding(customMinecraftRemoteResolveProvider.getDefaultValue(), customMinecraftRemoteResolveProvider::getValue, customMinecraftRemoteResolveProvider::setValue)
+        minecraftDomainNameResolutionDohProviderUrl = entryField("minecraftDomainNameResolutionDohProviderUrl", String.class);
+        Option<String> yaclMinecraftDomainNameResolutionDohProviderUrl = Option.<String>createBuilder()
+                .name(minecraftDomainNameResolutionDohProviderUrl.getEntryTranslateKey())
+                .binding(minecraftDomainNameResolutionDohProviderUrl.getDefaultValue(), minecraftDomainNameResolutionDohProviderUrl::getValue, minecraftDomainNameResolutionDohProviderUrl::setValue)
                 .controller(opt -> ValidStringControllerBuilder.create(opt).validityPredication(s -> s.startsWith("https://")))
                 .available(proxyMinecraft.getValue())
                 .build();
 
-        groupMinecraftServerDomainName.option(yaclMinecraftRemoteResolve);
-        groupMinecraftServerDomainName.option(yaclMinecraftRemoteResolveDismissSystemHosts);
-        groupMinecraftServerDomainName.option(yaclMinecraftRemoteResolveProvider);
-        groupMinecraftServerDomainName.option(yaclCustomMinecraftRemoteResolveProvider);
+        groupMinecraftServerDomainName.option(yaclMinecraftDomainNameResolutionUseProxy);
+        groupMinecraftServerDomainName.option(yaclMinecraftDomainNameResolutionDismissSystemHosts);
+        groupMinecraftServerDomainName.option(yaclMinecraftDomainNameResolutionDohProvider);
+        groupMinecraftServerDomainName.option(yaclMinecraftDomainNameResolutionDohProviderUrl);
 
         yaclProxyMinecraft.addListener((opt, v) -> {
-            yaclMinecraftRemoteResolve.setAvailable(v);
-            yaclMinecraftRemoteResolveDismissSystemHosts.setAvailable(v);
-            yaclMinecraftRemoteResolveProvider.setAvailable(v);
-            yaclCustomMinecraftRemoteResolveProvider.setAvailable(v);
+            yaclMinecraftDomainNameResolutionUseProxy.setAvailable(v);
+            yaclMinecraftDomainNameResolutionDismissSystemHosts.setAvailable(v);
+            yaclMinecraftDomainNameResolutionDohProvider.setAvailable(v);
+            yaclMinecraftDomainNameResolutionDohProviderUrl.setAvailable(v);
         });
 
         categoryBuilder.group(groupMinecraftServerDomainName.build());

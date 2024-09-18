@@ -20,10 +20,10 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
     SocksProxyClientConfigEntry<Boolean> useProxy;
 
     SocksProxyClientConfigEntry<SocksVersion> socksVersion;
-    SocksProxyClientConfigEntry<String> customProxyHost;
-    SocksProxyClientConfigEntry<Integer> customProxyPort;
-    SocksProxyClientConfigEntry<String> customProxyUsername;
-    SocksProxyClientConfigEntry<String> customProxyPassword;
+    SocksProxyClientConfigEntry<String> proxyHost;
+    SocksProxyClientConfigEntry<Integer> proxyPort;
+    SocksProxyClientConfigEntry<String> proxyUsername;
+    SocksProxyClientConfigEntry<String> proxyPassword;
 
     GeneralCategory(YACLAccess yacl) {
         super(yacl, GeneralConfig.class);
@@ -55,52 +55,52 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
                 .controller(opt -> EnumControllerBuilder.create(opt).enumClass(SocksVersion.class))
                 .build();
 
-        customProxyHost = entryField("customProxyHost", String.class);
-        Option<String> yaclCustomProxyHost = Option.<String>createBuilder()
-                .name(customProxyHost.getEntryTranslateKey())
+        proxyHost = entryField("proxyHost", String.class);
+        Option<String> yaclProxyHost = Option.<String>createBuilder()
+                .name(proxyHost.getEntryTranslateKey())
                 .available(useProxy.getValue())
-                .binding(customProxyHost.getDefaultValue(), customProxyHost::getValue, customProxyHost::setValue)
+                .binding(proxyHost.getDefaultValue(), proxyHost::getValue, proxyHost::setValue)
                 .controller(ValidStringControllerBuilder::create)
                 .build();
 
-        customProxyPort = entryField("customProxyPort", Integer.class);
-        Option<Integer> yaclCustomProxyPort = Option.<Integer>createBuilder()
-                .name(customProxyPort.getEntryTranslateKey())
+        proxyPort = entryField("proxyPort", Integer.class);
+        Option<Integer> yaclProxyPort = Option.<Integer>createBuilder()
+                .name(proxyPort.getEntryTranslateKey())
                 .available(useProxy.getValue())
-                .binding(customProxyPort.getDefaultValue(), customProxyPort::getValue, customProxyPort::setValue)
+                .binding(proxyPort.getDefaultValue(), proxyPort::getValue, proxyPort::setValue)
                 .controller(opt -> IntegerFieldControllerBuilder.create(opt).min(1).max(65535).formatValue(value -> Text.literal(String.format("%d", value))))
                 .build();
 
-        customProxyUsername = entryField("customProxyUsername", String.class);
-        Option<String> yaclCustomProxyUsername = Option.<String>createBuilder()
-                .name(customProxyUsername.getEntryTranslateKey())
+        proxyUsername = entryField("proxyUsername", String.class);
+        Option<String> yaclProxyUsername = Option.<String>createBuilder()
+                .name(proxyUsername.getEntryTranslateKey())
                 .available(useProxy.getValue())
-                .binding(customProxyUsername.getDefaultValue(), customProxyUsername::getValue, customProxyUsername::setValue)
+                .binding(proxyUsername.getDefaultValue(), proxyUsername::getValue, proxyUsername::setValue)
                 .controller(StringControllerBuilder::create)
                 .build();
 
-        customProxyPassword = entryField("customProxyPassword", String.class);
-        Option<String> yaclCustomProxyPassword = Option.<String>createBuilder()
-                .name(customProxyPassword.getEntryTranslateKey())
+        proxyPassword = entryField("proxyPassword", String.class);
+        Option<String> yaclProxyPassword = Option.<String>createBuilder()
+                .name(proxyPassword.getEntryTranslateKey())
                 .available(useProxy.getValue() && socksVersion.getValue().equals(SocksVersion.SOCKS5))
-                .binding(customProxyPassword.getDefaultValue(), customProxyPassword::getValue, customProxyPassword::setValue)
+                .binding(proxyPassword.getDefaultValue(), proxyPassword::getValue, proxyPassword::setValue)
                 .controller(CredentialsStringControllerBuilder::create)
                 .build();
 
-        yaclSocksVersion.addListener((opt, v) -> yaclCustomProxyPassword.setAvailable(v.equals(SocksVersion.SOCKS5) && useProxy.getValue()));
+        yaclSocksVersion.addListener((opt, v) -> yaclProxyPassword.setAvailable(v.equals(SocksVersion.SOCKS5) && useProxy.getValue()));
 
         groupBuilder.option(yaclSocksVersion);
-        groupBuilder.option(yaclCustomProxyHost);
-        groupBuilder.option(yaclCustomProxyPort);
-        groupBuilder.option(yaclCustomProxyUsername);
-        groupBuilder.option(yaclCustomProxyPassword);
+        groupBuilder.option(yaclProxyHost);
+        groupBuilder.option(yaclProxyPort);
+        groupBuilder.option(yaclProxyUsername);
+        groupBuilder.option(yaclProxyPassword);
 
         yaclUseProxy.addListener((opt, v) -> {
             yaclSocksVersion.setAvailable(v);
-            yaclCustomProxyHost.setAvailable(v);
-            yaclCustomProxyPort.setAvailable(v);
-            yaclCustomProxyUsername.setAvailable(v);
-            yaclCustomProxyPassword.setAvailable(v);
+            yaclProxyHost.setAvailable(v);
+            yaclProxyPort.setAvailable(v);
+            yaclProxyUsername.setAvailable(v);
+            yaclProxyPassword.setAvailable(v);
         });
 
         categoryBuilder.group(groupBuilder.build());
