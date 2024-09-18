@@ -1,0 +1,5 @@
+ext {
+    netty_version = "4.1.110.Final"
+    dnsjava_version = "3.5.2"
+    lombok_version = "1.18.30"
+}
