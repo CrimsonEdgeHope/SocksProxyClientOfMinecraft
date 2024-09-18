@@ -2,8 +2,8 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.screen
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.cloth.ClothConfigScreen;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeyUtil;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.YACLConfigScreen;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
@@ -11,13 +11,12 @@ import net.minecraft.client.gui.widget.AxisGridWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.DirectionalLayoutWidget;
 import net.minecraft.client.gui.widget.EmptyWidget;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
-import java.util.Arrays;
 
 @Environment(EnvType.CLIENT)
 @Mixin(MultiplayerScreen.class)
@@ -45,10 +44,10 @@ public class MultiplayerScreenMixin {
         AxisGridWidget axisGridWidget3 = directionalLayoutWidget.add(new AxisGridWidget(308, 20, AxisGridWidget.DisplayAxis.HORIZONTAL));
 
         ButtonWidget openConfigScreenButton = ButtonWidget.builder(
-                TranslateKeyUtil.itemAsText(Arrays.asList("screen", "config")),
+                Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_SCREEN_CONFIG),
                 button -> {
                     try {
-                        ((ScreenAccessor) this).getClient().setScreen(ClothConfigScreen.getScreen((MultiplayerScreen) (Object) this));
+                        ((ScreenAccessor) this).getClient().setScreen(YACLConfigScreen.getScreen((MultiplayerScreen) (Object) this));
                     } catch (Exception e) {
                         SocksProxyClient.logger(this.getClass().getSimpleName()).error("Where's my config screen?", e);
                         button.active = false;
@@ -57,7 +56,7 @@ public class MultiplayerScreenMixin {
         ((ScreenAccessor) this).invokeAddDrawableChild(openConfigScreenButton);
         axisGridWidget3.add(openConfigScreenButton);
         try {
-            Class.forName("me.shedaniel.clothconfig2.api.ValueHolder");
+            Class.forName("dev.isxander.yacl3.api.YetAnotherConfigLib");
         } catch (Exception e) {
             openConfigScreenButton.active = false;
         }
