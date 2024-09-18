@@ -1,3 +1,5 @@
+import crimsonedgehope.minecraft.fabric.socksproxyclient.gradle.GenerateTranslateKeysTask
+
 import java.nio.file.Paths
 
 plugins {
@@ -71,6 +73,16 @@ dependencies {
 	compileOnly "org.projectlombok:lombok:${project.ext.lombok_version}"
 	annotationProcessor "org.projectlombok:lombok:${project.ext.lombok_version}"
 }
+
+tasks.register("generateTranslateKeys", GenerateTranslateKeysTask) {
+	def packageTarget0 = "crimsonedgehope.minecraft.fabric.socksproxyclient.i18n"
+	inputFile = file("${rootProject.projectDir}/src/main/resources/assets/socksproxyclient/lang/en_us.json")
+	packageTarget = packageTarget0
+	outputDir = file("${rootProject.projectDir}/src/main/java/")
+}
+
+compileJava.dependsOn generateTranslateKeys
+compileJava.mustRunAfter generateTranslateKeys
 
 processResources {
 	def v = [
