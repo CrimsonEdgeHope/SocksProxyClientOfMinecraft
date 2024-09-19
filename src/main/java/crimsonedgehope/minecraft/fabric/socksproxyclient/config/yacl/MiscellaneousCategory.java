@@ -26,7 +26,7 @@ final class MiscellaneousCategory extends YACLCategory<MiscellaneousConfig> {
         Option<Boolean> yaclButtonsInMultiplayerScreen = Option.<Boolean>createBuilder()
                 .name(buttonsInMultiplayerScreen.getEntryTranslateKey())
                 .binding(buttonsInMultiplayerScreen.getDefaultValue(), buttonsInMultiplayerScreen::getValue, buttonsInMultiplayerScreen::setValue)
-                .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter())
+                .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter().coloured(true))
                 .build();
         categoryBuilder.option(yaclButtonsInMultiplayerScreen);
 
