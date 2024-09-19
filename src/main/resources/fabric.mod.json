@@ -44,5 +44,10 @@
   },
   "breaks": {
     "proxyserver": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "update_checker": false
+    }
   }
 }
