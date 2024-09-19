@@ -45,5 +45,10 @@
   "breaks": {
     "proxyserver": "*",
     "respectproxyoptions": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "update_checker": false
+    }
   }
 }
