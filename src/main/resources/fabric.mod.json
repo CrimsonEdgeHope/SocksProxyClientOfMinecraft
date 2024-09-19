@@ -40,5 +40,10 @@
   "conflicts": {
     "fastipping": "*",
     "viafabricplus": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "update_checker": false
+    }
   }
 }
