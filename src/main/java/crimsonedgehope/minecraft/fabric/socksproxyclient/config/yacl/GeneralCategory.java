@@ -40,7 +40,7 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
         Option<Boolean> yaclUseProxy = Option.<Boolean>createBuilder()
                 .name(useProxy.getEntryTranslateKey())
                 .binding(useProxy.getDefaultValue(), useProxy::getValue, useProxy::setValue)
-                .controller(BooleanControllerBuilder::create)
+                .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter().coloured(true))
                 .build();
         categoryBuilder.option(yaclUseProxy);
 
