@@ -10,7 +10,7 @@ import java.util.function.Function;
 
 public final class CredentialsStringController extends StringController {
 
-    public static final Function<String, Text> STARS = v -> Text.of(new StringBuilder().repeat("*", v.length()).toString());
+    public static final Function<String, Text> STARS = v -> Text.of("*".repeat(v.length()));
 
     private final ValueFormatter<String> valueFormatter;
 
