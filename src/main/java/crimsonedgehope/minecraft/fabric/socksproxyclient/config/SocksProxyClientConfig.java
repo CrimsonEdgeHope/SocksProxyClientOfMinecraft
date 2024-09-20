@@ -26,7 +26,7 @@ import java.util.function.Predicate;
 
 public abstract class SocksProxyClientConfig {
 
-    private final Logger LOGGER = SocksProxyClient.logger("Config");
+    public static final Logger LOGGER = SocksProxyClient.logger("Config");
 
     protected static Path configPathDir() {
         Path path = FabricLoader.getInstance().getConfigDir().resolve("socksproxyclient");
