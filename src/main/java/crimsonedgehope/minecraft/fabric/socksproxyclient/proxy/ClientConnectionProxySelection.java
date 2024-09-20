@@ -41,7 +41,7 @@ public final class ClientConnectionProxySelection {
         }
 
         if (proxySelection.equals(Proxy.NO_PROXY)) {
-            LOGGER.info("[Direct] -> [Remote] {}", address);
+            LOGGER.info("[Direct] -> [Remote] {}", remote);
             return;
         }
 
@@ -60,7 +60,7 @@ public final class ClientConnectionProxySelection {
                         new Socks5ProxyHandler(sa, proxyCredential.getUsername(), proxyCredential.getPassword()));
                 break;
             default:
-                LOGGER.info("[Direct] -> [Remote] {}", address);
+                LOGGER.info("[Direct] -> [Remote] {}", remote);
                 break;
         }
     }
