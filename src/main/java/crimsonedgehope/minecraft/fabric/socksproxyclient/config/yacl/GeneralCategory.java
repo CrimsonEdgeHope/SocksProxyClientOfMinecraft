@@ -5,9 +5,12 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.config.SocksProxyClient
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.controller.CredentialsStringControllerBuilder;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.controller.ValidStringControllerBuilder;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksUtils;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
+import dev.isxander.yacl3.api.ButtonOption;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.Option;
+import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.OptionGroup;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
@@ -95,12 +98,22 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
         groupBuilder.option(yaclProxyUsername);
         groupBuilder.option(yaclProxyPassword);
 
+        ButtonOption yaclTestReachability = ButtonOption.createBuilder()
+                .name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST))
+                .description(OptionDescription.of(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST_TOOLTIP)))
+                .available(true)
+                .action((screen, opt) -> SocksUtils.testReachability())
+                .build();
+
+        groupBuilder.option(yaclTestReachability);
+
         yaclUseProxy.addListener((opt, v) -> {
             yaclSocksVersion.setAvailable(v);
             yaclProxyHost.setAvailable(v);
             yaclProxyPort.setAvailable(v);
             yaclProxyUsername.setAvailable(v);
             yaclProxyPassword.setAvailable(v);
+            yaclTestReachability.setAvailable(v);
         });
 
         categoryBuilder.group(groupBuilder.build());
