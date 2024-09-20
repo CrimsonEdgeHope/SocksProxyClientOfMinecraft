@@ -12,6 +12,11 @@
   "socksproxyclient.config.general.proxy.Port": "Proxy port",
   "socksproxyclient.config.general.proxy.Username": "Proxy username",
   "socksproxyclient.config.general.proxy.Password": "Proxy password",
+  "socksproxyclient.config.general.proxy.test": "Test proxy",
+  "socksproxyclient.config.general.proxy.test.tooltip": "Click this button to test your proxy.\nSave new settings before click.",
+  "socksproxyclient.config.general.proxy.testing": "Testing proxy",
+  "socksproxyclient.config.general.proxy.test.success": "Test successful.",
+  "socksproxyclient.config.general.proxy.test.failure": "Test failed.",
 
   "socksproxyclient.config.server": "Server settings",
   "socksproxyclient.config.server.tooltip": "Configuration for proxy's scope of effectiveness",
