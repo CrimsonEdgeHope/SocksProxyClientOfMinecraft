@@ -46,7 +46,7 @@ public final class SocksUtils {
                 SocksProxyClientConfig.LOGGER.info("Testing connection to {} via proxy {}", target, minecraftProxy.address());
                 MinecraftClient.getInstance().submit(() -> {
                     SystemToast.show(MinecraftClient.getInstance().getToastManager(),
-                            new SystemToast.Type(),
+                            SystemToast.Type.TUTORIAL_HINT,
                             Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TESTING),
                             Text.literal(target));
                 });
@@ -79,7 +79,7 @@ public final class SocksUtils {
         final CompletableFuture<Void> res = test.thenApplyAsync(v -> {
             MinecraftClient.getInstance().submit(() -> {
                 MinecraftClient.getInstance().getToastManager().add(
-                        new SystemToast(new SystemToast.Type(3000L),
+                        new SystemToast(SystemToast.Type.TUTORIAL_HINT,
                                 Text.translatable(v.getLeft()
                                         ? TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST_SUCCESS
                                         : TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST_FAILURE
