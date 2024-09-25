@@ -6,6 +6,10 @@ import com.google.gson.JsonSyntaxException;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.SocksProxyClientConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelPipeline;
+import io.netty.handler.proxy.Socks4ProxyHandler;
+import io.netty.handler.proxy.Socks5ProxyHandler;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.minecraft.client.MinecraftClient;
@@ -13,25 +17,69 @@ import net.minecraft.client.toast.SystemToast;
 import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
 import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SocksUtils {
-    public static void testReachability() {
-        testReachability0("https://api.mojang.com");
-        testReachability0("https://ipinfo.io");
+    public static ChannelHandler getHandler(
+            @NotNull Socks socksVersion,
+            @NotNull InetSocketAddress address,
+            @NotNull ProxyCredential credential
+    ) {
+        return switch (socksVersion) {
+            case SOCKS4 -> new Socks4ProxyHandler(address, credential.getUsername());
+            case SOCKS5 -> new Socks5ProxyHandler(address, credential.getUsername(), credential.getPassword());
+        };
     }
 
-    public static void testReachability0(final String target) {
+    public static Socks5ProxyHandler getSocks5ProxyHandler(@NotNull InetSocketAddress address, @NotNull ProxyCredential credential) {
+        return (Socks5ProxyHandler) getHandler(Socks.SOCKS5, address, credential);
+    }
+
+    public static Socks4ProxyHandler getSocks4ProxyHandler(@NotNull InetSocketAddress address, @NotNull ProxyCredential credential) {
+        return (Socks4ProxyHandler) getHandler(Socks.SOCKS4, address, credential);
+    }
+
+    public static void applySocks5ProxyHandler(
+            @NotNull ChannelPipeline pipeline,
+            @NotNull InetSocketAddress address,
+            @NotNull ProxyCredential credential
+    ) {
+        pipeline.addFirst(getSocks5ProxyHandler(address, credential));
+    }
+
+    public static void applySocks4ProxyHandler(
+            @NotNull ChannelPipeline pipeline,
+            @NotNull InetSocketAddress address,
+            @NotNull ProxyCredential credential
+    ) {
+        pipeline.addFirst(getSocks4ProxyHandler(address, credential));
+    }
+
+    private static final ScheduledExecutorService schedules = Executors.newScheduledThreadPool(1);
+
+    public static void testReachability() {
+        testReachability("https://api.mojang.com");
+        schedules.schedule(() -> {
+            testReachability("https://ipinfo.io");
+        }, 1, TimeUnit.SECONDS);
+    }
+
+    public static void testReachability(final String target) {
         final CompletableFuture<Pair<Boolean, Throwable>> test = CompletableFuture.supplyAsync(() -> {
             try {
                 URL url = URI.create(target).toURL();

@@ -49,19 +49,17 @@ public final class ClientConnectionProxySelection {
 
         final SocketAddress sa = proxySelection.address();
         switch (ServerConfig.getSocksVersion()) {
-            case SOCKS4:
+            case SOCKS4 -> {
+                SocksUtils.applySocks4ProxyHandler(pipeline, (InetSocketAddress) sa, proxyCredential);
                 LOGGER.info("[Socks 4] {} -> [Remote] {}", sa, remote);
-                pipeline.addFirst("socks",
-                        new Socks4ProxyHandler(sa, proxyCredential.getUsername()));
-                break;
-            case SOCKS5:
+            }
+            case SOCKS5 -> {
+                SocksUtils.applySocks5ProxyHandler(pipeline, (InetSocketAddress) sa, proxyCredential);
                 LOGGER.info("[Socks 5] {} -> [Remote] {}", sa, remote);
-                pipeline.addFirst("socks",
-                        new Socks5ProxyHandler(sa, proxyCredential.getUsername(), proxyCredential.getPassword()));
-                break;
-            default:
+            }
+            default -> {
                 LOGGER.info("[Direct] -> [Remote] {}", remote);
-                break;
+            }
         }
     }
 }

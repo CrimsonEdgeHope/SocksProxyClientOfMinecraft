@@ -188,20 +188,20 @@ public class HttpToSocksServer {
                     noResolver = false;
                 } else {
                     switch (GeneralConfig.getSocksVersion()) {
-                        case SOCKS4:
+                        case SOCKS4 -> {
                             LOGGER.debug("http - Socks4. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
-                            handler = new Socks4ProxyHandler(proxySelection.address(), proxyCredential.getUsername());
+                            handler = SocksUtils.getSocks4ProxyHandler((InetSocketAddress) proxySelection.address(), proxyCredential);
                             noResolver = false;
-                            break;
-                        case SOCKS5:
+                        }
+                        case SOCKS5 -> {
                             LOGGER.debug("http - Socks5. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
-                            handler = new Socks5ProxyHandler(proxySelection.address(), proxyCredential.getUsername(), proxyCredential.getPassword());
-                            break;
-                        default:
+                            handler = SocksUtils.getSocks5ProxyHandler((InetSocketAddress) proxySelection.address(), proxyCredential);
+                        }
+                        default -> {
                             LOGGER.debug("http. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
                             handler = new ChannelDuplexHandler();
                             noResolver = false;
-                            break;
+                        }
                     }
                 }
 
