@@ -11,6 +11,7 @@ import dev.isxander.yacl3.api.ButtonOption;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
+import dev.isxander.yacl3.api.OptionFlag;
 import dev.isxander.yacl3.api.OptionGroup;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
@@ -44,6 +45,7 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
                 .name(useProxy.getEntryTranslateKey())
                 .binding(useProxy.getDefaultValue(), useProxy::getValue, useProxy::setValue)
                 .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter().coloured(true))
+                .flag(OptionFlag.GAME_RESTART)
                 .build();
         categoryBuilder.option(yaclUseProxy);
 
@@ -56,6 +58,7 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
                 .available(useProxy.getValue())
                 .binding(socksVersion.getDefaultValue(), socksVersion::getValue, socksVersion::setValue)
                 .controller(opt -> EnumControllerBuilder.create(opt).enumClass(SocksVersion.class))
+                .flag(OptionFlag.GAME_RESTART)
                 .build();
 
         proxyHost = entryField("proxyHost", String.class);
@@ -64,6 +67,7 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
                 .available(useProxy.getValue())
                 .binding(proxyHost.getDefaultValue(), proxyHost::getValue, proxyHost::setValue)
                 .controller(ValidStringControllerBuilder::create)
+                .flag(OptionFlag.GAME_RESTART)
                 .build();
 
         proxyPort = entryField("proxyPort", Integer.class);
@@ -72,6 +76,7 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
                 .available(useProxy.getValue())
                 .binding(proxyPort.getDefaultValue(), proxyPort::getValue, proxyPort::setValue)
                 .controller(opt -> IntegerFieldControllerBuilder.create(opt).min(1).max(65535).formatValue(value -> Text.literal(String.format("%d", value))))
+                .flag(OptionFlag.GAME_RESTART)
                 .build();
 
         proxyUsername = entryField("proxyUsername", String.class);
@@ -80,6 +85,7 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
                 .available(useProxy.getValue())
                 .binding(proxyUsername.getDefaultValue(), proxyUsername::getValue, proxyUsername::setValue)
                 .controller(StringControllerBuilder::create)
+                .flag(OptionFlag.GAME_RESTART)
                 .build();
 
         proxyPassword = entryField("proxyPassword", String.class);
@@ -88,6 +94,7 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
                 .available(useProxy.getValue() && socksVersion.getValue().equals(SocksVersion.SOCKS5))
                 .binding(proxyPassword.getDefaultValue(), proxyPassword::getValue, proxyPassword::setValue)
                 .controller(CredentialsStringControllerBuilder::create)
+                .flag(OptionFlag.GAME_RESTART)
                 .build();
 
         yaclSocksVersion.addListener((opt, v) -> yaclProxyPassword.setAvailable(v.equals(SocksVersion.SOCKS5) && useProxy.getValue()));
