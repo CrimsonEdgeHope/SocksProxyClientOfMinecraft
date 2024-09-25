@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.ProxyCredential;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.Socks;
 import lombok.Getter;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -32,9 +32,9 @@ public final class GeneralConfig extends SocksProxyClientConfig {
     private static final SocksProxyClientConfigEntry<Boolean> useProxy =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "useProxy",
                     Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_USEPROXY), false);
-    private static final SocksProxyClientConfigEntry<SocksVersion> socksVersion =
+    private static final SocksProxyClientConfigEntry<Socks> socksVersion =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "socksVersion",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_SOCKSVERSION), SocksVersion.SOCKS5);
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_SOCKSVERSION), Socks.SOCKS5);
     private static final SocksProxyClientConfigEntry<String> proxyHost =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyHost",
                     Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_HOST), "localhost");
@@ -67,7 +67,7 @@ public final class GeneralConfig extends SocksProxyClientConfig {
     @Override
     public void fromJsonObject(JsonObject entries) {
         useProxy.setValue(entries.get(useProxy.getJsonEntry()).getAsBoolean());
-        socksVersion.setValue(SocksVersion.valueOf(entries.get(socksVersion.getJsonEntry()).getAsString()));
+        socksVersion.setValue(Socks.valueOf(entries.get(socksVersion.getJsonEntry()).getAsString()));
         proxyHost.setValue(entries.get(proxyHost.getJsonEntry()).getAsString());
         proxyPort.setValue(entries.get(proxyPort.getJsonEntry()).getAsInt());
         proxyUsername.setValue(entries.get(proxyUsername.getJsonEntry()).getAsString());
@@ -129,7 +129,7 @@ public final class GeneralConfig extends SocksProxyClientConfig {
     }
 
     @Nullable
-    public static SocksVersion getSocksVersion() {
+    public static Socks getSocksVersion() {
         if (!usingProxy()) {
             return null;
         }

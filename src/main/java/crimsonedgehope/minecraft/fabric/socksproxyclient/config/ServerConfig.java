@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.DNSOverHTTPSProvider;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.ProxyCredential;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.Socks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.text.Text;
@@ -122,7 +122,7 @@ public final class ServerConfig extends SocksProxyClientConfig {
     }
 
     @Nullable
-    public static SocksVersion getSocksVersion() {
+    public static Socks getSocksVersion() {
         return GeneralConfig.getSocksVersion();
     }
 
