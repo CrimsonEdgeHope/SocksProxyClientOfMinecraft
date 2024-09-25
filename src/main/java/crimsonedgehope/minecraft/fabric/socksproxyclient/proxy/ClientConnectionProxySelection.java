@@ -4,8 +4,6 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.injection.access.IClientConnectionMixin;
 import io.netty.channel.ChannelPipeline;
-import io.netty.handler.proxy.Socks4ProxyHandler;
-import io.netty.handler.proxy.Socks5ProxyHandler;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.minecraft.network.ClientConnection;
@@ -50,11 +48,11 @@ public final class ClientConnectionProxySelection {
         final SocketAddress sa = proxySelection.address();
         switch (ServerConfig.getSocksVersion()) {
             case SOCKS4 -> {
-                SocksUtils.applySocks4ProxyHandler(pipeline, (InetSocketAddress) sa, proxyCredential);
+                SocksUtils.applySocks4ProxyHandler(pipeline, sa, proxyCredential);
                 LOGGER.info("[Socks 4] {} -> [Remote] {}", sa, remote);
             }
             case SOCKS5 -> {
-                SocksUtils.applySocks5ProxyHandler(pipeline, (InetSocketAddress) sa, proxyCredential);
+                SocksUtils.applySocks5ProxyHandler(pipeline, sa, proxyCredential);
                 LOGGER.info("[Socks 5] {} -> [Remote] {}", sa, remote);
             }
             default -> {

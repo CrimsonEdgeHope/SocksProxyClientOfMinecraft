@@ -30,8 +30,6 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.logging.LoggingHandler;
-import io.netty.handler.proxy.Socks4ProxyHandler;
-import io.netty.handler.proxy.Socks5ProxyHandler;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import lombok.Getter;
@@ -190,12 +188,12 @@ public class HttpToSocksServer {
                     switch (GeneralConfig.getSocksVersion()) {
                         case SOCKS4 -> {
                             LOGGER.debug("http - Socks4. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
-                            handler = SocksUtils.getSocks4ProxyHandler((InetSocketAddress) proxySelection.address(), proxyCredential);
+                            handler = SocksUtils.getSocks4ProxyHandler(proxySelection.address(), proxyCredential);
                             noResolver = false;
                         }
                         case SOCKS5 -> {
                             LOGGER.debug("http - Socks5. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
-                            handler = SocksUtils.getSocks5ProxyHandler((InetSocketAddress) proxySelection.address(), proxyCredential);
+                            handler = SocksUtils.getSocks5ProxyHandler(proxySelection.address(), proxyCredential);
                         }
                         default -> {
                             LOGGER.debug("http. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
