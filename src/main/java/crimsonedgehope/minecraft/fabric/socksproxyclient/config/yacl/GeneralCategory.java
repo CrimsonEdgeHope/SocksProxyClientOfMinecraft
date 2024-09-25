@@ -6,7 +6,7 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.controller.
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.controller.ValidStringControllerBuilder;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksUtils;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.Socks;
 import dev.isxander.yacl3.api.ButtonOption;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.Option;
@@ -23,7 +23,7 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
 
     SocksProxyClientConfigEntry<Boolean> useProxy;
 
-    SocksProxyClientConfigEntry<SocksVersion> socksVersion;
+    SocksProxyClientConfigEntry<Socks> socksVersion;
     SocksProxyClientConfigEntry<String> proxyHost;
     SocksProxyClientConfigEntry<Integer> proxyPort;
     SocksProxyClientConfigEntry<String> proxyUsername;
@@ -52,12 +52,12 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
         OptionGroup.Builder groupBuilder = OptionGroup.createBuilder()
                 .name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY));
 
-        socksVersion = entryField("socksVersion", SocksVersion.class);
-        Option<SocksVersion> yaclSocksVersion = Option.<SocksVersion>createBuilder()
+        socksVersion = entryField("socksVersion", Socks.class);
+        Option<Socks> yaclSocksVersion = Option.<Socks>createBuilder()
                 .name(socksVersion.getEntryTranslateKey())
                 .available(useProxy.getValue())
                 .binding(socksVersion.getDefaultValue(), socksVersion::getValue, socksVersion::setValue)
-                .controller(opt -> EnumControllerBuilder.create(opt).enumClass(SocksVersion.class))
+                .controller(opt -> EnumControllerBuilder.create(opt).enumClass(Socks.class))
                 .flag(OptionFlag.GAME_RESTART)
                 .build();
 
@@ -91,13 +91,13 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
         proxyPassword = entryField("proxyPassword", String.class);
         Option<String> yaclProxyPassword = Option.<String>createBuilder()
                 .name(proxyPassword.getEntryTranslateKey())
-                .available(useProxy.getValue() && socksVersion.getValue().equals(SocksVersion.SOCKS5))
+                .available(useProxy.getValue() && socksVersion.getValue().equals(Socks.SOCKS5))
                 .binding(proxyPassword.getDefaultValue(), proxyPassword::getValue, proxyPassword::setValue)
                 .controller(CredentialsStringControllerBuilder::create)
                 .flag(OptionFlag.GAME_RESTART)
                 .build();
 
-        yaclSocksVersion.addListener((opt, v) -> yaclProxyPassword.setAvailable(v.equals(SocksVersion.SOCKS5) && useProxy.getValue()));
+        yaclSocksVersion.addListener((opt, v) -> yaclProxyPassword.setAvailable(v.equals(Socks.SOCKS5) && useProxy.getValue()));
 
         groupBuilder.option(yaclSocksVersion);
         groupBuilder.option(yaclProxyHost);
