@@ -17,7 +17,19 @@ group = project.maven_group
 apply from: Paths.get("properties.gradle").toString()
 
 base {
-	archivesName = project.archives_base_name
+	String c = String.format("git rev-parse --short HEAD")
+	String r = "local"
+	String r1
+	try {
+		Process p = c.execute()
+		r1 = p.text.trim()
+		if (r1.length() != 0) {
+			r = r1
+		}
+	} catch (Throwable e) {
+
+	}
+	archivesName = project.archives_base_name + "-" + r
 }
 
 java {
