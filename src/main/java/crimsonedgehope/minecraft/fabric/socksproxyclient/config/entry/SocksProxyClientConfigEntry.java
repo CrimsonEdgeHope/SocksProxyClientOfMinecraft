@@ -1,5 +1,6 @@
-package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
+package crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry;
 
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.SocksProxyClientConfig;
 import lombok.Getter;
 import lombok.Setter;
 import net.fabricmc.api.EnvType;
