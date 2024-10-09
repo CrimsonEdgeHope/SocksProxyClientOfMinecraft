@@ -23,8 +23,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.net.SocketAddress;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 public final class SocksUtils {
     public static ChannelHandler getHandler(
             @NotNull Socks socksVersion,
-            @NotNull SocketAddress address,
+            @NotNull InetSocketAddress address,
             @NotNull Credential credential
     ) {
         return switch (socksVersion) {
@@ -47,17 +47,17 @@ public final class SocksUtils {
         };
     }
 
-    public static Socks5ProxyHandler getSocks5ProxyHandler(@NotNull SocketAddress address, @NotNull Credential credential) {
+    public static Socks5ProxyHandler getSocks5ProxyHandler(@NotNull InetSocketAddress address, @NotNull Credential credential) {
         return (Socks5ProxyHandler) getHandler(Socks.SOCKS5, address, credential);
     }
 
-    public static Socks4ProxyHandler getSocks4ProxyHandler(@NotNull SocketAddress address, @NotNull Credential credential) {
+    public static Socks4ProxyHandler getSocks4ProxyHandler(@NotNull InetSocketAddress address, @NotNull Credential credential) {
         return (Socks4ProxyHandler) getHandler(Socks.SOCKS4, address, credential);
     }
 
     public static void applySocks5ProxyHandler(
             @NotNull ChannelPipeline pipeline,
-            @NotNull SocketAddress address,
+            @NotNull InetSocketAddress address,
             @NotNull Credential credential
     ) {
         pipeline.addFirst(getSocks5ProxyHandler(address, credential));
@@ -65,7 +65,7 @@ public final class SocksUtils {
 
     public static void applySocks4ProxyHandler(
             @NotNull ChannelPipeline pipeline,
-            @NotNull SocketAddress address,
+            @NotNull InetSocketAddress address,
             @NotNull Credential credential
     ) {
         pipeline.addFirst(getSocks4ProxyHandler(address, credential));
