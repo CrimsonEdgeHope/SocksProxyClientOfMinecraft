@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.util.Objects;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -45,7 +44,7 @@ public final class ClientConnectionProxySelection {
 
         Credential proxyCredential = entry.getCredential();
 
-        final SocketAddress sa = entry.getProxy().address();
+        final InetSocketAddress sa = (InetSocketAddress) entry.getProxy().address();
         switch (entry.getVersion()) {
             case SOCKS4 -> {
                 SocksUtils.applySocks4ProxyHandler(pipeline, sa, proxyCredential);
