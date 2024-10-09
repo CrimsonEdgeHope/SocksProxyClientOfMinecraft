@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 @Getter
@@ -51,10 +52,10 @@ public class ProxyEntry {
         if (!(o instanceof ProxyEntry entry)) {
             return false;
         }
-        if (!getProxy().equals(entry.getProxy())) {
+        if (!this.getProxy().equals(entry.getProxy())) {
             return false;
         }
-        if (getVersion() != entry.getVersion()) {
+        if (this.getVersion() != entry.getVersion()) {
             return false;
         }
         return getCredential().equals(entry.getCredential());
