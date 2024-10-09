@@ -180,7 +180,7 @@ public class HttpToSocksServer {
                 boolean noResolver = ServerConfig.httpRemoteResolve();
                 ChannelHandler handler;
                 Proxy proxySelection = GeneralConfig.getProxy();
-                ProxyCredential proxyCredential = GeneralConfig.getProxyCredential();
+                Credential proxyCredential = GeneralConfig.getProxyCredential();
                 if (proxySelection.equals(Proxy.NO_PROXY)) {
                     handler = new ChannelDuplexHandler();
                     noResolver = false;
