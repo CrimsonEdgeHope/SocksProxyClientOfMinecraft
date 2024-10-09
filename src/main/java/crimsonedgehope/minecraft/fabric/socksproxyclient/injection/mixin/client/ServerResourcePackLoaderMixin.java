@@ -1,7 +1,7 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.client;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyServerUtils;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.resource.server.ServerResourcePackLoader;
@@ -22,6 +22,6 @@ public class ServerResourcePackLoaderMixin {
             )
     )
     private Proxy redirectedGet(Proxy instance) {
-        return HttpProxyServerUtils.getProxyObject(ServerConfig.shouldProxyServerResourceDownload());
+        return HttpProxyUtils.getProxyObject(ServerConfig.shouldProxyServerResourceDownload());
     }
 }

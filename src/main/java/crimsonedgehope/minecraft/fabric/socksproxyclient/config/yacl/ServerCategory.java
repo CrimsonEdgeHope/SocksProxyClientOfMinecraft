@@ -4,7 +4,7 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.SocksProxyClientConfigEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.controller.ValidStringControllerBuilder;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.DNSOverHTTPSProvider;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.DOHProvider;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
@@ -18,7 +18,7 @@ final class ServerCategory extends YACLCategory<ServerConfig> {
     SocksProxyClientConfigEntry<Boolean> proxyMinecraft;
     SocksProxyClientConfigEntry<Boolean> minecraftDomainNameResolutionUseProxy;
     SocksProxyClientConfigEntry<Boolean> minecraftDomainNameResolutionDismissSystemHosts;
-    SocksProxyClientConfigEntry<DNSOverHTTPSProvider> minecraftDomainNameResolutionDohProvider;
+    SocksProxyClientConfigEntry<DOHProvider> minecraftDomainNameResolutionDohProvider;
     SocksProxyClientConfigEntry<String> minecraftDomainNameResolutionDohProviderUrl;
 
     SocksProxyClientConfigEntry<Boolean> proxyYggdrasil;
@@ -70,11 +70,11 @@ final class ServerCategory extends YACLCategory<ServerConfig> {
                 .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter().coloured(true))
                 .build();
 
-        minecraftDomainNameResolutionDohProvider = entryField("minecraftDomainNameResolutionDohProvider", DNSOverHTTPSProvider.class);
-        Option<DNSOverHTTPSProvider> yaclMinecraftDomainNameResolutionDohProvider = Option.<DNSOverHTTPSProvider>createBuilder()
+        minecraftDomainNameResolutionDohProvider = entryField("minecraftDomainNameResolutionDohProvider", DOHProvider.class);
+        Option<DOHProvider> yaclMinecraftDomainNameResolutionDohProvider = Option.<DOHProvider>createBuilder()
                 .name(minecraftDomainNameResolutionDohProvider.getEntryTranslateKey())
                 .binding(minecraftDomainNameResolutionDohProvider.getDefaultValue(), minecraftDomainNameResolutionDohProvider::getValue, minecraftDomainNameResolutionDohProvider::setValue)
-                .controller(opt -> EnumControllerBuilder.create(opt).enumClass(DNSOverHTTPSProvider.class).formatValue(v -> Text.literal(v.displayName)))
+                .controller(opt -> EnumControllerBuilder.create(opt).enumClass(DOHProvider.class).formatValue(v -> Text.literal(v.displayName)))
                 .available(proxyMinecraft.getValue())
                 .build();
 

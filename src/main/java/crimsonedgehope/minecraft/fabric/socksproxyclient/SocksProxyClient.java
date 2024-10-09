@@ -1,7 +1,7 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ConfigUtils;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpToSocksServer;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxy;
 import net.fabricmc.api.ClientModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +10,7 @@ public class SocksProxyClient implements ClientModInitializer {
 
 	public static void preInit() throws Exception {
 		ConfigUtils.loadAllConfig();
-		HttpToSocksServer.INSTANCE.fire();
+		HttpProxy.INSTANCE.fire();
 	}
 
 	@Override
