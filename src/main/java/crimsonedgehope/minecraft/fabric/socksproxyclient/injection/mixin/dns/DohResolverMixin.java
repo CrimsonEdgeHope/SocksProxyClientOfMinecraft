@@ -1,6 +1,6 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.dns;
 
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyServerUtils;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Mixin;
@@ -43,7 +43,7 @@ public class DohResolverMixin {
             @Override
             public List<Proxy> select(URI uri) {
                 List<Proxy> res = new ArrayList<>();
-                res.add(HttpProxyServerUtils.getProxyObject());
+                res.add(HttpProxyUtils.getProxyObject());
                 return res;
             }
 
@@ -60,6 +60,6 @@ public class DohResolverMixin {
             remap = false
     )
     private URLConnection redirected(URL instance) throws IOException {
-        return instance.openConnection(HttpProxyServerUtils.getProxyObject());
+        return instance.openConnection(HttpProxyUtils.getProxyObject());
     }
 }

@@ -2,7 +2,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.client
 
 import com.mojang.patchy.MojangBlockListSupplier;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyServerUtils;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,6 +22,6 @@ public class MojangBlockListSupplierMixin {
             remap = false
     )
     private URLConnection redirectedGet(URL instance) throws IOException {
-        return instance.openConnection(HttpProxyServerUtils.getProxyObject(ServerConfig.shouldProxyBlockListSupplier()));
+        return instance.openConnection(HttpProxyUtils.getProxyObject(ServerConfig.shouldProxyBlockListSupplier()));
     }
 }

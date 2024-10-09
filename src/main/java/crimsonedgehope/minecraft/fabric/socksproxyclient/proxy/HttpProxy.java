@@ -42,14 +42,14 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Getter
-public class HttpToSocksServer {
+public class HttpProxy {
 
-    public static final HttpToSocksServer INSTANCE;
+    public static final HttpProxy INSTANCE;
 
     private static final Logger LOGGER = SocksProxyClient.logger("HttpProxy");
 
     static {
-        INSTANCE = new HttpToSocksServer();
+        INSTANCE = new HttpProxy();
     }
 
     private final String host;
@@ -57,15 +57,15 @@ public class HttpToSocksServer {
     private Channel channel;
     private boolean fired = false;
 
-    public HttpToSocksServer() {
+    public HttpProxy() {
         this(0);
     }
 
-    public HttpToSocksServer(int port) {
+    public HttpProxy(int port) {
         this("localhost", port);
     }
 
-    public HttpToSocksServer(String host, int port) {
+    public HttpProxy(String host, int port) {
         this.host = host;
         this.port = port;
     }
@@ -183,7 +183,7 @@ public class HttpToSocksServer {
                     noResolver = false;
                 } else {
                     for (ProxyEntry entry : GeneralConfig.getProxyEntry()) {
-                        if (entry.getVersion().equals(Socks.SOCKS4)) {
+                        if (entry.getVersion().equals(SocksVersion.SOCKS4)) {
                             LOGGER.debug("noResolver set to false, because of having SOCKS4 proxy.");
                             noResolver = false;
                             break;
