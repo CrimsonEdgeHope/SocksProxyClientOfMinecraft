@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
@@ -94,37 +93,19 @@ public final class GeneralConfig extends SocksProxyClientConfig {
         return getProxyEntry(usingProxy());
     }
 
-    public static Proxy getProxy() {
-        return getProxy(usingProxy());
-    }
-
     @Nullable
     public static ProxyEntry getProxyEntry(boolean useProxy) {
         LOGGER.debug("useProxy {}", useProxy);
         return useProxy ? new ProxyEntry(
-                getSocksVersion(),
+                socksVersion.getValue(),
                 new InetSocketAddress(proxyHost.getValue(), proxyPort.getValue()),
                 proxyUsername.getValue(),
                 proxyPassword.getValue()
         ) : null;
     }
-
-    public static Proxy getProxy(boolean useProxy) {
-        ProxyEntry entry = getProxyEntry(useProxy);
-        return Objects.isNull(entry) ? Proxy.NO_PROXY : entry.getProxy();
-    }
-
     @Nullable
     public static Credential getProxyCredential() {
         ProxyEntry entry = getProxyEntry();
         return Objects.isNull(entry) ? null : entry.getCredential();
-    }
-
-    @Nullable
-    public static Socks getSocksVersion() {
-        if (!usingProxy()) {
-            return null;
-        }
-        return socksVersion.getValue();
     }
 }
