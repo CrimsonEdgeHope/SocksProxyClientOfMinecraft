@@ -47,10 +47,11 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
 
         OptionGroup.Builder proxyGroupBuilder = OptionGroup.createBuilder()
                 .name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY));
+
         proxies = entryField("proxies", List.class);
         ListOption<ProxyEntry> yaclProxies = ListOption.<ProxyEntry>createBuilder()
                 .name(proxies.getEntryTranslateKey())
-//                .description(OptionDescription.of(proxies.getDescriptionTranslateKey()))
+                .description(OptionDescription.of(proxies.getDescriptionTranslateKey()))
                 .initial((ProxyEntry) proxies.getDefaultValue().get(0))
                 .binding((List<ProxyEntry>) proxies.getDefaultValue(), proxies::getValue, proxies::setValue)
                 .collapsed(false)
