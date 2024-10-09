@@ -187,12 +187,12 @@ public class HttpToSocksServer {
                     switch (entry.getVersion()) {
                         case SOCKS4 -> {
                             LOGGER.debug("http - Socks4. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
-                            handler = SocksUtils.getSocks4ProxyHandler(entry.getProxy().address(), entry.getCredential());
+                            handler = SocksUtils.getSocks4ProxyHandler((InetSocketAddress) entry.getProxy().address(), entry.getCredential());
                             noResolver = false;
                         }
                         case SOCKS5 -> {
                             LOGGER.debug("http - Socks5. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
-                            handler = SocksUtils.getSocks5ProxyHandler(entry.getProxy().address(), entry.getCredential());
+                            handler = SocksUtils.getSocks5ProxyHandler((InetSocketAddress) entry.getProxy().address(), entry.getCredential());
                         }
                         default -> {
                             LOGGER.debug("http. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
