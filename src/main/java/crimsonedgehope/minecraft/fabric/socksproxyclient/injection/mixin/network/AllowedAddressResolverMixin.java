@@ -141,7 +141,7 @@ public class AllowedAddressResolverMixin implements IAllowedAddressResolverMixin
     private Optional<Address> addressResolver(ServerAddress serverAddress) throws Exception {
         Record[] records = resolver(serverAddress.getAddress(), Type.A);
         final ARecord arec = (ARecord) records[0];
-        LOGGER.debug(arec.toString());
+        LOGGER.debug("{}", arec);
         InetAddress inetAddress = arec.getAddress();
         LOGGER.info("Resolve {} to {}", serverAddress.getAddress(), inetAddress.getHostAddress());
         byte[] bytes = inetAddress.getAddress();
@@ -154,7 +154,7 @@ public class AllowedAddressResolverMixin implements IAllowedAddressResolverMixin
         String addr0 = "_minecraft._tcp." + serverAddress.getAddress();
         Record[] records = resolver(addr0, Type.SRV);
         final SRVRecord srv = (SRVRecord) records[0];
-        LOGGER.debug(records[0].toString());
+        LOGGER.debug("{}", records[0]);
         String host = srv.getTarget().toString(true);
         LOGGER.info("Resolve {} to {}:{}", addr0, host, srv.getPort());
         return Optional.of(new ServerAddress(host, srv.getPort()));
