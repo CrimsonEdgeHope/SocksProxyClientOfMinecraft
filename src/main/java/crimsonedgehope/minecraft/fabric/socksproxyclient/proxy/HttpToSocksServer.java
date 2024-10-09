@@ -40,6 +40,7 @@ import org.slf4j.Logger;
 import java.net.InetSocketAddress;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
 public class HttpToSocksServer {
@@ -178,26 +179,14 @@ public class HttpToSocksServer {
 
             if (remote == null) {
                 boolean noResolver = ServerConfig.httpRemoteResolve();
-                ChannelHandler handler;
-                ProxyEntry entry = GeneralConfig.getProxyEntry();
-                if (Objects.isNull(entry)) {
-                    handler = new ChannelDuplexHandler();
+                if (GeneralConfig.getProxyEntry().isEmpty()) {
+                    LOGGER.debug("http. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
                     noResolver = false;
                 } else {
-                    switch (entry.getVersion()) {
-                        case SOCKS4 -> {
-                            LOGGER.debug("http - Socks4. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
-                            handler = SocksUtils.getSocks4ProxyHandler((InetSocketAddress) entry.getProxy().address(), entry.getCredential());
+                    for (ProxyEntry entry : GeneralConfig.getProxyEntry()) {
+                        if (entry.getVersion().equals(Socks.SOCKS4)) {
                             noResolver = false;
-                        }
-                        case SOCKS5 -> {
-                            LOGGER.debug("http - Socks5. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
-                            handler = SocksUtils.getSocks5ProxyHandler((InetSocketAddress) entry.getProxy().address(), entry.getCredential());
-                        }
-                        default -> {
-                            LOGGER.debug("http. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
-                            handler = new ChannelDuplexHandler();
-                            noResolver = false;
+                            break;
                         }
                     }
                 }
@@ -207,15 +196,30 @@ public class HttpToSocksServer {
                         .handler(new ChannelInitializer<SocketChannel>() {
                             @Override
                             public void initChannel(@NotNull SocketChannel channel) {
-                                channel.pipeline().addFirst(handler);
+                                if (GeneralConfig.getProxyEntry().isEmpty()) {
+                                    channel.pipeline().addFirst(new ChannelDuplexHandler());
+                                } else {
+                                    for (ProxyEntry entry : GeneralConfig.getProxyEntry()) {
+                                        switch (entry.getVersion()) {
+                                            case SOCKS4 -> {
+                                                LOGGER.debug("http - Socks4. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
+                                                SocksUtils.applySocks4ProxyHandler(channel.pipeline(), (InetSocketAddress) entry.getProxy().address(), entry.getCredential());
+                                            }
+                                            case SOCKS5 -> {
+                                                LOGGER.debug("http - Socks5. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
+                                                SocksUtils.applySocks5ProxyHandler(channel.pipeline(), (InetSocketAddress) entry.getProxy().address(), entry.getCredential());
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         })
                         .option(ChannelOption.TCP_NODELAY, true)
                         .option(ChannelOption.SO_KEEPALIVE, true);
+                LOGGER.debug("noResolver: {}", noResolver);
                 if (noResolver) {
                     b = b.disableResolver();
                 }
-                LOGGER.debug("noResolver: {}", noResolver);
                 ChannelFuture future = b.connect(remoteHttpHost, remoteHttpPort);
                 future.addListener(f -> {
                     if (f.isSuccess()) {
