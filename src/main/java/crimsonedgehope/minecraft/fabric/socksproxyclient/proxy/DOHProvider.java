@@ -1,6 +1,6 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
 
-public enum DNSOverHTTPSProvider {
+public enum DOHProvider {
     CLOUDFLARE("Cloudflare", "https://cloudflare-dns.com/dns-query"),
     GOOGLE("Google", "https://dns.google/dns-query"),
     DNS_SB("dns.sb", "https://doh.sb/dns-query"),
@@ -13,13 +13,13 @@ public enum DNSOverHTTPSProvider {
     public final String displayName;
     public final String url;
 
-    DNSOverHTTPSProvider(String displayName, String url) {
+    DOHProvider(String displayName, String url) {
         this.displayName = displayName;
         this.url = url;
     }
 
-    public static DNSOverHTTPSProvider byDisplayName(String v) {
-        for (DNSOverHTTPSProvider provider : DNSOverHTTPSProvider.values()) {
+    public static DOHProvider byDisplayName(String v) {
+        for (DOHProvider provider : DOHProvider.values()) {
             if (provider.displayName.equals(v)) {
                 return provider;
             }

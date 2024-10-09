@@ -7,7 +7,7 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.ProxyEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.SocksProxyClientConfigEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.Socks;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.text.Text;
@@ -39,7 +39,7 @@ public final class GeneralConfig extends SocksProxyClientConfig {
                     Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXIES),
                     Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXIES_TOOLTIP),
                     new ArrayList<>() {{
-                        add(new ProxyEntry(Socks.SOCKS5, new InetSocketAddress("localhost", 1080)));
+                        add(new ProxyEntry(SocksVersion.SOCKS5, new InetSocketAddress("localhost", 1080)));
                     }});
 
     private GeneralConfig() {
@@ -70,7 +70,7 @@ public final class GeneralConfig extends SocksProxyClientConfig {
         List<ProxyEntry> list = new ArrayList<>();
         JsonArray array = (JsonArray) entries.get("proxies");
 
-        Socks version;
+        SocksVersion version;
         String host;
         int port;
         String username;
@@ -79,9 +79,9 @@ public final class GeneralConfig extends SocksProxyClientConfig {
         for (JsonElement element : array) {
             JsonObject proxyObj = (JsonObject) element;
             try {
-                version = Socks.valueOf(proxyObj.get("version").getAsString());
+                version = SocksVersion.valueOf(proxyObj.get("version").getAsString());
             } catch (Exception e) {
-                version = Socks.SOCKS5;
+                version = SocksVersion.SOCKS5;
             }
             host = proxyObj.get("host").getAsString();
             if (Objects.isNull(host)) {

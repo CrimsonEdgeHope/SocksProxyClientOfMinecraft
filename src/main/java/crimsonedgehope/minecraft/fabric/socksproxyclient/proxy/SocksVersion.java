@@ -1,6 +1,6 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
 
-public enum Socks {
+public enum SocksVersion {
     SOCKS4,
     SOCKS5
 }

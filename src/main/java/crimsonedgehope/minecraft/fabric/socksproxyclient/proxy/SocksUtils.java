@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SocksUtils {
     public static ChannelHandler getHandler(
-            @NotNull Socks socksVersion,
+            @NotNull SocksVersion socksVersion,
             @NotNull InetSocketAddress address,
             @NotNull Credential credential
     ) {
@@ -48,11 +48,11 @@ public final class SocksUtils {
     }
 
     public static Socks5ProxyHandler getSocks5ProxyHandler(@NotNull InetSocketAddress address, @NotNull Credential credential) {
-        return (Socks5ProxyHandler) getHandler(Socks.SOCKS5, address, credential);
+        return (Socks5ProxyHandler) getHandler(SocksVersion.SOCKS5, address, credential);
     }
 
     public static Socks4ProxyHandler getSocks4ProxyHandler(@NotNull InetSocketAddress address, @NotNull Credential credential) {
-        return (Socks4ProxyHandler) getHandler(Socks.SOCKS4, address, credential);
+        return (Socks4ProxyHandler) getHandler(SocksVersion.SOCKS4, address, credential);
     }
 
     public static void applySocks5ProxyHandler(
@@ -88,7 +88,7 @@ public final class SocksUtils {
         final CompletableFuture<Pair<Boolean, Throwable>> test = CompletableFuture.supplyAsync(() -> {
             try {
                 URL url = URI.create(target).toURL();
-                final Proxy httpProxy = HttpProxyServerUtils.getProxyObject(true);
+                final Proxy httpProxy = HttpProxyUtils.getProxyObject(true);
                 final ProxyEntry minecraftProxyEntry = ServerConfig.getProxyEntryForMinecraft(true).getLast();
                 if (httpProxy.equals(Proxy.NO_PROXY) || Objects.isNull(minecraftProxyEntry)) {
                     SocksProxyClientConfig.LOGGER.warn("No proxy to test.");
