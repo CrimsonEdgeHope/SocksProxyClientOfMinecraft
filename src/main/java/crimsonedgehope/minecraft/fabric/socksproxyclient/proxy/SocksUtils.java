@@ -3,6 +3,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ProxyEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.SocksProxyClientConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
@@ -88,14 +89,14 @@ public final class SocksUtils {
             try {
                 URL url = URI.create(target).toURL();
                 final Proxy httpProxy = HttpProxyServerUtils.getProxyObject(true);
-                final Proxy minecraftProxy = ServerConfig.getProxyForMinecraft(true);
-                if (httpProxy.equals(Proxy.NO_PROXY) || minecraftProxy.equals(Proxy.NO_PROXY)) {
+                final ProxyEntry minecraftProxyEntry = ServerConfig.getProxyEntryForMinecraft(true);
+                if (httpProxy.equals(Proxy.NO_PROXY) || Objects.isNull(minecraftProxyEntry)) {
                     SocksProxyClientConfig.LOGGER.warn("No proxy to test.");
                     return new Pair<>(true, null);
                 }
 
                 final HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection(httpProxy);
-                SocksProxyClientConfig.LOGGER.info("Testing connection to {} via proxy {}", target, minecraftProxy.address());
+                SocksProxyClientConfig.LOGGER.info("Testing connection to {} via proxy {}", target, minecraftProxyEntry.getProxy().address());
                 MinecraftClient.getInstance().submit(() -> {
                     SystemToast.show(MinecraftClient.getInstance().getToastManager(),
                             new SystemToast.Type(),
