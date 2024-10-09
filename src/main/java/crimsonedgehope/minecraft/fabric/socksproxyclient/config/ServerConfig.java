@@ -4,13 +4,9 @@ import com.google.gson.JsonObject;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.Credential;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.DNSOverHTTPSProvider;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.Socks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.text.Text;
-import org.jetbrains.annotations.Nullable;
-
-import java.net.Proxy;
 
 @Environment(EnvType.CLIENT)
 public final class ServerConfig extends SocksProxyClientConfig {
@@ -89,16 +85,16 @@ public final class ServerConfig extends SocksProxyClientConfig {
         return usingProxyOnMinecraft() && imposeProxyOnMinecraftLoopback.getValue();
     }
 
-    public static Proxy getProxyForMinecraft() {
-        return getProxyForMinecraft(usingProxyOnMinecraft());
+    public static ProxyEntry getProxyEntryForMinecraft() {
+        return getProxyEntryForMinecraft(usingProxyOnMinecraft());
     }
 
-    public static Proxy getProxyForMinecraft(boolean useProxy) {
-        return GeneralConfig.getProxy(useProxy);
+    public static ProxyEntry getProxyEntryForMinecraft(boolean useProxy) {
+        return GeneralConfig.getProxyEntry(useProxy);
     }
 
-    public static Proxy getProxyForMinecraftLoopback() {
-        return getProxyForMinecraft(minecraftLoopbackProxyOption());
+    public static ProxyEntry getProxyEntryForMinecraftLoopback() {
+        return getProxyEntryForMinecraft(minecraftLoopbackProxyOption());
     }
 
     public static boolean shouldProxyYggdrasil() {
@@ -119,11 +115,6 @@ public final class ServerConfig extends SocksProxyClientConfig {
 
     public static Credential getProxyCredential() {
         return GeneralConfig.getProxyCredential();
-    }
-
-    @Nullable
-    public static Socks getSocksVersion() {
-        return GeneralConfig.getSocksVersion();
     }
 
     public static boolean httpRemoteResolve() {
