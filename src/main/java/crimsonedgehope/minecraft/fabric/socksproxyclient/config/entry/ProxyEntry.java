@@ -14,12 +14,12 @@ import java.net.Proxy;
 
 @Environment(EnvType.CLIENT)
 @Getter
-@Setter
-public final class ProxyEntry {
+public class ProxyEntry {
     private Proxy proxy;
+    @Setter
     private Socks version;
 
-    @NotNull
+    @NotNull @Setter
     private Credential credential;
 
     public ProxyEntry(Socks version, InetSocketAddress sa) {
@@ -34,5 +34,12 @@ public final class ProxyEntry {
         this.proxy = new Proxy(Proxy.Type.SOCKS, sa);
         this.version = version;
         this.credential = credential;
+    }
+
+    public void setProxy(Proxy proxy) {
+        this.proxy = proxy;
+        if (!proxy.type().equals(Proxy.Type.SOCKS)) {
+            throw new IllegalArgumentException();
+        }
     }
 }

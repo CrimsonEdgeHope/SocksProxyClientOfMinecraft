@@ -9,6 +9,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.text.Text;
 
+import java.util.List;
+
 @Environment(EnvType.CLIENT)
 public final class ServerConfig extends SocksProxyClientConfig {
 
@@ -86,15 +88,15 @@ public final class ServerConfig extends SocksProxyClientConfig {
         return usingProxyOnMinecraft() && imposeProxyOnMinecraftLoopback.getValue();
     }
 
-    public static ProxyEntry getProxyEntryForMinecraft() {
+    public static List<ProxyEntry> getProxyEntryForMinecraft() {
         return getProxyEntryForMinecraft(usingProxyOnMinecraft());
     }
 
-    public static ProxyEntry getProxyEntryForMinecraft(boolean useProxy) {
+    public static List<ProxyEntry> getProxyEntryForMinecraft(boolean useProxy) {
         return GeneralConfig.getProxyEntry(useProxy);
     }
 
-    public static ProxyEntry getProxyEntryForMinecraftLoopback() {
+    public static List<ProxyEntry> getProxyEntryForMinecraftLoopback() {
         return getProxyEntryForMinecraft(minecraftLoopbackProxyOption());
     }
 

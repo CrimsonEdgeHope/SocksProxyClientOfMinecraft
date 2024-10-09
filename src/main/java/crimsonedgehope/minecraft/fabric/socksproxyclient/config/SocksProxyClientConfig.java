@@ -61,7 +61,7 @@ public abstract class SocksProxyClientConfig {
         try {
             readConfigFile();
         } catch (Exception e) {
-            LOGGER.info("Error reading config file {}", this.configFile.getName());
+            LOGGER.error("Error reading config file " + this.configFile.getName(), e);
         }
     }
 
@@ -147,10 +147,11 @@ public abstract class SocksProxyClientConfig {
             if (Integer.class.isAssignableFrom(clazz)
                     || Boolean.class.isAssignableFrom(clazz)
                     || String.class.isAssignableFrom(clazz)
-                    || Enum.class.isAssignableFrom(clazz)) {
+                    || Enum.class.isAssignableFrom(clazz)
+                    || List.class.isAssignableFrom(clazz)) {
                 entries.add(entry);
             } else {
-                throw new UnsupportedOperationException("Not using \"" + clazz.getSimpleName() + "\"!");
+                throw new UnsupportedOperationException("Not using \"" + clazz.getName() + "\"!");
             }
         }
         return entries;
