@@ -1,6 +1,7 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ConfigUtils;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.SocksProxyClientConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public final class YACLConfigScreen {
                     try {
                         ConfigUtils.saveAllConfig();
                     } catch (Throwable e) {
-                        throw new RuntimeException("There's something wrong whilst saving config!", e);
+                        SocksProxyClientConfig.LOGGER.error("There's something wrong whilst saving config!", e);
                     }
                 });
         yacl.buildYacl();

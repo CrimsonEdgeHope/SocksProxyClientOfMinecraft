@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.util.List;
 import java.util.Objects;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -30,32 +31,33 @@ public final class ClientConnectionProxySelection {
 
         InetAddress address = remote.getAddress();
 
-        ProxyEntry entry;
+        List<ProxyEntry> proxies;
         if (address.isLoopbackAddress()) {
-            entry = ServerConfig.getProxyEntryForMinecraftLoopback();
+            proxies = ServerConfig.getProxyEntryForMinecraftLoopback();
         } else {
-            entry = ServerConfig.getProxyEntryForMinecraft();
+            proxies = ServerConfig.getProxyEntryForMinecraft();
         }
 
-        if (Objects.isNull(entry)) {
+        if (proxies.isEmpty()) {
             LOGGER.info("[Direct] -> [Remote] {}", remote);
             return;
         }
 
-        Credential proxyCredential = entry.getCredential();
-
-        final InetSocketAddress sa = (InetSocketAddress) entry.getProxy().address();
-        switch (entry.getVersion()) {
-            case SOCKS4 -> {
-                SocksUtils.applySocks4ProxyHandler(pipeline, sa, proxyCredential);
-                LOGGER.info("[Socks 4] {} -> [Remote] {}", sa, remote);
-            }
-            case SOCKS5 -> {
-                SocksUtils.applySocks5ProxyHandler(pipeline, sa, proxyCredential);
-                LOGGER.info("[Socks 5] {} -> [Remote] {}", sa, remote);
-            }
-            default -> {
-                LOGGER.info("[Direct] -> [Remote] {}", remote);
+        for (ProxyEntry entry : proxies) {
+            final Credential proxyCredential = entry.getCredential();
+            final InetSocketAddress sa = (InetSocketAddress) entry.getProxy().address();
+            switch (entry.getVersion()) {
+                case SOCKS4 -> {
+                    SocksUtils.applySocks4ProxyHandler(pipeline, sa, proxyCredential);
+                    LOGGER.info("[Socks 4] {} -> [Remote] {}", sa, remote);
+                }
+                case SOCKS5 -> {
+                    SocksUtils.applySocks5ProxyHandler(pipeline, sa, proxyCredential);
+                    LOGGER.info("[Socks 5] {} -> [Remote] {}", sa, remote);
+                }
+                default -> {
+                    LOGGER.info("[Direct] -> [Remote] {}", remote);
+                }
             }
         }
     }

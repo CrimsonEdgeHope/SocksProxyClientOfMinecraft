@@ -89,7 +89,7 @@ public final class SocksUtils {
             try {
                 URL url = URI.create(target).toURL();
                 final Proxy httpProxy = HttpProxyServerUtils.getProxyObject(true);
-                final ProxyEntry minecraftProxyEntry = ServerConfig.getProxyEntryForMinecraft(true);
+                final ProxyEntry minecraftProxyEntry = ServerConfig.getProxyEntryForMinecraft(true).getLast();
                 if (httpProxy.equals(Proxy.NO_PROXY) || Objects.isNull(minecraftProxyEntry)) {
                     SocksProxyClientConfig.LOGGER.warn("No proxy to test.");
                     return new Pair<>(true, null);
