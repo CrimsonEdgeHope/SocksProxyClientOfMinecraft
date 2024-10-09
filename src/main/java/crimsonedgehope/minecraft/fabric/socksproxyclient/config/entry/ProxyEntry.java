@@ -1,4 +1,4 @@
-package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
+package crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.Credential;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.Socks;
