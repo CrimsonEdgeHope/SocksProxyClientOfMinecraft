@@ -3,7 +3,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ProxyEntry;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.ProxyEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.SocksProxyClientConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
