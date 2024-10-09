@@ -1,6 +1,6 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.client;
 
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyServerUtils;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -22,11 +22,11 @@ public class MinecraftClientMixin {
 
     @Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;networkProxy:Ljava/net/Proxy;", opcode = Opcodes.PUTFIELD))
     private void redirectedPut(MinecraftClient instance, Proxy value) {
-        this.networkProxy = HttpProxyServerUtils.getProxyObject();
+        this.networkProxy = HttpProxyUtils.getProxyObject();
     }
 
     @Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;networkProxy:Ljava/net/Proxy;", opcode = Opcodes.GETFIELD))
     private Proxy redirectedGet(MinecraftClient instance) {
-        return HttpProxyServerUtils.getProxyObject();
+        return HttpProxyUtils.getProxyObject();
     }
 }

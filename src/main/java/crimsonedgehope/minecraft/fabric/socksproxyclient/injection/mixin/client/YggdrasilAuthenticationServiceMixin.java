@@ -3,7 +3,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.client
 import com.mojang.authlib.HttpAuthenticationService;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyServerUtils;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,7 +15,7 @@ import java.net.Proxy;
 public class YggdrasilAuthenticationServiceMixin extends HttpAuthenticationServiceMixin {
     @Override
     protected Proxy redirectedGet0(HttpAuthenticationService instance) {
-        return HttpProxyServerUtils.getProxyObject(ServerConfig.shouldProxyYggdrasil());
+        return HttpProxyUtils.getProxyObject(ServerConfig.shouldProxyYggdrasil());
     }
 
     @Override

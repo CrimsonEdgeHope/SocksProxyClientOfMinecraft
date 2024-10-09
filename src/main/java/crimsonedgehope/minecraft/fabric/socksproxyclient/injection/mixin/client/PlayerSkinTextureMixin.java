@@ -1,7 +1,7 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.client;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyServerUtils;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -17,6 +17,6 @@ import java.net.Proxy;
 public class PlayerSkinTextureMixin {
     @Redirect(method = "method_22801", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getNetworkProxy()Ljava/net/Proxy;"))
     private Proxy redirectedGet(MinecraftClient instance) {
-        return HttpProxyServerUtils.getProxyObject(ServerConfig.shouldProxyPlayerSkinDownload());
+        return HttpProxyUtils.getProxyObject(ServerConfig.shouldProxyPlayerSkinDownload());
     }
 }
