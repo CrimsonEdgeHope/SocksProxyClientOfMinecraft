@@ -3,18 +3,17 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
 import com.google.gson.JsonObject;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.ProxyCredential;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.Credential;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.Socks;
-import lombok.Getter;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.text.Text;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public final class GeneralConfig extends SocksProxyClientConfig {
@@ -90,42 +89,35 @@ public final class GeneralConfig extends SocksProxyClientConfig {
         return useProxy.getValue();
     }
 
-    @NotNull
+    @Nullable
+    public static ProxyEntry getProxyEntry() {
+        return getProxyEntry(usingProxy());
+    }
+
     public static Proxy getProxy() {
         return getProxy(usingProxy());
     }
 
-    @NotNull
-    public static Proxy getProxy(
-            boolean useProxy
-    ) {
+    @Nullable
+    public static ProxyEntry getProxyEntry(boolean useProxy) {
         LOGGER.debug("useProxy {}", useProxy);
-
-        if (!useProxy) {
-            return Proxy.NO_PROXY;
-        }
-
-        return new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(proxyHost.getValue(), proxyPort.getValue()));
+        return useProxy ? new ProxyEntry(
+                getSocksVersion(),
+                new InetSocketAddress(proxyHost.getValue(), proxyPort.getValue()),
+                proxyUsername.getValue(),
+                proxyPassword.getValue()
+        ) : null;
     }
 
-    public static ProxyCredential getProxyCredential() {
-        return getCustomCredential();
+    public static Proxy getProxy(boolean useProxy) {
+        ProxyEntry entry = getProxyEntry(useProxy);
+        return Objects.isNull(entry) ? Proxy.NO_PROXY : entry.getProxy();
     }
 
-    @Getter
-    private static ProxyCredential customCredential = new ProxyCredential(null, null);
-
-    public static void setCustomCredential(@Nullable String username, @Nullable String password) {
-        setCustomCredentialUsername(username);
-        setCustomCredentialPassword(password);
-    }
-
-    public static void setCustomCredentialUsername(@Nullable String username) {
-        customCredential.setUsername(username);
-    }
-
-    public static void setCustomCredentialPassword(@Nullable String password) {
-        customCredential.setPassword(password);
+    @Nullable
+    public static Credential getProxyCredential() {
+        ProxyEntry entry = getProxyEntry();
+        return Objects.isNull(entry) ? null : entry.getCredential();
     }
 
     @Nullable
