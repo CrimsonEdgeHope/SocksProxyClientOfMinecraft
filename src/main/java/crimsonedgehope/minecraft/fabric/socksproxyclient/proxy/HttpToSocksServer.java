@@ -2,8 +2,8 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.ProxyEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.ProxyEntry;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
@@ -40,7 +40,6 @@ import org.slf4j.Logger;
 import java.net.InetSocketAddress;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
 public class HttpToSocksServer {
@@ -185,6 +184,7 @@ public class HttpToSocksServer {
                 } else {
                     for (ProxyEntry entry : GeneralConfig.getProxyEntry()) {
                         if (entry.getVersion().equals(Socks.SOCKS4)) {
+                            LOGGER.debug("noResolver set to false, because of having SOCKS4 proxy.");
                             noResolver = false;
                             break;
                         }

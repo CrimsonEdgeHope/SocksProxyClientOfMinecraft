@@ -16,21 +16,21 @@ import java.net.Proxy;
 @Getter
 public class ProxyEntry {
     private Proxy proxy;
-    @Setter
+    @NotNull @Setter
     private Socks version;
 
     @NotNull @Setter
     private Credential credential;
 
-    public ProxyEntry(Socks version, InetSocketAddress sa) {
+    public ProxyEntry(@NotNull Socks version, InetSocketAddress sa) {
         this(version, sa, null, null);
     }
 
-    public ProxyEntry(Socks version, InetSocketAddress sa, @Nullable String username, @Nullable String password) {
+    public ProxyEntry(@NotNull Socks version, InetSocketAddress sa, @Nullable String username, @Nullable String password) {
         this(version, sa, new Credential(username, password));
     }
 
-    public ProxyEntry(Socks version, InetSocketAddress sa, @NotNull Credential credential) {
+    public ProxyEntry(@NotNull Socks version, InetSocketAddress sa, @NotNull Credential credential) {
         this.proxy = new Proxy(Proxy.Type.SOCKS, sa);
         this.version = version;
         this.credential = credential;
@@ -41,5 +41,30 @@ public class ProxyEntry {
         if (!proxy.type().equals(Proxy.Type.SOCKS)) {
             throw new IllegalArgumentException();
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ProxyEntry entry)) {
+            return false;
+        }
+        if (!getProxy().equals(entry.getProxy())) {
+            return false;
+        }
+        if (getVersion() != entry.getVersion()) {
+            return false;
+        }
+        return getCredential().equals(entry.getCredential());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getProxy().hashCode();
+        result = 31 * result + getVersion().hashCode();
+        result = 31 * result + getCredential().hashCode();
+        return result;
     }
 }
