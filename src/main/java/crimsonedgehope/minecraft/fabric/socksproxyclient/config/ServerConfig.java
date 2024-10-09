@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.ProxyEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.SocksProxyClientConfigEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.DNSOverHTTPSProvider;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.DOHProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.text.Text;
@@ -35,14 +35,14 @@ public final class ServerConfig extends SocksProxyClientConfig {
                     Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTDOMAINNAMERESOLUTION_DISMISSSYSTEMHOSTS),
                     Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTDOMAINNAMERESOLUTION_DISMISSSYSTEMHOSTS_TOOLTIP),
                     true);
-    private static final SocksProxyClientConfigEntry<DNSOverHTTPSProvider> minecraftDomainNameResolutionDohProvider =
+    private static final SocksProxyClientConfigEntry<DOHProvider> minecraftDomainNameResolutionDohProvider =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "minecraftDomainNameResolutionDohProvider",
                     Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTDOMAINNAMERESOLUTION_DOHPROVIDER),
-                    DNSOverHTTPSProvider.CLOUDFLARE);
+                    DOHProvider.CLOUDFLARE);
     private static final SocksProxyClientConfigEntry<String> minecraftDomainNameResolutionDohProviderUrl =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "minecraftDomainNameResolutionDohProviderUrl",
                     Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTDOMAINNAMERESOLUTION_DOHPROVIDERURL),
-                    DNSOverHTTPSProvider.CLOUDFLARE.url);
+                    DOHProvider.CLOUDFLARE.url);
     private static final SocksProxyClientConfigEntry<Boolean> proxyYggdrasil =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxyYggdrasil",
                     Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_SERVICES_PROXYYGGDRASIL),
@@ -132,7 +132,7 @@ public final class ServerConfig extends SocksProxyClientConfig {
         if (!minecraftRemoteResolve()) {
             return null;
         }
-        if (minecraftDomainNameResolutionDohProvider.getValue().equals(DNSOverHTTPSProvider.CUSTOM)) {
+        if (minecraftDomainNameResolutionDohProvider.getValue().equals(DOHProvider.CUSTOM)) {
             return minecraftDomainNameResolutionDohProviderUrl.getValue();
         }
         return minecraftDomainNameResolutionDohProvider.getValue().url;
@@ -177,7 +177,7 @@ public final class ServerConfig extends SocksProxyClientConfig {
         proxyMinecraft.setValue(object.get(proxyMinecraft.getJsonEntry()).getAsBoolean());
         minecraftDomainNameResolutionUseProxy.setValue(object.get(minecraftDomainNameResolutionUseProxy.getJsonEntry()).getAsBoolean());
         minecraftDomainNameResolutionDismissSystemHosts.setValue(object.get(minecraftDomainNameResolutionDismissSystemHosts.getJsonEntry()).getAsBoolean());
-        minecraftDomainNameResolutionDohProvider.setValue(DNSOverHTTPSProvider.valueOf(object.get(minecraftDomainNameResolutionDohProvider.getJsonEntry()).getAsString()));
+        minecraftDomainNameResolutionDohProvider.setValue(DOHProvider.valueOf(object.get(minecraftDomainNameResolutionDohProvider.getJsonEntry()).getAsString()));
         minecraftDomainNameResolutionDohProviderUrl.setValue(object.get(minecraftDomainNameResolutionDohProviderUrl.getJsonEntry()).getAsString());
         proxyYggdrasil.setValue(object.get(proxyYggdrasil.getJsonEntry()).getAsBoolean());
         proxyPlayerSkinDownload.setValue(object.get(proxyPlayerSkinDownload.getJsonEntry()).getAsBoolean());
