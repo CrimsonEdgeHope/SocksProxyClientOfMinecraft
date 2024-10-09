@@ -1,6 +1,7 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ProxyEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.injection.access.IClientConnectionMixin;
 import io.netty.channel.ChannelPipeline;
@@ -11,7 +12,6 @@ import org.slf4j.Logger;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.net.SocketAddress;
 import java.util.Objects;
 
@@ -31,22 +31,22 @@ public final class ClientConnectionProxySelection {
 
         InetAddress address = remote.getAddress();
 
-        Proxy proxySelection;
+        ProxyEntry entry;
         if (address.isLoopbackAddress()) {
-            proxySelection = ServerConfig.getProxyForMinecraftLoopback();
+            entry = ServerConfig.getProxyEntryForMinecraftLoopback();
         } else {
-            proxySelection = ServerConfig.getProxyForMinecraft();
+            entry = ServerConfig.getProxyEntryForMinecraft();
         }
 
-        if (proxySelection.equals(Proxy.NO_PROXY)) {
+        if (Objects.isNull(entry)) {
             LOGGER.info("[Direct] -> [Remote] {}", remote);
             return;
         }
 
         Credential proxyCredential = ServerConfig.getProxyCredential();
 
-        final SocketAddress sa = proxySelection.address();
-        switch (ServerConfig.getSocksVersion()) {
+        final SocketAddress sa = entry.getProxy().address();
+        switch (entry.getVersion()) {
             case SOCKS4 -> {
                 SocksUtils.applySocks4ProxyHandler(pipeline, sa, proxyCredential);
                 LOGGER.info("[Socks 4] {} -> [Remote] {}", sa, remote);

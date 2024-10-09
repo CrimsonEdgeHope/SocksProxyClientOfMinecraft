@@ -2,6 +2,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ProxyEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
@@ -37,7 +38,6 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -179,21 +179,21 @@ public class HttpToSocksServer {
             if (remote == null) {
                 boolean noResolver = ServerConfig.httpRemoteResolve();
                 ChannelHandler handler;
-                Proxy proxySelection = GeneralConfig.getProxy();
+                ProxyEntry entry = GeneralConfig.getProxyEntry();
                 Credential proxyCredential = GeneralConfig.getProxyCredential();
-                if (proxySelection.equals(Proxy.NO_PROXY)) {
+                if (Objects.isNull(entry)) {
                     handler = new ChannelDuplexHandler();
                     noResolver = false;
                 } else {
-                    switch (GeneralConfig.getSocksVersion()) {
+                    switch (entry.getVersion()) {
                         case SOCKS4 -> {
                             LOGGER.debug("http - Socks4. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
-                            handler = SocksUtils.getSocks4ProxyHandler(proxySelection.address(), proxyCredential);
+                            handler = SocksUtils.getSocks4ProxyHandler(entry.getProxy().address(), proxyCredential);
                             noResolver = false;
                         }
                         case SOCKS5 -> {
                             LOGGER.debug("http - Socks5. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
-                            handler = SocksUtils.getSocks5ProxyHandler(proxySelection.address(), proxyCredential);
+                            handler = SocksUtils.getSocks5ProxyHandler(entry.getProxy().address(), proxyCredential);
                         }
                         default -> {
                             LOGGER.debug("http. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
