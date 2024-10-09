@@ -43,7 +43,7 @@ public final class ClientConnectionProxySelection {
             return;
         }
 
-        ProxyCredential proxyCredential = ServerConfig.getProxyCredential();
+        Credential proxyCredential = ServerConfig.getProxyCredential();
 
         final SocketAddress sa = proxySelection.address();
         switch (ServerConfig.getSocksVersion()) {
