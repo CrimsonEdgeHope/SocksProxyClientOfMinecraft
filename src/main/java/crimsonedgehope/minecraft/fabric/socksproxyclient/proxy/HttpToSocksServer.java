@@ -2,7 +2,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ProxyEntry;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.ProxyEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;

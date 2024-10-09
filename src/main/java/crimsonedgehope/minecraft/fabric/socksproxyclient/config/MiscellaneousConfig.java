@@ -2,6 +2,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
 
 import com.google.gson.JsonObject;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.SocksProxyClientConfigEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
