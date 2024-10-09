@@ -3,7 +3,6 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
 import com.google.gson.JsonObject;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.Credential;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.Socks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -12,7 +11,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.net.InetSocketAddress;
-import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public final class GeneralConfig extends SocksProxyClientConfig {
@@ -102,10 +100,5 @@ public final class GeneralConfig extends SocksProxyClientConfig {
                 proxyUsername.getValue(),
                 proxyPassword.getValue()
         ) : null;
-    }
-    @Nullable
-    public static Credential getProxyCredential() {
-        ProxyEntry entry = getProxyEntry();
-        return Objects.isNull(entry) ? null : entry.getCredential();
     }
 }
