@@ -180,7 +180,6 @@ public class HttpToSocksServer {
                 boolean noResolver = ServerConfig.httpRemoteResolve();
                 ChannelHandler handler;
                 ProxyEntry entry = GeneralConfig.getProxyEntry();
-                Credential proxyCredential = GeneralConfig.getProxyCredential();
                 if (Objects.isNull(entry)) {
                     handler = new ChannelDuplexHandler();
                     noResolver = false;
@@ -188,12 +187,12 @@ public class HttpToSocksServer {
                     switch (entry.getVersion()) {
                         case SOCKS4 -> {
                             LOGGER.debug("http - Socks4. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
-                            handler = SocksUtils.getSocks4ProxyHandler(entry.getProxy().address(), proxyCredential);
+                            handler = SocksUtils.getSocks4ProxyHandler(entry.getProxy().address(), entry.getCredential());
                             noResolver = false;
                         }
                         case SOCKS5 -> {
                             LOGGER.debug("http - Socks5. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
-                            handler = SocksUtils.getSocks5ProxyHandler(entry.getProxy().address(), proxyCredential);
+                            handler = SocksUtils.getSocks5ProxyHandler(entry.getProxy().address(), entry.getCredential());
                         }
                         default -> {
                             LOGGER.debug("http. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
