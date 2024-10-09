@@ -2,7 +2,6 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
 
 import com.google.gson.JsonObject;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.Credential;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.DNSOverHTTPSProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -111,10 +110,6 @@ public final class ServerConfig extends SocksProxyClientConfig {
 
     public static boolean shouldProxyBlockListSupplier() {
         return GeneralConfig.usingProxy() && proxyBlockListSupplier.getValue();
-    }
-
-    public static Credential getProxyCredential() {
-        return GeneralConfig.getProxyCredential();
     }
 
     public static boolean httpRemoteResolve() {
