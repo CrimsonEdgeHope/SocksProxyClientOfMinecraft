@@ -2,7 +2,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.client
 
 import com.mojang.authlib.minecraft.client.MinecraftClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyServerUtils;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.objectweb.asm.Opcodes;
@@ -27,7 +27,7 @@ public class AuthlibMinecraftClientMixin {
             remap = false
     )
     private Proxy redirected(MinecraftClient instance) {
-        return HttpProxyServerUtils.getProxyObject(ServerConfig.shouldProxyYggdrasil());
+        return HttpProxyUtils.getProxyObject(ServerConfig.shouldProxyYggdrasil());
     }
 
     @Redirect(method = "<init>",
@@ -36,6 +36,6 @@ public class AuthlibMinecraftClientMixin {
             remap = false
     )
     private void redirected(MinecraftClient instance, Proxy value) {
-        this.proxy = HttpProxyServerUtils.getProxyObject(ServerConfig.shouldProxyYggdrasil());
+        this.proxy = HttpProxyUtils.getProxyObject(ServerConfig.shouldProxyYggdrasil());
     }
 }
