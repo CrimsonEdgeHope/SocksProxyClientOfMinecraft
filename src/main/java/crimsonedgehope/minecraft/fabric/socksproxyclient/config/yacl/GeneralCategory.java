@@ -58,6 +58,7 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
                 .controller(opt -> ProxyEntryControllerBuilder.create((Option<ProxyEntry>) opt).action((screen, entry) -> {
                     MinecraftClient.getInstance().setScreen(new ProxyEntryEditScreen(screen, entry));
                 }))
+                .insertEntriesAtEnd(true)
                 .flag(OptionFlag.GAME_RESTART)
                 .build();
 
