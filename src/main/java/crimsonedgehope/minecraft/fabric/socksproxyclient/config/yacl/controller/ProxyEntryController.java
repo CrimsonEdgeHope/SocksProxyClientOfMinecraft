@@ -12,6 +12,7 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.net.InetSocketAddress;
 import java.util.function.BiConsumer;
 
 public class ProxyEntryController implements Controller<ProxyEntry> {
@@ -22,7 +23,9 @@ public class ProxyEntryController implements Controller<ProxyEntry> {
     public ProxyEntryController(Option<ProxyEntry> option, BiConsumer<YACLScreen, ProxyEntry> action) {
         this.option = option;
         this.action = action;
-        this.text = Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_EDIT);
+        InetSocketAddress sa = (InetSocketAddress) option().pendingValue().getProxy().address();
+        this.text = Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_EDIT,
+                sa.getHostString() + ":" + sa.getPort());
     }
 
     @Override
@@ -43,6 +46,10 @@ public class ProxyEntryController implements Controller<ProxyEntry> {
         return option().pendingValue();
     }
 
+    public void setEntry(ProxyEntry entry) {
+        option.requestSet(entry);
+    }
+
     @Override
     public AbstractWidget provideWidget(YACLScreen screen, Dimension<Integer> widgetDimension) {
         return new ProxyEntryControllerElement(this, screen, widgetDimension);
@@ -57,8 +64,18 @@ public class ProxyEntryController implements Controller<ProxyEntry> {
         }
 
         public void executeAction() {
+            ProxyEntry e0 = control.getEntry();
+            ProxyEntry e1 = new ProxyEntry(
+                    e0.getVersion(),
+                    InetSocketAddress.createUnresolved(
+                            ((InetSocketAddress) e0.getProxy().address()).getHostString(),
+                            ((InetSocketAddress) e0.getProxy().address()).getPort()
+                    ),
+                    e0.getCredential().getUsername(),
+                    e0.getCredential().getPassword());
             playDownSound();
-            control.action().accept(screen, control.getEntry());
+            control.action().accept(screen, e1);
+            control.setEntry(e1);
         }
 
         @Override

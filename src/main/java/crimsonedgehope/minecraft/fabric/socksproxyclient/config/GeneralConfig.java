@@ -36,7 +36,8 @@ public final class GeneralConfig extends SocksProxyClientConfig {
                     Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_USEPROXY), false);
     private static final SocksProxyClientConfigEntry<List<ProxyEntry>> proxies =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxies",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXIES),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXIES_TOOLTIP),
                     new ArrayList<>() {{
                         add(new ProxyEntry(Socks.SOCKS5, new InetSocketAddress("localhost", 1080)));
                     }});
