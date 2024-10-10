@@ -5,19 +5,18 @@ import dev.isxander.yacl3.api.Controller;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.gui.YACLScreen;
 import org.apache.commons.lang3.Validate;
-
-import java.util.function.BiConsumer;
+import org.apache.logging.log4j.util.TriConsumer;
 
 public class ProxyEntryControllerBuilderImpl implements ProxyEntryControllerBuilder {
     private final Option<ProxyEntry> option;
-    private BiConsumer<YACLScreen, ProxyEntry> action;
+    private TriConsumer<YACLScreen, ProxyEntry, Runnable> action;
 
     protected ProxyEntryControllerBuilderImpl(Option<ProxyEntry> option) {
         this.option = option;
     }
 
     @Override
-    public ProxyEntryControllerBuilder action(BiConsumer<YACLScreen, ProxyEntry> action) {
+    public ProxyEntryControllerBuilder action(TriConsumer<YACLScreen, ProxyEntry, Runnable> action) {
         Validate.notNull(action, "action cannot be null");
         this.action = action;
         return this;

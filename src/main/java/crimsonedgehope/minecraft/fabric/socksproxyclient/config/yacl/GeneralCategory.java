@@ -55,11 +55,12 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
                 .initial((ProxyEntry) proxies.getDefaultValue().get(0))
                 .binding((List<ProxyEntry>) proxies.getDefaultValue(), proxies::getValue, proxies::setValue)
                 .collapsed(false)
-                .controller(opt -> ProxyEntryControllerBuilder.create((Option<ProxyEntry>) opt).action((screen, entry) -> {
-                    MinecraftClient.getInstance().setScreen(new ProxyEntryEditScreen(screen, entry));
+                .controller(opt -> ProxyEntryControllerBuilder.create((Option<ProxyEntry>) opt).action((screen, entry, callback) -> {
+                    MinecraftClient.getInstance().setScreen(new ProxyEntryEditScreen(screen, entry, callback));
                 }))
                 .insertEntriesAtEnd(true)
                 .flag(OptionFlag.GAME_RESTART)
+                .available(useProxy.getValue())
                 .build();
 
         categoryBuilder.group(yaclProxies);
@@ -69,6 +70,7 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
                 .description(OptionDescription.of(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST_TOOLTIP)))
                 .available(true)
                 .action((screen, opt) -> SocksUtils.testReachability())
+                .available(useProxy.getValue())
                 .build();
 
         proxyGroupBuilder.option(yaclTestReachability);

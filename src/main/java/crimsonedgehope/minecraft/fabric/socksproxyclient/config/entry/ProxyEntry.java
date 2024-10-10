@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,9 +40,7 @@ public class ProxyEntry {
 
     public void setProxy(Proxy proxy) {
         this.proxy = proxy;
-        if (!proxy.type().equals(Proxy.Type.SOCKS)) {
-            throw new IllegalArgumentException();
-        }
+        Validate.isTrue(proxy.type().equals(Proxy.Type.SOCKS));
     }
 
     @Override
@@ -52,13 +51,46 @@ public class ProxyEntry {
         if (!(o instanceof ProxyEntry entry)) {
             return false;
         }
-        if (!this.getProxy().equals(entry.getProxy())) {
-            return false;
-        }
         if (this.getVersion() != entry.getVersion()) {
             return false;
         }
-        return getCredential().equals(entry.getCredential());
+        Proxy proxy0 = this.getProxy();
+        Proxy proxy1 = entry.getProxy();
+        if (!proxy0.type().equals(proxy1.type())) {
+            return false;
+        }
+
+        InetSocketAddress sa0 = (InetSocketAddress) proxy0.address();
+        InetSocketAddress sa1 = (InetSocketAddress) proxy1.address();
+
+        if (!compare(sa0.getHostString(), sa1.getHostString())) {
+            return false;
+        }
+        if (sa0.getPort() != sa1.getPort()) {
+            return false;
+        }
+
+        Credential c0 = this.getCredential();
+        Credential c1 = entry.getCredential();
+
+        if (!compare(c0.getUsername(), c1.getUsername())) {
+            return false;
+        }
+        if (!compare(c0.getPassword(), c1.getPassword())) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean compare(String s1, String s2) {
+        if (Objects.nonNull(s1) && Objects.nonNull(s2)) {
+            if (!s1.equals(s2)) {
+                return false;
+            }
+        } else if (!(Objects.isNull(s1) && Objects.isNull(s2))) {
+            return false;
+        }
+        return true;
     }
 
     @Override

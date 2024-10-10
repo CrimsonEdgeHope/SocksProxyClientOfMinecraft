@@ -37,10 +37,13 @@ public class ProxyEntryEditScreen extends Screen {
     private TextFieldWidget passwordField;
     private ButtonWidget setButton;
 
-    public ProxyEntryEditScreen(Screen parent, @Nullable ProxyEntry option) {
+    private final Runnable callback;
+
+    public ProxyEntryEditScreen(Screen parent, @Nullable ProxyEntry option, @Nullable Runnable callback) {
         super(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY));
         this.parent = parent;
         this.option = option;
+        this.callback = callback;
     }
 
     @Override
@@ -108,6 +111,9 @@ public class ProxyEntryEditScreen extends Screen {
 
     @Override
     public void close() {
+        if (Objects.nonNull(this.callback)) {
+            this.callback.run();
+        }
         this.client.setScreen(this.parent);
     }
 
