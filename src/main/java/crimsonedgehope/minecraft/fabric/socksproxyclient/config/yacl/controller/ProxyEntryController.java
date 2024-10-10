@@ -10,16 +10,16 @@ import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.ControllerWidget;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
+import org.apache.logging.log4j.util.TriConsumer;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.net.InetSocketAddress;
-import java.util.function.BiConsumer;
 
 public class ProxyEntryController implements Controller<ProxyEntry> {
     private final Option<ProxyEntry> option;
-    private final BiConsumer<YACLScreen, ProxyEntry> action;
+    private final TriConsumer<YACLScreen, ProxyEntry, Runnable> action;
 
-    public ProxyEntryController(Option<ProxyEntry> option, BiConsumer<YACLScreen, ProxyEntry> action) {
+    public ProxyEntryController(Option<ProxyEntry> option, TriConsumer<YACLScreen, ProxyEntry, Runnable> action) {
         this.option = option;
         this.action = action;
     }
@@ -29,7 +29,7 @@ public class ProxyEntryController implements Controller<ProxyEntry> {
         return option;
     }
 
-    public BiConsumer<YACLScreen, ProxyEntry> action() {
+    public TriConsumer<YACLScreen, ProxyEntry, Runnable> action() {
         return action;
     }
 
@@ -45,7 +45,7 @@ public class ProxyEntryController implements Controller<ProxyEntry> {
     }
 
     public void setEntry(ProxyEntry entry) {
-        option.requestSet(entry);
+        option().requestSet(entry);
     }
 
     @Override
@@ -72,8 +72,7 @@ public class ProxyEntryController implements Controller<ProxyEntry> {
                     e0.getCredential().getUsername(),
                     e0.getCredential().getPassword());
             playDownSound();
-            control.action().accept(screen, e1);
-            control.setEntry(e1);
+            control.action().accept(screen, e1, () -> control.setEntry(e1));
             buttonString = control.formatValue().getString().toLowerCase();
         }
 
@@ -117,7 +116,7 @@ public class ProxyEntryController implements Controller<ProxyEntry> {
     }
 
     @ApiStatus.Internal
-    public static ProxyEntryController createInternal(Option<ProxyEntry> option, BiConsumer<YACLScreen, ProxyEntry> action) {
+    public static ProxyEntryController createInternal(Option<ProxyEntry> option, TriConsumer<YACLScreen, ProxyEntry, Runnable> action) {
         return new ProxyEntryController(option, action);
     }
 }

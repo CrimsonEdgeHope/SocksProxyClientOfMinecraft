@@ -22,9 +22,7 @@ public final class SocksApply {
     private static final Logger LOGGER = SocksProxyClient.logger("Connect");
 
     public static void info(@NotNull List<ProxyEntry> proxies, @NotNull InetSocketAddress remote) {
-        if (Objects.isNull(remote.getHostString())) {
-            throw new IllegalArgumentException();
-        }
+        Objects.requireNonNull(remote.getHostString());
         if (proxies.isEmpty()) {
             LOGGER.info("[Direct] -> [Remote] {}:{}", remote.getHostString(), remote.getPort());
             return;
