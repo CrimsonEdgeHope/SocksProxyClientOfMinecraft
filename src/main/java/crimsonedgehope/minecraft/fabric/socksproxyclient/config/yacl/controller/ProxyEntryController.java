@@ -18,14 +18,10 @@ import java.util.function.BiConsumer;
 public class ProxyEntryController implements Controller<ProxyEntry> {
     private final Option<ProxyEntry> option;
     private final BiConsumer<YACLScreen, ProxyEntry> action;
-    private final Text text;
 
     public ProxyEntryController(Option<ProxyEntry> option, BiConsumer<YACLScreen, ProxyEntry> action) {
         this.option = option;
         this.action = action;
-        InetSocketAddress sa = (InetSocketAddress) option().pendingValue().getProxy().address();
-        this.text = Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_EDIT,
-                sa.getHostString() + ":" + sa.getPort());
     }
 
     @Override
@@ -39,7 +35,9 @@ public class ProxyEntryController implements Controller<ProxyEntry> {
 
     @Override
     public Text formatValue() {
-        return text;
+        InetSocketAddress sa = (InetSocketAddress) getEntry().getProxy().address();
+        return Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_EDIT,
+                sa.getHostString() + ":" + sa.getPort());
     }
 
     public ProxyEntry getEntry() {
@@ -56,7 +54,7 @@ public class ProxyEntryController implements Controller<ProxyEntry> {
     }
 
     public static class ProxyEntryControllerElement extends ControllerWidget<ProxyEntryController> {
-        private final String buttonString;
+        private String buttonString;
 
         public ProxyEntryControllerElement(ProxyEntryController control, YACLScreen screen, Dimension<Integer> dim) {
             super(control, screen, dim);
@@ -76,6 +74,7 @@ public class ProxyEntryController implements Controller<ProxyEntry> {
             playDownSound();
             control.action().accept(screen, e1);
             control.setEntry(e1);
+            buttonString = control.formatValue().getString().toLowerCase();
         }
 
         @Override

@@ -3,7 +3,8 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.networ
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.netty.ChannelInitializerAccessor;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.ClientConnectionProxySelection;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksApply;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksUtils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -35,7 +36,7 @@ public class MultiplayerServerListPingerMixin {
             @Override
             protected void initChannel(Channel ch) throws Exception {
                 ((ChannelInitializerAccessor) initializer).invokeInitChannel(ch);
-                ClientConnectionProxySelection.fire(remote, ch.pipeline());
+                SocksApply.fire(remote, ch.pipeline());
             }
         });
         return original.call(instance, inetHost, inetPort);
