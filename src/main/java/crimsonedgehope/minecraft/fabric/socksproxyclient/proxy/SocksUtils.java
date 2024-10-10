@@ -3,11 +3,10 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.ProxyEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.SocksProxyClientConfig;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.ProxyEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.proxy.Socks4ProxyHandler;
 import io.netty.handler.proxy.Socks5ProxyHandler;
@@ -23,11 +22,11 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
@@ -36,39 +35,18 @@ import java.util.concurrent.TimeUnit;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SocksUtils {
-    public static ChannelHandler getHandler(
-            @NotNull SocksVersion socksVersion,
-            @NotNull InetSocketAddress address,
-            @NotNull Credential credential
-    ) {
-        return switch (socksVersion) {
-            case SOCKS4 -> new Socks4ProxyHandler(address, credential.getUsername());
-            case SOCKS5 -> new Socks5ProxyHandler(address, credential.getUsername(), credential.getPassword());
-        };
-    }
-
-    public static Socks5ProxyHandler getSocks5ProxyHandler(@NotNull InetSocketAddress address, @NotNull Credential credential) {
-        return (Socks5ProxyHandler) getHandler(SocksVersion.SOCKS5, address, credential);
-    }
-
-    public static Socks4ProxyHandler getSocks4ProxyHandler(@NotNull InetSocketAddress address, @NotNull Credential credential) {
-        return (Socks4ProxyHandler) getHandler(SocksVersion.SOCKS4, address, credential);
-    }
-
-    public static void applySocks5ProxyHandler(
+    public static void apply(
             @NotNull ChannelPipeline pipeline,
-            @NotNull InetSocketAddress address,
-            @NotNull Credential credential
+            @NotNull List<ProxyEntry> entries
     ) {
-        pipeline.addFirst(getSocks5ProxyHandler(address, credential));
-    }
 
-    public static void applySocks4ProxyHandler(
-            @NotNull ChannelPipeline pipeline,
-            @NotNull InetSocketAddress address,
-            @NotNull Credential credential
-    ) {
-        pipeline.addFirst(getSocks4ProxyHandler(address, credential));
+        for (int i = entries.size() - 1; i >= 0; --i) {
+            ProxyEntry entry = entries.get(i);
+            switch (entry.getVersion()) {
+                case SOCKS4 -> pipeline.addFirst("spc-socks4-" + i, new Socks4ProxyHandler(entry.getProxy().address(), entry.getCredential().getUsername()));
+                case SOCKS5 -> pipeline.addFirst("spc-socks5-" + i, new Socks5ProxyHandler(entry.getProxy().address(), entry.getCredential().getUsername(), entry.getCredential().getPassword()));
+            }
+        }
     }
 
     private static final ScheduledExecutorService schedules = Executors.newScheduledThreadPool(1);

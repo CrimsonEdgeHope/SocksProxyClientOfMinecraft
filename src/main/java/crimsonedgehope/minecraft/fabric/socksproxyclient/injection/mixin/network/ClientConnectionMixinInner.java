@@ -2,7 +2,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.networ
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.ClientConnectionProxySelection;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksApply;
 import io.netty.channel.ChannelPipeline;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -16,6 +16,6 @@ public class ClientConnectionMixinInner {
     @WrapOperation(method = "initChannel", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ClientConnection;addFlowControlHandler(Lio/netty/channel/ChannelPipeline;)V"))
     private void wrapped(ClientConnection instance, ChannelPipeline pipeline, Operation<Void> original) {
         original.call(instance, pipeline);
-        ClientConnectionProxySelection.fire(instance, pipeline);
+        SocksApply.fire(instance, pipeline);
     }
 }
