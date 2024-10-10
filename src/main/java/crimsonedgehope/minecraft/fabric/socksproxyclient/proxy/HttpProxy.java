@@ -199,18 +199,7 @@ public class HttpProxy {
                                 if (GeneralConfig.getProxyEntry().isEmpty()) {
                                     channel.pipeline().addFirst(new ChannelDuplexHandler());
                                 } else {
-                                    for (ProxyEntry entry : GeneralConfig.getProxyEntry()) {
-                                        switch (entry.getVersion()) {
-                                            case SOCKS4 -> {
-                                                LOGGER.debug("http - Socks4. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
-                                                SocksUtils.applySocks4ProxyHandler(channel.pipeline(), (InetSocketAddress) entry.getProxy().address(), entry.getCredential());
-                                            }
-                                            case SOCKS5 -> {
-                                                LOGGER.debug("http - Socks5. Remote: {}:{}", remoteHttpHost, remoteHttpPort);
-                                                SocksUtils.applySocks5ProxyHandler(channel.pipeline(), (InetSocketAddress) entry.getProxy().address(), entry.getCredential());
-                                            }
-                                        }
-                                    }
+                                    SocksApply.fire(InetSocketAddress.createUnresolved(remoteHttpHost, remoteHttpPort), channel.pipeline(), true);
                                 }
                             }
                         })
