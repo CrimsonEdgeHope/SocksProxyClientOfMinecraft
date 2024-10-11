@@ -7,7 +7,7 @@
   "socksproxyclient.config.general.tooltip": "Configuration of SOCKS proxy to use",
   "socksproxyclient.config.general.useProxy": "Use proxy",
   "socksproxyclient.config.general.proxy": "Socks Proxy",
-  "socksproxyclient.config.general.proxies": "Socks Proxies",
+  "socksproxyclient.config.general.proxies": "Socks proxy chain",
   "socksproxyclient.config.general.proxies.tooltip": "A chain of proxies to use.\nAssume you have 3 proxies PA, PB, PC, chain of Client-->PA-->PB-->PC-->Target server, PA being 1st hop, PB 2nd, PC 3rd, put PA on top of this list, PB follows, lastly PC.",
   "socksproxyclient.config.general.proxy.socksVersion": "SOCKS proxy version",
   "socksproxyclient.config.general.proxy.proxyAddress": "Proxy address",
