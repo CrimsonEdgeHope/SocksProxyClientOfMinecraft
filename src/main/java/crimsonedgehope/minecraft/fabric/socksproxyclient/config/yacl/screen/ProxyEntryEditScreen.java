@@ -28,9 +28,9 @@ public class ProxyEntryEditScreen extends Screen {
     private final Screen parent;
 
     @Nullable
-    private ProxyEntry option;
+    private ProxyEntry entry;
 
-    private CyclingButtonWidget<?> selectVersionButton;
+    private CyclingButtonWidget<Object> setSocksVersionButton;
     /* Host and port */
     private TextFieldWidget proxyAddressField;
     private TextFieldWidget usernameField;
@@ -39,10 +39,10 @@ public class ProxyEntryEditScreen extends Screen {
 
     private final Runnable callback;
 
-    public ProxyEntryEditScreen(Screen parent, @Nullable ProxyEntry option, @Nullable Runnable callback) {
+    public ProxyEntryEditScreen(Screen parent, @Nullable ProxyEntry entry, @Nullable Runnable callback) {
         super(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY));
         this.parent = parent;
-        this.option = option;
+        this.entry = entry;
         this.callback = callback;
     }
 
@@ -53,8 +53,8 @@ public class ProxyEntryEditScreen extends Screen {
         this.proxyAddressField.setMaxLength(262);
         String p = "";
         this.proxyAddressField.setText(p);
-        if (Objects.nonNull(option)) {
-            InetSocketAddress sa = (InetSocketAddress) option.getProxy().address();
+        if (Objects.nonNull(entry)) {
+            InetSocketAddress sa = (InetSocketAddress) entry.getProxy().address();
             if (Objects.nonNull(sa.getHostString())) {
                 p = sa.getHostString() + ":" + sa.getPort();
             }
@@ -66,23 +66,24 @@ public class ProxyEntryEditScreen extends Screen {
         this.usernameField = new TextFieldWidget(this.textRenderer, this.width / 2 - 100, 86, 200, 20,
                 Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_USERNAME));
         this.usernameField.setMaxLength(255);
-        this.usernameField.setText(Objects.isNull(option) ? "" : option.getCredential().getUsername());
+        this.usernameField.setText(Objects.isNull(entry) ? "" : entry.getCredential().getUsername());
         this.addSelectableChild(this.usernameField);
 
         this.passwordField = new TextFieldWidget(this.textRenderer, this.width / 2 - 100, 126, 200, 20,
                 Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PASSWORD));
         this.passwordField.setMaxLength(255);
         this.passwordField.setRenderTextProvider((string, firstCharacterIndex) -> Text.of(new StringBuilder().repeat("*", string.length()).toString()).asOrderedText());
-        this.passwordField.setText(Objects.isNull(option) ? "" : option.getCredential().getPassword());
+        this.passwordField.setText(Objects.isNull(entry) ? "" : entry.getCredential().getPassword());
         this.addSelectableChild(this.passwordField);
 
-        this.selectVersionButton = this.addDrawableChild(CyclingButtonWidget.builder(o -> Text.literal(o.toString())).values((Object[]) SocksVersion.values())
+        this.setSocksVersionButton = this.addDrawableChild(CyclingButtonWidget.builder(o -> Text.literal(o.toString())).values((Object[]) SocksVersion.values())
                 .initially(SocksVersion.SOCKS5).build(this.width / 2 - 100, this.height / 4 + 92 + 18, 200, 20,
                         Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_SOCKSVERSION),
                         (button, socksVersion) -> {
-                            option.setVersion((SocksVersion) socksVersion);
+                            entry.setVersion((SocksVersion) socksVersion);
                             this.passwordField.active = !socksVersion.equals(SocksVersion.SOCKS4);
                         }));
+        this.setSocksVersionButton.setValue(Objects.nonNull(entry) ? entry.getVersion() : SocksVersion.SOCKS5);
 
         this.setButton = this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, button -> setAndClose())
                 .dimensions(this.width / 2 - 100, this.height / 4 + 116 + 18, 200, 20).build());
@@ -131,16 +132,16 @@ public class ProxyEntryEditScreen extends Screen {
 
     private void setAndClose() {
         HostAndPort hostAndPort = HostAndPort.fromString(this.proxyAddressField.getText());
-        if (Objects.isNull(option)) {
-            option = new ProxyEntry(
-                    (SocksVersion) this.selectVersionButton.getValue(),
+        if (Objects.isNull(entry)) {
+            entry = new ProxyEntry(
+                    (SocksVersion) this.setSocksVersionButton.getValue(),
                     InetSocketAddress.createUnresolved(hostAndPort.getHost(), hostAndPort.getPort()),
                     this.usernameField.getText(),
                     this.passwordField.getText());
         } else {
-            option.setVersion((SocksVersion) this.selectVersionButton.getValue());
-            option.setProxy(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(hostAndPort.getHost(), hostAndPort.getPort())));
-            option.setCredential(new Credential(this.usernameField.getText(), this.passwordField.getText()));
+            entry.setVersion((SocksVersion) this.setSocksVersionButton.getValue());
+            entry.setProxy(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(hostAndPort.getHost(), hostAndPort.getPort())));
+            entry.setCredential(new Credential(this.usernameField.getText(), this.passwordField.getText()));
         }
         this.close();
     }
