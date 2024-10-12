@@ -72,7 +72,7 @@ public class ProxyEntryEditScreen extends Screen {
         this.passwordField = new TextFieldWidget(this.textRenderer, this.width / 2 - 100, 126, 200, 20,
                 Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PASSWORD));
         this.passwordField.setMaxLength(255);
-        this.passwordField.setRenderTextProvider((string, firstCharacterIndex) -> Text.of(new StringBuilder().repeat("*", string.length()).toString()).asOrderedText());
+        this.passwordField.setRenderTextProvider((string, firstCharacterIndex) -> Text.of("*".repeat(string.length())).asOrderedText());
         this.passwordField.setText(Objects.isNull(entry) ? "" : entry.getCredential().getPassword());
         this.addSelectableChild(this.passwordField);
 
@@ -92,11 +92,6 @@ public class ProxyEntryEditScreen extends Screen {
                 .dimensions(this.width / 2 - 100, this.height / 4 + 140 + 18, 200, 20).build());
 
         this.updateSetButton();
-    }
-
-    @Override
-    protected void setInitialFocus() {
-        this.setInitialFocus(this.proxyAddressField);
     }
 
     @Override
