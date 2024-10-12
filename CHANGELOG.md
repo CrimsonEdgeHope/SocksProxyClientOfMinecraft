@@ -14,6 +14,21 @@
 
 ### Security
 
+## [10.1.0-alpha+1.21.1]
+
+### Added
+
+- Proxy chaining (#1).
+- Button of testing proxy connectivity.
+
+### Changed
+
+- Use FabricLoader no lower than 0.15.11
+- Use [YACL](https://modrinth.com/mod/yacl/) instead of Cloth Config.
+- Split config into 3 categories.
+- Translate keys.
+- Internal refactor.
+
 ## [10.0.0-alpha+1.21.1]
 
 ### Changed
@@ -96,7 +111,8 @@
 - Convert SOCKS proxy to HTTP(S) proxy. Proxy communications with Mojang Yggdrasil auth service, player skin download endpoint, and server resource pack downloading.
 - Remotely resolve Minecraft server's domain name through SOCKS proxy with the help of [DNS over HTTPS (DoH)](https://www.rfc-editor.org/rfc/rfc8484)
 
-[Unreleased]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v10.0.0-alpha+1.21.1...HEAD
+[Unreleased]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v10.1.0-alpha+1.21.1...HEAD
+[10.1.0-alpha+1.21.1]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v10.0.0-alpha+1.21.1...v10.1.0-alpha+1.21.1
 [10.0.0-alpha+1.21.1]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.3.1-alpha+1.21...v10.0.0-alpha+1.21.1
 [0.3.1-alpha+1.21]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.3.0-alpha+1.20.6...v0.3.1-alpha+1.21
 [0.3.0-alpha+1.20.6]: https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/compare/v0.2.1-alpha+1.20.4...v0.3.0-alpha+1.20.6
