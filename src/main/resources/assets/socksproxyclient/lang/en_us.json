@@ -46,5 +46,8 @@
   "socksproxyclient.config.server.advanced.imposeProxyOnMinecraftLoopback": "Impose proxy on Minecraft servers on loopback address",
   "socksproxyclient.config.server.advanced.imposeProxyOnMinecraftLoopback.tooltip": "Mostly you don't need to enable this at all.",
 
-  "socksproxyclient.config.miscellaneous": "Miscellaneous settings"
+  "socksproxyclient.config.miscellaneous": "Miscellaneous settings",
+  "socksproxyclient.config.miscellaneous.buttonInMultiplayerScreen": "Show config button in multiplayer screen",
+
+  "socksproxyclient.screen.config": "Open SocksProxyClient config"
 }

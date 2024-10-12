@@ -22,7 +22,9 @@
     "network.ClientConnectionMixinInner",
     "network.HandshakeC2SPacketAccessor",
     "network.MultiplayerServerListPingerMixinInner",
-    "screen.ConnectScreenMixinInner"
+    "screen.ConnectScreenMixinInner",
+    "screen.MultiplayerScreenMixin",
+    "screen.ScreenAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
