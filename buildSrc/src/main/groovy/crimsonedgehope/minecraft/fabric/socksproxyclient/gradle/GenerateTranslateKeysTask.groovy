@@ -17,6 +17,11 @@ abstract class GenerateTranslateKeysTask extends DefaultTask {
     @Input String outputDir
     @Input String packageTarget
 
+    GenerateTranslateKeysTask() {
+        group = Tasks.GROUP
+        description = "Generate translate keys. All keys in accordance with en_us.json"
+    }
+
     @TaskAction
     void generate() throws Exception {
         final FileReader reader = new FileReader(inputFile)
