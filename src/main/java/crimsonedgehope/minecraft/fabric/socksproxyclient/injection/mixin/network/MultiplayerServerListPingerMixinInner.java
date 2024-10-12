@@ -1,6 +1,6 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.network;
 
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.ClientConnectionProxySelection;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksApply;
 import io.netty.channel.Channel;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -30,6 +30,6 @@ public class MultiplayerServerListPingerMixinInner {
             remap = false
     )
     private void injected(Channel channel, CallbackInfo ci) {
-        ClientConnectionProxySelection.fire(inetSocketAddress, channel.pipeline());
+        SocksApply.fire(inetSocketAddress, channel.pipeline());
     }
 }
