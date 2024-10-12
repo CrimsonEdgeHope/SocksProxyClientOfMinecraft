@@ -1,6 +1,6 @@
 {
   "modmenu.nameTranslation.socksproxyclient": "SocksProxyClient",
-  "modmenu.descriptionTranslation.socksproxyclient": "Use SOCKS proxy to connect to Minecraft server.",
+  "modmenu.descriptionTranslation.socksproxyclient": "Use SOCKS proxy to connect to Minecraft server.\n\nCompiled with Java ${compilation_java_version}. (${git_hash})",
 
   "socksproxyclient.config": "SocksProxyClient config",
   "socksproxyclient.config.general": "General settings",
