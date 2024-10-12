@@ -23,7 +23,6 @@ base {
 }
 
 java {
-	withSourcesJar()
 	sourceCompatibility = JavaVersion.VERSION_17
 	targetCompatibility = JavaVersion.VERSION_17
 }
@@ -31,11 +30,6 @@ java {
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = 17
 	it.options.encoding = "UTF-8"
-}
-
-sourcesJar {
-	archiveClassifier.set("sources")
-	from sourceSets.main.allSource
 }
 
 shadowJar {
@@ -86,6 +80,8 @@ tasks.register("generateTranslateKeys", GenerateTranslateKeysTask) {
 compileJava.dependsOn generateTranslateKeys
 compileJava.mustRunAfter generateTranslateKeys
 
+processResources.dependsOn "projectGitHash"
+processResources.mustRunAfter "projectGitHash"
 processResources {
 	filesMatching("fabric.mod.json") {
 		expand([
