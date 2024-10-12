@@ -9,6 +9,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CyclingButtonWidget;
@@ -95,6 +96,11 @@ public class ProxyEntryEditScreen extends Screen {
     }
 
     @Override
+    protected void setInitialFocus(Element element) {
+        this.setFocused(this.proxyAddressField);
+    }
+
+    @Override
     public void resize(MinecraftClient client, int width, int height) {
         String string = this.proxyAddressField.getText();
         String string2 = this.usernameField.getText();
@@ -115,7 +121,7 @@ public class ProxyEntryEditScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
+        this.renderBackground(context);
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 17, 16777215);
         context.drawTextWithShadow(this.textRenderer, Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PROXYADDRESS), this.width / 2 - 100 + 1, 33, 10526880);
         context.drawTextWithShadow(this.textRenderer, Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_USERNAME), this.width / 2 - 100 + 1, 74, 10526880);
@@ -123,6 +129,7 @@ public class ProxyEntryEditScreen extends Screen {
         this.proxyAddressField.render(context, mouseX, mouseY, delta);
         this.usernameField.render(context, mouseX, mouseY, delta);
         this.passwordField.render(context, mouseX, mouseY, delta);
+        super.render(context, mouseX, mouseY, delta);
     }
 
     private void setAndClose() {
