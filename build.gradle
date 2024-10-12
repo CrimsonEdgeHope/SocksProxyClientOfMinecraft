@@ -4,11 +4,11 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.gradle.Tasks
 import java.nio.file.Paths
 
 plugins {
-	id "fabric-loom" version "1.6-SNAPSHOT"
+	id "fabric-loom" version "1.7-SNAPSHOT"
 	id "java-library"
 	id "com.github.johnrengelman.shadow" version "8.1.1"
 	id "org.jetbrains.changelog" version "2.2.0"
-	id "com.modrinth.minotaur" version "2.+"
+	id "com.modrinth.minotaur" version "2.8.7"
 	id "com.matthewprenger.cursegradle" version "1.4.0"
 }
 apply plugin: Tasks
