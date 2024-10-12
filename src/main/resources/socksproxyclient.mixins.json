@@ -8,7 +8,6 @@
     "client.AuthlibMinecraftClientMixin",
     "client.HttpAuthenticationServiceMixin",
     "client.MainMixin",
-    "client.MinecraftClientMixin",
     "client.MojangBlockListSupplierMixin",
     "client.PlayerSkinTextureMixin",
     "client.RealmsClientConfigMixin",
