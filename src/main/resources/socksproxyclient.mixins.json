@@ -22,9 +22,7 @@
     "network.AllowedAddressResolverMixin",
     "network.ClientConnectionMixin",
     "network.ClientConnectionMixinInner",
-    "network.MultiplayerServerListPingerMixin",
-    "screen.MultiplayerScreenMixin",
-    "screen.ScreenAccessor"
+    "network.MultiplayerServerListPingerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
