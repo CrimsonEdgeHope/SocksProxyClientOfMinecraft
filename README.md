@@ -7,6 +7,8 @@
 &nbsp;[![CurseForge Downloads](https://img.shields.io/curseforge/dt/1034471?style=for-the-badge&logo=curseforge&color=blue)](https://www.curseforge.com/minecraft/mc-mods/socksproxyclient)
 &nbsp;[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/CrimsonEdgeHope/SocksProxyClientOfMinecraft/total?style=for-the-badge&logo=github&color=blue)](https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/releases)
 
+[![Discord](https://img.shields.io/discord/1295373558981197887?style=for-the-badge&logo=discord&labelColor=000000&color=blue)](https://discord.gg/bnR4zTEFuq)
+
 Modern Minecraft Java client relies on Netty to connect to multiplayer servers,
 and this simple mod is able to proxy Minecraft game traffic through designated SOCKS proxy as desired.
 
