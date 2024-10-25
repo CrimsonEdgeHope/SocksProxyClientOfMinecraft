@@ -11,6 +11,7 @@ import net.minecraft.text.Text;
 final class MiscellaneousCategory extends YACLCategory<MiscellaneousConfig> {
 
     SocksProxyClientConfigEntry<Boolean> buttonsInMultiplayerScreen;
+    SocksProxyClientConfigEntry<Boolean> checkUpdates;
 
     MiscellaneousCategory(YACLAccess yacl) {
         super(yacl, MiscellaneousConfig.class);
@@ -28,6 +29,14 @@ final class MiscellaneousCategory extends YACLCategory<MiscellaneousConfig> {
                 .binding(buttonsInMultiplayerScreen.getDefaultValue(), buttonsInMultiplayerScreen::getValue, buttonsInMultiplayerScreen::setValue)
                 .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter().coloured(true))
                 .build();
+        checkUpdates = entryField("checkUpdates", Boolean.class);
+        Option<Boolean> yaclButtonsCheckUpdates = Option.<Boolean>createBuilder()
+                .name(checkUpdates.getEntryTranslateKey())
+                .binding(checkUpdates.getDefaultValue(), checkUpdates::getValue, checkUpdates::setValue)
+                .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter().coloured(true))
+                .build();
+
+        categoryBuilder.option(yaclButtonsCheckUpdates);
         categoryBuilder.option(yaclButtonsInMultiplayerScreen);
 
         return categoryBuilder.build();

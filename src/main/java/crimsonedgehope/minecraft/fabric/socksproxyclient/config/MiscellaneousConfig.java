@@ -26,6 +26,10 @@ public final class MiscellaneousConfig extends SocksProxyClientConfig {
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "buttonsInMultiplayerScreen",
                     Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_MISCELLANEOUS_BUTTONINMULTIPLAYERSCREEN),
                     true);
+    private static final SocksProxyClientConfigEntry<Boolean> checkUpdates =
+            new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "checkUpdates",
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_MISCELLANEOUS_CHECKUPDATES),
+                    true);
 
     private MiscellaneousConfig() {
         super(CATEGORY + ".json");
@@ -35,22 +39,29 @@ public final class MiscellaneousConfig extends SocksProxyClientConfig {
     public JsonObject defaultEntries() {
         JsonObject obj = new JsonObject();
         obj.addProperty(buttonsInMultiplayerScreen.getJsonEntry(), buttonsInMultiplayerScreen.getDefaultValue());
+        obj.addProperty(checkUpdates.getJsonEntry(), checkUpdates.getDefaultValue());
         return obj;
     }
 
     @Override
     public void fromJsonObject(JsonObject entries) {
         buttonsInMultiplayerScreen.setValue(entries.get(buttonsInMultiplayerScreen.getJsonEntry()).getAsBoolean());
+        checkUpdates.setValue(entries.get(checkUpdates.getJsonEntry()).getAsBoolean());
     }
 
     @Override
     public JsonObject toJsonObject() {
         JsonObject obj = new JsonObject();
         obj.addProperty(buttonsInMultiplayerScreen.getJsonEntry(), buttonsInMultiplayerScreen.getValue());
+        obj.addProperty(checkUpdates.getJsonEntry(), checkUpdates.getValue());
         return obj;
     }
 
     public static boolean showButtonsInMultiplayerScreen() {
         return buttonsInMultiplayerScreen.getValue();
+    }
+
+    public static boolean shouldCheckUpdates() {
+        return checkUpdates.getValue();
     }
 }
