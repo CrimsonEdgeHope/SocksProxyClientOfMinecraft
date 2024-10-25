@@ -48,6 +48,7 @@
 
   "socksproxyclient.config.miscellaneous": "Miscellaneous settings",
   "socksproxyclient.config.miscellaneous.buttonInMultiplayerScreen": "Show config button in multiplayer screen",
+  "socksproxyclient.config.miscellaneous.checkUpdates": "Check updates",
 
   "socksproxyclient.screen.config": "Open SocksProxyClient config"
 }
