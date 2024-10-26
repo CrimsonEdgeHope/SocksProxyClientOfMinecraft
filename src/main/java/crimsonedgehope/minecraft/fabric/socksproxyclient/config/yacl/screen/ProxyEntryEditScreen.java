@@ -8,12 +8,12 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.CyclingButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
@@ -120,16 +120,16 @@ public class ProxyEntryEditScreen extends Screen {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 17, 16777215);
-        context.drawTextWithShadow(this.textRenderer, Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PROXYADDRESS), this.width / 2 - 100 + 1, 33, 10526880);
-        context.drawTextWithShadow(this.textRenderer, Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_USERNAME), this.width / 2 - 100 + 1, 74, 10526880);
-        context.drawTextWithShadow(this.textRenderer, Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PASSWORD), this.width / 2 - 100 + 1, 115, 10526880);
-        this.proxyAddressField.render(context, mouseX, mouseY, delta);
-        this.usernameField.render(context, mouseX, mouseY, delta);
-        this.passwordField.render(context, mouseX, mouseY, delta);
-        super.render(context, mouseX, mouseY, delta);
+    public void render(MatrixStack matrixStack, int mouseX, int mouseY, float delta) {
+        this.renderBackground(matrixStack);
+        drawCenteredTextWithShadow(matrixStack, this.textRenderer, this.title, this.width / 2, 17, 16777215);
+        drawTextWithShadow(matrixStack, this.textRenderer, Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PROXYADDRESS), this.width / 2 - 100 + 1, 33, 10526880);
+        drawTextWithShadow(matrixStack, this.textRenderer, Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_USERNAME), this.width / 2 - 100 + 1, 74, 10526880);
+        drawTextWithShadow(matrixStack, this.textRenderer, Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PASSWORD), this.width / 2 - 100 + 1, 115, 10526880);
+        this.proxyAddressField.render(matrixStack, mouseX, mouseY, delta);
+        this.usernameField.render(matrixStack, mouseX, mouseY, delta);
+        this.passwordField.render(matrixStack, mouseX, mouseY, delta);
+        super.render(matrixStack, mouseX, mouseY, delta);
     }
 
     private void setAndClose() {
