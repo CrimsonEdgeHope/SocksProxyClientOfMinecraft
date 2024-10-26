@@ -57,7 +57,7 @@ dependencies {
 		exclude(group: "net.fabricmc")
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	modApi("dev.isxander:yet-another-config-lib:${project.yacl_version}") {
+	modApi("dev.isxander:yet-another-config-lib:${project.yacl_version}-for-1.19.2") {
 		exclude(group: "net.fabricmc")
 		exclude(group: "net.fabricmc.fabric-api")
 	}

@@ -86,11 +86,8 @@ public class ProxyEntryEditScreen extends Screen {
                         }));
         this.setSocksVersionButton.setValue(Objects.nonNull(entry) ? entry.getVersion() : SocksVersion.SOCKS5);
 
-        this.setButton = this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, button -> setAndClose())
-                .dimensions(this.width / 2 - 100, this.height / 4 + 116 + 18, 200, 20).build());
-
-        this.addDrawableChild(ButtonWidget.builder(ScreenTexts.CANCEL, button -> this.close())
-                .dimensions(this.width / 2 - 100, this.height / 4 + 140 + 18, 200, 20).build());
+        this.setButton = this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height / 4 + 116 + 18, 200, 20, ScreenTexts.DONE, button -> setAndClose()));
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height / 4 + 140 + 18, 200, 20, ScreenTexts.CANCEL, button -> this.close()));
 
         this.updateSetButton();
     }

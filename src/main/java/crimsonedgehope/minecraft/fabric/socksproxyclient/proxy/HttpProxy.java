@@ -31,6 +31,7 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.resolver.NoopAddressResolverGroup;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import lombok.Getter;
@@ -207,7 +208,7 @@ public class HttpProxy {
                         .option(ChannelOption.SO_KEEPALIVE, true);
                 LOGGER.debug("noResolver: {}", noResolver);
                 if (noResolver) {
-                    b = b.disableResolver();
+                    b = b.resolver(NoopAddressResolverGroup.INSTANCE);
                 }
                 ChannelFuture future = b.connect(remoteHttpHost, remoteHttpPort);
                 future.addListener(f -> {
