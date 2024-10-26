@@ -74,7 +74,7 @@ final class ServerCategory extends YACLCategory<ServerConfig> {
         Option<DOHProvider> yaclMinecraftDomainNameResolutionDohProvider = Option.<DOHProvider>createBuilder()
                 .name(minecraftDomainNameResolutionDohProvider.getEntryTranslateKey())
                 .binding(minecraftDomainNameResolutionDohProvider.getDefaultValue(), minecraftDomainNameResolutionDohProvider::getValue, minecraftDomainNameResolutionDohProvider::setValue)
-                .controller(opt -> EnumControllerBuilder.create(opt).enumClass(DOHProvider.class).formatValue(v -> Text.literal(v.displayName)))
+                .controller(opt -> EnumControllerBuilder.create(opt).enumClass(DOHProvider.class).valueFormatter(v -> Text.literal(v.displayName)))
                 .available(proxyMinecraft.getValue())
                 .build();
 
