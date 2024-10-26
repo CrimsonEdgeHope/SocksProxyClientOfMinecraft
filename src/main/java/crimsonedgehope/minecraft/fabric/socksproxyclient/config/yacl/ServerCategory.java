@@ -2,15 +2,14 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.SocksProxyClientConfigEntry;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.controller.ValidStringControllerBuilder;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.controller.ValidStringController;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.DOHProvider;
-import dev.isxander.yacl3.api.ConfigCategory;
-import dev.isxander.yacl3.api.Option;
-import dev.isxander.yacl3.api.OptionDescription;
-import dev.isxander.yacl3.api.OptionGroup;
-import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
-import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
+import dev.isxander.yacl.api.ConfigCategory;
+import dev.isxander.yacl.api.Option;
+import dev.isxander.yacl.api.OptionGroup;
+import dev.isxander.yacl.gui.controllers.BooleanController;
+import dev.isxander.yacl.gui.controllers.cycling.EnumController;
 import net.minecraft.text.Text;
 
 final class ServerCategory extends YACLCategory<ServerConfig> {
@@ -41,11 +40,11 @@ final class ServerCategory extends YACLCategory<ServerConfig> {
                 .tooltip(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_TOOLTIP));
 
         proxyMinecraft = entryField("proxyMinecraft", Boolean.class);
-        Option<Boolean> yaclProxyMinecraft = Option.<Boolean>createBuilder()
+        Option<Boolean> yaclProxyMinecraft = Option.createBuilder(Boolean.class)
                 .name(proxyMinecraft.getEntryTranslateKey())
-                .description(OptionDescription.of(proxyMinecraft.getDescriptionTranslateKey()))
+                .tooltip(proxyMinecraft.getDescriptionTranslateKey())
                 .binding(proxyMinecraft.getDefaultValue(), proxyMinecraft::getValue, proxyMinecraft::setValue)
-                .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter().coloured(true))
+                .controller(opt -> new BooleanController(opt, BooleanController.YES_NO_FORMATTER, true))
                 .build();
         categoryBuilder.option(yaclProxyMinecraft);
 
@@ -53,36 +52,36 @@ final class ServerCategory extends YACLCategory<ServerConfig> {
         groupMinecraftServerDomainName.name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTDOMAINNAMERESOLUTION));
 
         minecraftDomainNameResolutionUseProxy = entryField("minecraftDomainNameResolutionUseProxy", Boolean.class);
-        Option<Boolean> yaclMinecraftDomainNameResolutionUseProxy = Option.<Boolean>createBuilder()
+        Option<Boolean> yaclMinecraftDomainNameResolutionUseProxy = Option.createBuilder(Boolean.class)
                 .name(minecraftDomainNameResolutionUseProxy.getEntryTranslateKey())
-                .description(OptionDescription.of(minecraftDomainNameResolutionUseProxy.getDescriptionTranslateKey()))
+                .tooltip(minecraftDomainNameResolutionUseProxy.getDescriptionTranslateKey())
                 .binding(minecraftDomainNameResolutionUseProxy.getDefaultValue(), minecraftDomainNameResolutionUseProxy::getValue, minecraftDomainNameResolutionUseProxy::setValue)
                 .available(proxyMinecraft.getValue())
-                .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter().coloured(true))
+                .controller(opt -> new BooleanController(opt, BooleanController.YES_NO_FORMATTER, true))
                 .build();
 
         minecraftDomainNameResolutionDismissSystemHosts = entryField("minecraftDomainNameResolutionDismissSystemHosts", Boolean.class);
-        Option<Boolean> yaclMinecraftDomainNameResolutionDismissSystemHosts = Option.<Boolean>createBuilder()
+        Option<Boolean> yaclMinecraftDomainNameResolutionDismissSystemHosts = Option.createBuilder(Boolean.class)
                 .name(minecraftDomainNameResolutionDismissSystemHosts.getEntryTranslateKey())
-                .description(OptionDescription.of(minecraftDomainNameResolutionDismissSystemHosts.getDescriptionTranslateKey()))
+                .tooltip((minecraftDomainNameResolutionDismissSystemHosts.getDescriptionTranslateKey()))
                 .binding(minecraftDomainNameResolutionDismissSystemHosts.getDefaultValue(), minecraftDomainNameResolutionDismissSystemHosts::getValue, minecraftDomainNameResolutionDismissSystemHosts::setValue)
                 .available(proxyMinecraft.getValue())
-                .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter().coloured(true))
+                .controller(opt -> new BooleanController(opt, BooleanController.YES_NO_FORMATTER, true))
                 .build();
 
         minecraftDomainNameResolutionDohProvider = entryField("minecraftDomainNameResolutionDohProvider", DOHProvider.class);
-        Option<DOHProvider> yaclMinecraftDomainNameResolutionDohProvider = Option.<DOHProvider>createBuilder()
+        Option<DOHProvider> yaclMinecraftDomainNameResolutionDohProvider = Option.createBuilder(DOHProvider.class)
                 .name(minecraftDomainNameResolutionDohProvider.getEntryTranslateKey())
                 .binding(minecraftDomainNameResolutionDohProvider.getDefaultValue(), minecraftDomainNameResolutionDohProvider::getValue, minecraftDomainNameResolutionDohProvider::setValue)
-                .controller(opt -> EnumControllerBuilder.create(opt).enumClass(DOHProvider.class).valueFormatter(v -> Text.literal(v.displayName)))
+                .controller(opt -> new EnumController<>(opt, v -> Text.literal(v.displayName)))
                 .available(proxyMinecraft.getValue())
                 .build();
 
         minecraftDomainNameResolutionDohProviderUrl = entryField("minecraftDomainNameResolutionDohProviderUrl", String.class);
-        Option<String> yaclMinecraftDomainNameResolutionDohProviderUrl = Option.<String>createBuilder()
+        Option<String> yaclMinecraftDomainNameResolutionDohProviderUrl = Option.createBuilder(String.class)
                 .name(minecraftDomainNameResolutionDohProviderUrl.getEntryTranslateKey())
                 .binding(minecraftDomainNameResolutionDohProviderUrl.getDefaultValue(), minecraftDomainNameResolutionDohProviderUrl::getValue, minecraftDomainNameResolutionDohProviderUrl::setValue)
-                .controller(opt -> ValidStringControllerBuilder.create(opt).validityPredication(s -> s.startsWith("https://")))
+                .controller(opt -> new ValidStringController(opt, s -> s.startsWith("https://")))
                 .available(proxyMinecraft.getValue())
                 .build();
 
@@ -104,39 +103,39 @@ final class ServerCategory extends YACLCategory<ServerConfig> {
         groupServices.name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_SERVICES));
 
         proxyYggdrasil = entryField("proxyYggdrasil", Boolean.class);
-        Option<Boolean> yaclProxyYggdrasil = Option.<Boolean>createBuilder()
+        Option<Boolean> yaclProxyYggdrasil = Option.createBuilder(Boolean.class)
                 .name(proxyYggdrasil.getEntryTranslateKey())
-                .description(OptionDescription.of(proxyYggdrasil.getDescriptionTranslateKey()))
+                .tooltip((proxyYggdrasil.getDescriptionTranslateKey()))
                 .binding(proxyYggdrasil.getDefaultValue(), proxyYggdrasil::getValue, proxyYggdrasil::setValue)
-                .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter().coloured(true))
+                .controller(opt -> new BooleanController(opt, BooleanController.YES_NO_FORMATTER, true))
                 .build();
         proxyPlayerSkinDownload = entryField("proxyPlayerSkinDownload", Boolean.class);
-        Option<Boolean> yaclProxyPlayerSkinDownload = Option.<Boolean>createBuilder()
+        Option<Boolean> yaclProxyPlayerSkinDownload = Option.createBuilder(Boolean.class)
                 .name(proxyPlayerSkinDownload.getEntryTranslateKey())
-                .description(OptionDescription.of(proxyPlayerSkinDownload.getDescriptionTranslateKey()))
+                .tooltip((proxyPlayerSkinDownload.getDescriptionTranslateKey()))
                 .binding(proxyPlayerSkinDownload.getDefaultValue(), proxyPlayerSkinDownload::getValue, proxyPlayerSkinDownload::setValue)
-                .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter().coloured(true))
+                .controller(opt -> new BooleanController(opt, BooleanController.YES_NO_FORMATTER, true))
                 .build();
         proxyServerResourceDownload = entryField("proxyServerResourceDownload", Boolean.class);
-        Option<Boolean> yaclProxyServerResourceDownload = Option.<Boolean>createBuilder()
+        Option<Boolean> yaclProxyServerResourceDownload = Option.createBuilder(Boolean.class)
                 .name(proxyServerResourceDownload.getEntryTranslateKey())
-                .description(OptionDescription.of(proxyServerResourceDownload.getDescriptionTranslateKey()))
+                .tooltip((proxyServerResourceDownload.getDescriptionTranslateKey()))
                 .binding(proxyServerResourceDownload.getDefaultValue(), proxyServerResourceDownload::getValue, proxyServerResourceDownload::setValue)
-                .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter().coloured(true))
+                .controller(opt -> new BooleanController(opt, BooleanController.YES_NO_FORMATTER, true))
                 .build();
         proxyBlockListSupplier = entryField("proxyBlockListSupplier", Boolean.class);
-        Option<Boolean> yaclProxyBlockListSupplier = Option.<Boolean>createBuilder()
+        Option<Boolean> yaclProxyBlockListSupplier = Option.createBuilder(Boolean.class)
                 .name(proxyBlockListSupplier.getEntryTranslateKey())
-                .description(OptionDescription.of(proxyBlockListSupplier.getDescriptionTranslateKey()))
+                .tooltip((proxyBlockListSupplier.getDescriptionTranslateKey()))
                 .binding(proxyBlockListSupplier.getDefaultValue(), proxyBlockListSupplier::getValue, proxyBlockListSupplier::setValue)
-                .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter().coloured(true))
+                .controller(opt -> new BooleanController(opt, BooleanController.YES_NO_FORMATTER, true))
                 .build();
         httpRemoteResolve = entryField("httpRemoteResolve", Boolean.class);
-        Option<Boolean> yaclHttpRemoteResolve = Option.<Boolean>createBuilder()
+        Option<Boolean> yaclHttpRemoteResolve = Option.createBuilder(Boolean.class)
                 .name(httpRemoteResolve.getEntryTranslateKey())
-                .description(OptionDescription.of(httpRemoteResolve.getDescriptionTranslateKey()))
+                .tooltip((httpRemoteResolve.getDescriptionTranslateKey()))
                 .binding(httpRemoteResolve.getDefaultValue(), httpRemoteResolve::getValue, httpRemoteResolve::setValue)
-                .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter().coloured(true))
+                .controller(opt -> new BooleanController(opt, BooleanController.YES_NO_FORMATTER, true))
                 .build();
 
         groupServices.option(yaclProxyYggdrasil)
@@ -151,11 +150,11 @@ final class ServerCategory extends YACLCategory<ServerConfig> {
         groupAdvanced.name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_ADVANCED));
 
         imposeProxyOnMinecraftLoopback = entryField("imposeProxyOnMinecraftLoopback", Boolean.class);
-        Option<Boolean> yaclImposeProxyOnMinecraftLoopback = Option.<Boolean>createBuilder()
+        Option<Boolean> yaclImposeProxyOnMinecraftLoopback = Option.createBuilder(Boolean.class)
                 .name(imposeProxyOnMinecraftLoopback.getEntryTranslateKey())
-                .description(OptionDescription.of(imposeProxyOnMinecraftLoopback.getDescriptionTranslateKey()))
+                .tooltip((imposeProxyOnMinecraftLoopback.getDescriptionTranslateKey()))
                 .binding(imposeProxyOnMinecraftLoopback.getDefaultValue(), imposeProxyOnMinecraftLoopback::getValue, imposeProxyOnMinecraftLoopback::setValue)
-                .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter().coloured(true))
+                .controller(opt -> new BooleanController(opt, BooleanController.YES_NO_FORMATTER, true))
                 .build();
         groupAdvanced.option(yaclImposeProxyOnMinecraftLoopback);
 

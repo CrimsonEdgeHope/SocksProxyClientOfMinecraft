@@ -33,7 +33,7 @@
   },
   "recommends": {
     "fabric-api": "*",
-    "yet_another_config_lib_v3": "^${yacl_version}"
+    "yet-another-config-lib": "^${yacl_version}"
   },
   "suggests": {
     "modmenu": "^${modmenu_version}"
