@@ -1,7 +1,7 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.controller;
 
-import dev.isxander.yacl3.api.Option;
-import dev.isxander.yacl3.gui.controllers.string.StringController;
+import dev.isxander.yacl.api.Option;
+import dev.isxander.yacl.gui.controllers.string.StringController;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Objects;

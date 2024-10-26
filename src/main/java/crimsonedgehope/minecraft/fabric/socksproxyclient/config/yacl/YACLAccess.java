@@ -1,6 +1,6 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl;
 
-import dev.isxander.yacl3.api.YetAnotherConfigLib;
+import dev.isxander.yacl.api.YetAnotherConfigLib;
 import lombok.Getter;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

@@ -96,7 +96,7 @@ public class ProxyEntryEditScreen extends Screen {
     }
 
     @Override
-    protected void setInitialFocus(Element element) {
+    public void setInitialFocus(Element element) {
         this.setFocused(this.proxyAddressField);
     }
 
@@ -122,7 +122,7 @@ public class ProxyEntryEditScreen extends Screen {
     @Override
     public void render(MatrixStack matrixStack, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrixStack);
-        drawCenteredTextWithShadow(matrixStack, this.textRenderer, this.title, this.width / 2, 17, 16777215);
+        drawCenteredTextWithShadow(matrixStack, this.textRenderer, this.title.asOrderedText(), this.width / 2, 17, 16777215);
         drawTextWithShadow(matrixStack, this.textRenderer, Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PROXYADDRESS), this.width / 2 - 100 + 1, 33, 10526880);
         drawTextWithShadow(matrixStack, this.textRenderer, Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_USERNAME), this.width / 2 - 100 + 1, 74, 10526880);
         drawTextWithShadow(matrixStack, this.textRenderer, Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PASSWORD), this.width / 2 - 100 + 1, 115, 10526880);

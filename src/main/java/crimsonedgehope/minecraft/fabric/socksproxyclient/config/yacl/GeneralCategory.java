@@ -3,18 +3,18 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.ProxyEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.SocksProxyClientConfigEntry;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.controller.ProxyEntryControllerBuilder;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.controller.ProxyEntryController;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.screen.ProxyEntryEditScreen;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksUtils;
-import dev.isxander.yacl3.api.ButtonOption;
-import dev.isxander.yacl3.api.ConfigCategory;
-import dev.isxander.yacl3.api.ListOption;
-import dev.isxander.yacl3.api.Option;
-import dev.isxander.yacl3.api.OptionDescription;
-import dev.isxander.yacl3.api.OptionFlag;
-import dev.isxander.yacl3.api.OptionGroup;
-import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
+import dev.isxander.yacl.api.ButtonOption;
+import dev.isxander.yacl.api.ConfigCategory;
+import dev.isxander.yacl.api.ListOption;
+import dev.isxander.yacl.api.Option;
+import dev.isxander.yacl.api.OptionFlag;
+import dev.isxander.yacl.api.OptionGroup;
+import dev.isxander.yacl.gui.controllers.ActionController;
+import dev.isxander.yacl.gui.controllers.BooleanController;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
@@ -37,10 +37,10 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
                 .tooltip(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_TOOLTIP));
 
         useProxy = entryField("useProxy", Boolean.class);
-        Option<Boolean> yaclUseProxy = Option.<Boolean>createBuilder()
+        Option<Boolean> yaclUseProxy = Option.createBuilder(Boolean.class)
                 .name(useProxy.getEntryTranslateKey())
                 .binding(useProxy.getDefaultValue(), useProxy::getValue, useProxy::setValue)
-                .controller(opt -> BooleanControllerBuilder.create(opt).yesNoFormatter().coloured(true))
+                .controller(opt -> new BooleanController(opt, BooleanController.YES_NO_FORMATTER, true))
                 .flag(OptionFlag.GAME_RESTART)
                 .build();
         categoryBuilder.option(yaclUseProxy);
@@ -49,16 +49,15 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
                 .name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY));
 
         proxies = entryField("proxies", List.class);
-        ListOption<ProxyEntry> yaclProxies = ListOption.<ProxyEntry>createBuilder()
+        ListOption<ProxyEntry> yaclProxies = ListOption.createBuilder(ProxyEntry.class)
                 .name(proxies.getEntryTranslateKey())
-                .description(OptionDescription.of(proxies.getDescriptionTranslateKey()))
+                .tooltip(proxies.getDescriptionTranslateKey())
                 .initial((ProxyEntry) proxies.getDefaultValue().get(0))
                 .binding((List<ProxyEntry>) proxies.getDefaultValue(), proxies::getValue, proxies::setValue)
                 .collapsed(false)
-                .controller(opt -> ProxyEntryControllerBuilder.create((Option<ProxyEntry>) opt).action((screen, entry, callback) -> {
+                .controller(opt -> new ProxyEntryController((Option<ProxyEntry>) opt, (screen, entry, callback) -> {
                     MinecraftClient.getInstance().setScreen(new ProxyEntryEditScreen(screen, entry, callback));
                 }))
-                .insertEntriesAtEnd(true)
                 .flag(OptionFlag.GAME_RESTART)
                 .available(useProxy.getValue())
                 .build();
@@ -67,9 +66,10 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
 
         ButtonOption yaclTestReachability = ButtonOption.createBuilder()
                 .name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST))
-                .description(OptionDescription.of(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST_TOOLTIP)))
+                .tooltip(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST_TOOLTIP))
                 .available(true)
                 .action((screen, opt) -> SocksUtils.testReachability())
+                .controller(opt -> new ActionController(opt))
                 .available(useProxy.getValue())
                 .build();
 

@@ -2,12 +2,12 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.controller
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.ProxyEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
-import dev.isxander.yacl3.api.Controller;
-import dev.isxander.yacl3.api.Option;
-import dev.isxander.yacl3.api.utils.Dimension;
-import dev.isxander.yacl3.gui.AbstractWidget;
-import dev.isxander.yacl3.gui.YACLScreen;
-import dev.isxander.yacl3.gui.controllers.ControllerWidget;
+import dev.isxander.yacl.api.Controller;
+import dev.isxander.yacl.api.Option;
+import dev.isxander.yacl.api.utils.Dimension;
+import dev.isxander.yacl.gui.AbstractWidget;
+import dev.isxander.yacl.gui.YACLScreen;
+import dev.isxander.yacl.gui.controllers.ControllerWidget;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import org.apache.logging.log4j.util.TriConsumer;
