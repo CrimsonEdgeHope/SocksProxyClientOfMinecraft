@@ -16,11 +16,20 @@
 
 ## [5.0.0-alpha+1.19.4]
 
+### Added
+
+- Proxy chaining (#1).
+- Button of testing proxy connectivity.
+
 ### Changed
 
 - Port to Minecraft 1.19.4
+- Use FabricLoader no lower than 0.15.11
+- Use [YACL](https://modrinth.com/mod/yacl/) instead of Cloth Config.
+- Split config into 3 categories.
+- Translate keys.
 - Bump version number.
-- Internal patch.
+- Internal refactor.
 
 ## [0.0.7-alpha+1.20]
 
