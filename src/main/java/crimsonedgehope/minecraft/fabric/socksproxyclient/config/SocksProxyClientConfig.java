@@ -8,6 +8,8 @@ import com.google.gson.stream.JsonReader;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.SocksProxyClientConfigEntry;
 import lombok.Getter;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 
@@ -25,9 +27,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+@Environment(EnvType.CLIENT)
 public abstract class SocksProxyClientConfig {
 
-    public static final Logger LOGGER = SocksProxyClient.logger("Config");
+    public static final Logger LOGGER = SocksProxyClient.getLogger("Config");
 
     protected static Path configPathDir() {
         Path path = FabricLoader.getInstance().getConfigDir().resolve("socksproxyclient");

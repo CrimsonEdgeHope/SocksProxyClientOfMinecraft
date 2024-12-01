@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Environment(EnvType.CLIENT)
 @Mixin(ChannelInitializer.class)
-public interface ChannelInitializerAccessor<C extends Channel> {
+public interface AccessorChannelInitializer<C extends Channel> {
     @Invoker(value = "initChannel", remap = false)
     void invokeInitChannel(C ch);
 }

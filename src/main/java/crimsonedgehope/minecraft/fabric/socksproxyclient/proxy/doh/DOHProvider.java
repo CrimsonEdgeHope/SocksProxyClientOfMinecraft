@@ -1,5 +1,12 @@
-package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
+package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.doh;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+@Environment(EnvType.CLIENT)
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public enum DOHProvider {
     CLOUDFLARE("Cloudflare", "https://cloudflare-dns.com/dns-query"),
     GOOGLE("Google", "https://dns.google/dns-query"),
@@ -12,18 +19,4 @@ public enum DOHProvider {
 
     public final String displayName;
     public final String url;
-
-    DOHProvider(String displayName, String url) {
-        this.displayName = displayName;
-        this.url = url;
-    }
-
-    public static DOHProvider byDisplayName(String v) {
-        for (DOHProvider provider : DOHProvider.values()) {
-            if (provider.displayName.equals(v)) {
-                return provider;
-            }
-        }
-        return null;
-    }
 }

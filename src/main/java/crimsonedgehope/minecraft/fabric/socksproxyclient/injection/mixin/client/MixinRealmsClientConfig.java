@@ -1,6 +1,6 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.client;
 
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyUtils;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.http.HttpProxyUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.realms.RealmsClientConfig;
@@ -13,7 +13,7 @@ import java.net.Proxy;
 
 @Environment(EnvType.CLIENT)
 @Mixin(RealmsClientConfig.class)
-public class RealmsClientConfigMixin {
+public class MixinRealmsClientConfig {
     @Redirect(
             method = "getProxy",
             at = @At(value = "FIELD", target = "Lnet/minecraft/client/realms/RealmsClientConfig;proxy:Ljava/net/Proxy;",

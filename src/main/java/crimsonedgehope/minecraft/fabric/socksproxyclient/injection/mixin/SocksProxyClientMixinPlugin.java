@@ -21,7 +21,7 @@ import java.util.Set;
 @Environment(EnvType.CLIENT)
 public class SocksProxyClientMixinPlugin implements IMixinConfigPlugin {
 
-    private static final Logger LOGGER = SocksProxyClient.logger("Mixin");
+    private static final Logger LOGGER = SocksProxyClient.getLogger("Mixin");
 
     private boolean viaFabricPlusLive;
 
@@ -52,7 +52,7 @@ public class SocksProxyClientMixinPlugin implements IMixinConfigPlugin {
         boolean ret = true;
 
         if (viaFabricPlusLive) {
-            if (mixinClassName.equals(pac + ".network.MultiplayerServerListPingerMixin")) {
+            if (mixinClassName.equals(pac + ".network.MixinMultiplayerServerListPinger")) {
                 ret = false;
             }
             if (!ret) {

@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Environment(EnvType.CLIENT)
 @Mixin(Screen.class)
-public interface ScreenAccessor {
+public interface AccessorScreen {
     @Accessor
     MinecraftClient getClient();
 

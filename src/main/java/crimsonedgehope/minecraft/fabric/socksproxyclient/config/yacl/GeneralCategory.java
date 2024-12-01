@@ -6,7 +6,7 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.SocksProxy
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.controller.ProxyEntryControllerBuilder;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.screen.ProxyEntryEditScreen;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksUtils;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.socks.SocksUtils;
 import dev.isxander.yacl3.api.ButtonOption;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.ListOption;

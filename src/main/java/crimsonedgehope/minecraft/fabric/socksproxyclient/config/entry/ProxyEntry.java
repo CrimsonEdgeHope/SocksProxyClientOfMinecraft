@@ -1,7 +1,7 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry;
 
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.Credential;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.socks.SocksProxyCredential;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.socks.SocksVersion;
 import lombok.Getter;
 import lombok.Setter;
 import net.fabricmc.api.EnvType;
@@ -22,20 +22,20 @@ public class ProxyEntry {
     private SocksVersion version;
 
     @NotNull @Setter
-    private Credential credential;
+    private SocksProxyCredential socksProxyCredential;
 
     public ProxyEntry(@NotNull SocksVersion version, InetSocketAddress sa) {
         this(version, sa, null, null);
     }
 
     public ProxyEntry(@NotNull SocksVersion version, InetSocketAddress sa, @Nullable String username, @Nullable String password) {
-        this(version, sa, new Credential(username, password));
+        this(version, sa, new SocksProxyCredential(username, password));
     }
 
-    public ProxyEntry(@NotNull SocksVersion version, InetSocketAddress sa, @NotNull Credential credential) {
+    public ProxyEntry(@NotNull SocksVersion version, InetSocketAddress sa, @NotNull SocksProxyCredential socksProxyCredential) {
         this.proxy = new Proxy(Proxy.Type.SOCKS, sa);
         this.version = version;
-        this.credential = credential;
+        this.socksProxyCredential = socksProxyCredential;
     }
 
     public void setProxy(Proxy proxy) {
@@ -70,8 +70,8 @@ public class ProxyEntry {
             return false;
         }
 
-        Credential c0 = this.getCredential();
-        Credential c1 = entry.getCredential();
+        SocksProxyCredential c0 = this.getSocksProxyCredential();
+        SocksProxyCredential c1 = entry.getSocksProxyCredential();
 
         if (!compare(c0.getUsername(), c1.getUsername())) {
             return false;
@@ -97,7 +97,7 @@ public class ProxyEntry {
     public int hashCode() {
         int result = getProxy().hashCode();
         result = 31 * result + getVersion().hashCode();
-        result = 31 * result + getCredential().hashCode();
+        result = 31 * result + getSocksProxyCredential().hashCode();
         return result;
     }
 }

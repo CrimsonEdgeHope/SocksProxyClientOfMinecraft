@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Environment(EnvType.CLIENT)
 @Mixin(MultiplayerScreen.class)
-public class MultiplayerScreenMixin {
+public class MixinMultiplayerScreen {
     @Inject(method = "init",
             at = @At(
                     value = "INVOKE",
@@ -47,13 +47,13 @@ public class MultiplayerScreenMixin {
                 Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_SCREEN_CONFIG),
                 button -> {
                     try {
-                        ((ScreenAccessor) this).getClient().setScreen(YACLConfigScreen.getScreen((MultiplayerScreen) (Object) this));
+                        ((AccessorScreen) this).getClient().setScreen(YACLConfigScreen.getScreen((MultiplayerScreen) (Object) this));
                     } catch (Exception e) {
-                        SocksProxyClient.logger(this.getClass().getSimpleName()).error("Where's my config screen?", e);
+                        SocksProxyClient.getLogger(this.getClass().getSimpleName()).error("Where's my config screen?", e);
                         button.active = false;
                     }
                 }).width(308).build();
-        ((ScreenAccessor) this).invokeAddDrawableChild(openConfigScreenButton);
+        ((AccessorScreen) this).invokeAddDrawableChild(openConfigScreenButton);
         axisGridWidget3.add(openConfigScreenButton);
         try {
             Class.forName("dev.isxander.yacl3.api.YetAnotherConfigLib");

@@ -1,6 +1,6 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.dns;
 
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyUtils;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.http.HttpProxyUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,7 +25,7 @@ import java.util.concurrent.Executor;
 
 @Environment(EnvType.CLIENT)
 @Mixin(DohResolver.class)
-public class DohResolverMixin {
+public class MixinDohResolver {
     @Inject(
             method = "lambda$getHttpClient$0",
             at = @At(

@@ -1,9 +1,11 @@
-package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
+package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.http;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.ProxyEntry;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.socks.SocksSelection;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.socks.SocksVersion;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
@@ -34,6 +36,8 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import lombok.Getter;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -41,12 +45,13 @@ import java.net.InetSocketAddress;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+@Environment(EnvType.CLIENT)
 @Getter
 public class HttpProxy {
 
     public static final HttpProxy INSTANCE;
 
-    private static final Logger LOGGER = SocksProxyClient.logger("HttpProxy");
+    private static final Logger LOGGER = SocksProxyClient.getLogger("HttpProxy");
 
     static {
         INSTANCE = new HttpProxy();
@@ -199,7 +204,7 @@ public class HttpProxy {
                                 if (GeneralConfig.getProxyEntry().isEmpty()) {
                                     channel.pipeline().addFirst(new ChannelDuplexHandler());
                                 } else {
-                                    SocksApply.fire(InetSocketAddress.createUnresolved(remoteHttpHost, remoteHttpPort), channel.pipeline(), true);
+                                    SocksSelection.fire(InetSocketAddress.createUnresolved(remoteHttpHost, remoteHttpPort), channel.pipeline(), true);
                                 }
                             }
                         })

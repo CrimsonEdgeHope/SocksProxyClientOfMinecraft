@@ -1,8 +1,6 @@
 import crimsonedgehope.minecraft.fabric.socksproxyclient.gradle.GenerateTranslateKeysTask
 import crimsonedgehope.minecraft.fabric.socksproxyclient.gradle.Tasks
 
-import java.nio.file.Paths
-
 plugins {
 	id "fabric-loom" version "1.8-SNAPSHOT"
 	id "java-library"
@@ -16,10 +14,12 @@ apply plugin: Tasks
 version = "${project.mod_version}+${project.minecraft_version}"
 group = project.maven_group
 
-apply from: Paths.get("properties.gradle").toString()
+apply from: new File(rootProject.rootDir, "properties.gradle").toPath().toString()
 
-base {
-	archivesName = project.archives_base_name
+repositories {
+	maven { url "https://maven.shedaniel.me/" }
+	maven { url "https://maven.terraformersmc.com/releases/" }
+	maven { url "https://maven.isxander.dev/releases" }
 }
 
 java {
@@ -32,21 +32,8 @@ tasks.withType(JavaCompile).configureEach {
 	it.options.encoding = "UTF-8"
 }
 
-shadowJar {
-	configurations = [ project.configurations.shadow ]
-	archiveClassifier.set("SHADOW")
-}
-
-remapJar {
-	dependsOn(shadowJar)
-	inputFile = tasks.shadowJar.archiveFile
-	archiveClassifier.set("SNAPSHOT")
-}
-
-repositories {
-	maven { url "https://maven.shedaniel.me/" }
-	maven { url "https://maven.terraformersmc.com/releases/" }
-	maven { url "https://maven.isxander.dev/releases" }
+base {
+	archivesName = project.archives_base_name
 }
 
 dependencies {
@@ -102,6 +89,17 @@ processResources {
 				git_hash: project.ext.git_short_hash
 		])
 	}
+}
+
+shadowJar {
+	configurations = [project.configurations.shadow]
+	archiveClassifier.set("SHADOW")
+}
+
+remapJar {
+	dependsOn(shadowJar)
+	inputFile = tasks.shadowJar.archiveFile
+	archiveClassifier.set("SNAPSHOT")
 }
 
 changelog {

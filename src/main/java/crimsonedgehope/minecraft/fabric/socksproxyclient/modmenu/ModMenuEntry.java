@@ -31,7 +31,7 @@ public final class ModMenuEntry implements ModMenuApi {
 
     private static final String MODRINTH = "https://modrinth.com/mod/socksproxyclient";
     private static final String METADATA_URL = "https://garment.warpedinnether.top/socksproxyclient";
-    private static final Logger LOGGER = SocksProxyClient.logger("UpdateChecker");
+    private static final Logger LOGGER = SocksProxyClient.getLogger("UpdateChecker");
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {

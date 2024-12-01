@@ -3,8 +3,8 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.screen;
 import com.google.common.net.HostAndPort;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.ProxyEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.Credential;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.socks.SocksProxyCredential;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.socks.SocksVersion;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -66,14 +66,14 @@ public class ProxyEntryEditScreen extends Screen {
         this.usernameField = new TextFieldWidget(this.textRenderer, this.width / 2 - 100, 86, 200, 20,
                 Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_USERNAME));
         this.usernameField.setMaxLength(255);
-        this.usernameField.setText(Objects.isNull(entry) ? "" : entry.getCredential().getUsername());
+        this.usernameField.setText(Objects.isNull(entry) ? "" : entry.getSocksProxyCredential().getUsername());
         this.addSelectableChild(this.usernameField);
 
         this.passwordField = new TextFieldWidget(this.textRenderer, this.width / 2 - 100, 126, 200, 20,
                 Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PASSWORD));
         this.passwordField.setMaxLength(255);
         this.passwordField.setRenderTextProvider((string, firstCharacterIndex) -> Text.of(new StringBuilder().repeat("*", string.length()).toString()).asOrderedText());
-        this.passwordField.setText(Objects.isNull(entry) ? "" : entry.getCredential().getPassword());
+        this.passwordField.setText(Objects.isNull(entry) ? "" : entry.getSocksProxyCredential().getPassword());
         this.addSelectableChild(this.passwordField);
 
         this.setSocksVersionButton = this.addDrawableChild(CyclingButtonWidget.builder(o -> Text.literal(o.toString())).values((Object[]) SocksVersion.values())
@@ -141,7 +141,7 @@ public class ProxyEntryEditScreen extends Screen {
         } else {
             entry.setVersion((SocksVersion) this.setSocksVersionButton.getValue());
             entry.setProxy(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(hostAndPort.getHost(), hostAndPort.getPort())));
-            entry.setCredential(new Credential(this.usernameField.getText(), this.passwordField.getText()));
+            entry.setSocksProxyCredential(new SocksProxyCredential(this.usernameField.getText(), this.passwordField.getText()));
         }
         this.close();
     }
