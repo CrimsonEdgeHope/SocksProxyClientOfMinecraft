@@ -2,7 +2,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.client
 
 import com.mojang.patchy.MojangBlockListSupplier;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyUtils;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.http.HttpProxyUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,7 +15,7 @@ import java.net.URLConnection;
 
 @Environment(EnvType.CLIENT)
 @Mixin(MojangBlockListSupplier.class)
-public class MojangBlockListSupplierMixin {
+public class MixinMojangBlockListSupplier {
     @Redirect(
             method = "createBlockList",
             at = @At(value = "INVOKE", target = "Ljava/net/URL;openConnection()Ljava/net/URLConnection;"),

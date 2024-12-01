@@ -1,14 +1,14 @@
-package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
+package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.socks;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.GeneralConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.ProxyEntry;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.injection.access.IClientConnectionMixin;
 import io.netty.channel.ChannelPipeline;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import net.minecraft.network.ClientConnection;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -17,9 +17,10 @@ import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Objects;
 
+@Environment(EnvType.CLIENT)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class SocksApply {
-    private static final Logger LOGGER = SocksProxyClient.logger("Connect");
+public final class SocksSelection {
+    private static final Logger LOGGER = SocksProxyClient.getLogger("Connect");
 
     public static void info(@NotNull List<ProxyEntry> proxies, @NotNull InetSocketAddress remote) {
         Objects.requireNonNull(remote.getHostString());
@@ -30,17 +31,12 @@ public final class SocksApply {
         StringBuilder builder = new StringBuilder();
         for (ProxyEntry entry : proxies) {
             builder.append(String.format("[%s] %s:%s -> ",
-                    entry.getVersion().desc,
+                    entry.getVersion().description,
                     ((InetSocketAddress) entry.getProxy().address()).getHostString(),
                     ((InetSocketAddress) entry.getProxy().address()).getPort()));
         }
         builder.append(String.format("[Remote] %s:%s", remote.getHostString(), remote.getPort()));
         LOGGER.info("{}", builder);
-    }
-
-    public static void fire(ClientConnection instance, ChannelPipeline pipeline) {
-        InetSocketAddress remote = ((IClientConnectionMixin) instance).socksProxyClient$getInetSocketAddress();
-        fire(remote, pipeline);
     }
 
     public static void fire(InetSocketAddress remote, ChannelPipeline pipeline) {

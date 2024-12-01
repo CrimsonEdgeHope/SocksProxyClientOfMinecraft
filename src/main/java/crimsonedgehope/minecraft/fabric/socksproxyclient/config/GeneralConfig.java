@@ -7,7 +7,7 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.ProxyEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.SocksProxyClientConfigEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.socks.SocksVersion;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.text.Text;
@@ -27,7 +27,7 @@ public final class GeneralConfig extends SocksProxyClientConfig {
         INSTANCE = new GeneralConfig();
     }
 
-    private static final Logger LOGGER = SocksProxyClient.logger(GeneralConfig.class.getSimpleName());
+    private static final Logger LOGGER = SocksProxyClient.getLogger(GeneralConfig.class.getSimpleName());
 
     public static final String CATEGORY = "general";
 
@@ -56,8 +56,8 @@ public final class GeneralConfig extends SocksProxyClientConfig {
             proxyObj.addProperty("version", entry.getVersion().name());
             proxyObj.addProperty("host", ((InetSocketAddress) entry.getProxy().address()).getHostString());
             proxyObj.addProperty("port", ((InetSocketAddress) entry.getProxy().address()).getPort());
-            proxyObj.addProperty("username", entry.getCredential().getUsername());
-            proxyObj.addProperty("password", entry.getCredential().getPassword());
+            proxyObj.addProperty("username", entry.getSocksProxyCredential().getUsername());
+            proxyObj.addProperty("password", entry.getSocksProxyCredential().getPassword());
             array.add(proxyObj);
         });
         obj.add(proxies.getJsonEntry(), array);
@@ -118,8 +118,8 @@ public final class GeneralConfig extends SocksProxyClientConfig {
             proxyObj.addProperty("version", entry.getVersion().name());
             proxyObj.addProperty("host", ((InetSocketAddress) entry.getProxy().address()).getHostString());
             proxyObj.addProperty("port", ((InetSocketAddress) entry.getProxy().address()).getPort());
-            proxyObj.addProperty("username", entry.getCredential().getUsername());
-            proxyObj.addProperty("password", entry.getCredential().getPassword());
+            proxyObj.addProperty("username", entry.getSocksProxyCredential().getUsername());
+            proxyObj.addProperty("password", entry.getSocksProxyCredential().getPassword());
             array.add(proxyObj);
         });
         obj.add(proxies.getJsonEntry(), array);

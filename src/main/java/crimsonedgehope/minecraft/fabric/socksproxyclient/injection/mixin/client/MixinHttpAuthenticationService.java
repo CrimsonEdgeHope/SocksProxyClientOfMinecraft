@@ -12,7 +12,7 @@ import java.net.Proxy;
 
 @Environment(EnvType.CLIENT)
 @Mixin(HttpAuthenticationService.class)
-public abstract class HttpAuthenticationServiceMixin {
+public abstract class MixinHttpAuthenticationService {
     @Redirect(method = "getProxy",
             at = @At(value = "FIELD", target = "Lcom/mojang/authlib/HttpAuthenticationService;proxy:Ljava/net/Proxy;", opcode = Opcodes.GETFIELD),
             remap = false

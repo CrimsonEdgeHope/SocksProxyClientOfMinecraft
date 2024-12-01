@@ -1,6 +1,6 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.client;
 
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyUtils;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.http.HttpProxyUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -16,7 +16,7 @@ import java.net.Proxy;
 
 @Environment(EnvType.CLIENT)
 @Mixin(MinecraftClient.class)
-public class MinecraftClientMixin {
+public class MixinMinecraftClientInstance {
     @Mutable
     @Shadow @Final private Proxy networkProxy;
 

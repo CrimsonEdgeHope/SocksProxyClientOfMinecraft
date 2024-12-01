@@ -2,7 +2,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.client
 
 import com.mojang.authlib.minecraft.client.MinecraftClient;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyUtils;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.http.HttpProxyUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.objectweb.asm.Opcodes;
@@ -17,7 +17,7 @@ import java.net.Proxy;
 
 @Environment(EnvType.CLIENT)
 @Mixin(MinecraftClient.class)
-public class AuthlibMinecraftClientMixin {
+public class MixinAuthlibMinecraftClient {
     @Shadow(remap = false) @Final @Mutable
     private Proxy proxy;
 

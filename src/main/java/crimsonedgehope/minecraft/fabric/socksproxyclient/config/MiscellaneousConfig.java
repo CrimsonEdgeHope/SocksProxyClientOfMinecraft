@@ -18,7 +18,7 @@ public final class MiscellaneousConfig extends SocksProxyClientConfig {
         INSTANCE = new MiscellaneousConfig();
     }
 
-    private static final Logger LOGGER = SocksProxyClient.logger(MiscellaneousConfig.class.getSimpleName());
+    private static final Logger LOGGER = SocksProxyClient.getLogger(MiscellaneousConfig.class.getSimpleName());
 
     public static final String CATEGORY = "miscellaneous";
 

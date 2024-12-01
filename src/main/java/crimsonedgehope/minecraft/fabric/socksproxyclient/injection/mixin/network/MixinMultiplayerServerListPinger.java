@@ -2,9 +2,8 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.networ
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.netty.ChannelInitializerAccessor;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksApply;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksUtils;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.netty.AccessorChannelInitializer;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.socks.SocksSelection;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -20,7 +19,7 @@ import java.net.InetSocketAddress;
 
 @Mixin(MultiplayerServerListPinger.class)
 @Environment(EnvType.CLIENT)
-public class MultiplayerServerListPingerMixin {
+public class MixinMultiplayerServerListPinger {
 
     @WrapOperation(method = "ping",
             at = @At(
@@ -35,8 +34,8 @@ public class MultiplayerServerListPingerMixin {
         instance.handler(new ChannelInitializer<>() {
             @Override
             protected void initChannel(Channel ch) throws Exception {
-                ((ChannelInitializerAccessor) initializer).invokeInitChannel(ch);
-                SocksApply.fire(remote, ch.pipeline());
+                ((AccessorChannelInitializer) initializer).invokeInitChannel(ch);
+                SocksSelection.fire(remote, ch.pipeline());
             }
         });
         return original.call(instance, inetHost, inetPort);

@@ -3,10 +3,13 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.SocksProxyClientConfigEntry;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
 
+@Environment(EnvType.CLIENT)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ConfigUtils {
 

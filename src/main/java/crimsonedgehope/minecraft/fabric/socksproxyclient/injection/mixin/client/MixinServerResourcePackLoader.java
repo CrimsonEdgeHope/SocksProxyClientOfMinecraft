@@ -1,7 +1,7 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.client;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyUtils;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.http.HttpProxyUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.resource.server.ServerResourcePackLoader;
@@ -13,7 +13,7 @@ import java.net.Proxy;
 
 @Environment(EnvType.CLIENT)
 @Mixin(ServerResourcePackLoader.class)
-public class ServerResourcePackLoaderMixin {
+public class MixinServerResourcePackLoader {
     @ModifyArg(
             method = "createDownloadQueuer",
             at = @At(

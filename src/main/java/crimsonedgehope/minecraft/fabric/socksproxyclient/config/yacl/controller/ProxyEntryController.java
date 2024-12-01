@@ -37,7 +37,7 @@ public class ProxyEntryController implements Controller<ProxyEntry> {
     public Text formatValue() {
         InetSocketAddress sa = (InetSocketAddress) getEntry().getProxy().address();
         return Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_EDIT,
-                getEntry().getVersion().desc, sa.getHostString() + ":" + sa.getPort());
+                getEntry().getVersion().description, sa.getHostString() + ":" + sa.getPort());
     }
 
     public ProxyEntry getEntry() {
@@ -69,8 +69,8 @@ public class ProxyEntryController implements Controller<ProxyEntry> {
                             ((InetSocketAddress) e0.getProxy().address()).getHostString(),
                             ((InetSocketAddress) e0.getProxy().address()).getPort()
                     ),
-                    e0.getCredential().getUsername(),
-                    e0.getCredential().getPassword());
+                    e0.getSocksProxyCredential().getUsername(),
+                    e0.getSocksProxyCredential().getPassword());
             playDownSound();
             control.action().accept(screen, e1, () -> control.setEntry(e1));
             buttonString = control.formatValue().getString().toLowerCase();

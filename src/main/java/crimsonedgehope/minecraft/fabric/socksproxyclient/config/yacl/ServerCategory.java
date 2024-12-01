@@ -4,7 +4,7 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.SocksProxyClientConfigEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl.controller.ValidStringControllerBuilder;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.DOHProvider;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.doh.DOHProvider;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;

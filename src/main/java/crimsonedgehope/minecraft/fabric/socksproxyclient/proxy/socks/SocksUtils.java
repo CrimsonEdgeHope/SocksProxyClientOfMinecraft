@@ -1,4 +1,4 @@
-package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
+package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.socks;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -6,11 +6,14 @@ import com.google.gson.JsonSyntaxException;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.SocksProxyClientConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.ProxyEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.http.HttpProxyUtils;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.proxy.Socks4ProxyHandler;
 import io.netty.handler.proxy.Socks5ProxyHandler;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.text.Text;
@@ -32,6 +35,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@Environment(EnvType.CLIENT)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SocksUtils {
     public static void apply(
@@ -42,8 +46,8 @@ public final class SocksUtils {
         for (int i = entries.size() - 1; i >= 0; --i) {
             ProxyEntry entry = entries.get(i);
             switch (entry.getVersion()) {
-                case SOCKS4 -> pipeline.addFirst("spc-socks4-" + i, new Socks4ProxyHandler(entry.getProxy().address(), entry.getCredential().getUsername()));
-                case SOCKS5 -> pipeline.addFirst("spc-socks5-" + i, new Socks5ProxyHandler(entry.getProxy().address(), entry.getCredential().getUsername(), entry.getCredential().getPassword()));
+                case SOCKS4 -> pipeline.addFirst("spc-socks4-" + i, new Socks4ProxyHandler(entry.getProxy().address(), entry.getSocksProxyCredential().getUsername()));
+                case SOCKS5 -> pipeline.addFirst("spc-socks5-" + i, new Socks5ProxyHandler(entry.getProxy().address(), entry.getSocksProxyCredential().getUsername(), entry.getSocksProxyCredential().getPassword()));
             }
         }
     }
@@ -99,7 +103,7 @@ public final class SocksUtils {
                     SocksProxyClientConfig.LOGGER.warn("{} is not responding.", target);
                 }
             } catch (JsonSyntaxException e) {
-                return new Pair<>(false, new RuntimeException(target + " sent back no json.", e));
+                return new Pair<>(true, new RuntimeException(target + " sent back no json.", e));
             } catch (IOException e) {
                 return new Pair<>(false, new RuntimeException("IO failure!!", e));
             }

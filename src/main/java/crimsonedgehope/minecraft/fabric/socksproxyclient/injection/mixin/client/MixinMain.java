@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Environment(EnvType.CLIENT)
 @Mixin(Main.class)
-public class MainMixin {
+public class MixinMain {
     @Inject(method = "main", at = @At(value = "HEAD"))
     private static void injected(String[] args, CallbackInfo ci) throws Exception {
         SocksProxyClient.preInit();

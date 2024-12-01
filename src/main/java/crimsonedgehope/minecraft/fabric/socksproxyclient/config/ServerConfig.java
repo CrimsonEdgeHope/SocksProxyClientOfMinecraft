@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.ProxyEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.SocksProxyClientConfigEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
-import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.DOHProvider;
+import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.doh.DOHProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.text.Text;
