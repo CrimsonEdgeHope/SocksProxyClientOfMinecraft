@@ -1,13 +1,9 @@
 # SocksProxyClient
 
-<h1>!!! This project won't be maintained anymore !!!</h1>
-
 Modern Minecraft Java client relies on Netty to connect to multiplayer servers,
 and this simple mod is able to proxy Minecraft game traffic through designated SOCKS proxy as desired.
 
 [![Modrinth Downloads](https://img.shields.io/modrinth/dt/PtUSravz?style=for-the-badge&logo=modrinth&color=blue)](https://modrinth.com/mod/socksproxyclient)
-&nbsp;[![CurseForge Downloads](https://img.shields.io/curseforge/dt/1034471?style=for-the-badge&logo=curseforge&color=blue)](https://www.curseforge.com/minecraft/mc-mods/socksproxyclient)
-&nbsp;[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/CrimsonEdgeHope/SocksProxyClientOfMinecraft/total?style=for-the-badge&logo=github&color=blue)](https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/releases)
 
 ## Features
 
@@ -27,11 +23,6 @@ and this simple mod is able to proxy Minecraft game traffic through designated S
 &nbsp;![Environment: Client](https://img.shields.io/badge/environment-client-1976d2?style=for-the-badge)
 
 Optional dependencies:
-- [Fabric API (Recommended)](https://modrinth.com/mod/fabric-api)
-- [Cloth Config API](https://modrinth.com/mod/cloth-config)
+- [Fabric API](https://modrinth.com/mod/fabric-api)
 - [YACL](https://modrinth.com/mod/yacl)
 - [ModMenu](https://modrinth.com/mod/modmenu)
-
-<u>**Starting from [v6.1.0-alpha+1.20.1](https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/releases/tag/v6.1.0-alpha%2B1.20.1), 
-[v10.1.0-alpha+1.21.1](https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft/releases/tag/v10.1.0-alpha%2B1.21.1), this mod
-uses YACL instead of Cloth Config API.**</u>
