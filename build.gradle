@@ -53,6 +53,9 @@ dependencies {
 		exclude(group: "org.slf4j")
 	})
 
+	testImplementation "net.fabricmc:fabric-loader-junit:${project.fabricloader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
 	compileOnly "org.projectlombok:lombok:${project.ext.lombok_version}"
 	annotationProcessor "org.projectlombok:lombok:${project.ext.lombok_version}"
 }
@@ -108,6 +111,10 @@ changelog {
 	})
 	combinePreReleases = false
 	repositoryUrl = "${github_repository}"
+}
+
+test {
+	useJUnitPlatform()
 }
 
 modrinth {
