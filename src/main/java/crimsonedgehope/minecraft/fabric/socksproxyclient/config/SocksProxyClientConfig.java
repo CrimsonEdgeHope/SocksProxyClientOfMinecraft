@@ -33,7 +33,7 @@ public abstract class SocksProxyClientConfig {
     public static final Logger LOGGER = SocksProxyClient.getLogger("Config");
 
     protected static Path configPathDir() {
-        Path path = FabricLoader.getInstance().getConfigDir().resolve("socksproxyclient");
+        Path path = FabricLoader.getInstance().getConfigDir().resolve(SocksProxyClient.ID);
         File file = path.toFile();
         if (!path.toFile().exists()) {
             file.mkdirs();
@@ -42,7 +42,7 @@ public abstract class SocksProxyClientConfig {
     }
 
     @Getter
-    private File configFile;
+    private final File configFile;
 
     protected SocksProxyClientConfig(String filename) {
         this(configPathDir().resolve(filename).toFile());
