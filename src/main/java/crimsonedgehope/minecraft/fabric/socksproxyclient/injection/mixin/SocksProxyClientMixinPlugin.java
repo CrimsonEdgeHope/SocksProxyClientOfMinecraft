@@ -36,6 +36,9 @@ public class SocksProxyClientMixinPlugin implements IMixinConfigPlugin {
         final ModMetadata viafabricplusMetadata = viafabricplus.get().getMetadata();
         try {
             viaFabricPlusLive = VersionComparisonOperator.GREATER_EQUAL.test(viafabricplusMetadata.getVersion(), Version.parse("3.0.0"));
+            if (viaFabricPlusLive) {
+                LOGGER.info("ViaFabricPlus detected");
+            }
         } catch (VersionParsingException e) {
             throw new Error(e);
         }
@@ -48,15 +51,12 @@ public class SocksProxyClientMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        final String pac = this.getClass().getPackageName();
         boolean ret = true;
 
         if (viaFabricPlusLive) {
-            if (mixinClassName.equals(pac + ".network.MixinMultiplayerServerListPinger")) {
+            if (mixinClassName.equals("crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.network.MixinMultiplayerServerListPinger")) {
                 ret = false;
-            }
-            if (!ret) {
-                LOGGER.warn("Dismiss some of our Mixins because of ViaFabricPlus to prevent crash!");
+                LOGGER.info("Dismiss MixinMultiplayerServerListPinger");
             }
         }
         return ret;
