@@ -5,6 +5,7 @@
   "name": "${mod_name}",
   "description": "Use SOCKS proxy to connect to Minecraft server.",
   "authors": [
+    "NorthRealm",
     "CrimsonEdgeHope"
   ],
   "license": "WTFPL",
