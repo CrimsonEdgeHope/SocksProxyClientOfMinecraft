@@ -15,10 +15,13 @@ import lombok.NoArgsConstructor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.MultiplayerServerListPinger;
+import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -52,20 +55,58 @@ public final class SocksUtils {
         }
     }
 
-    private static final ScheduledExecutorService schedules = Executors.newScheduledThreadPool(1);
+    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(10);
+    private static final MultiplayerServerListPinger pinger = new MultiplayerServerListPinger();
+    private static Long testTime = System.currentTimeMillis();
 
     static {
-        Runtime.getRuntime().addShutdownHook(new Thread(schedules::shutdown));
+        scheduler.scheduleAtFixedRate(pinger::tick, 0, 50L, TimeUnit.MILLISECONDS);
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            scheduler.shutdownNow();
+            pinger.cancel();
+        }));
     }
 
-    public static void testReachability() {
-        testReachability("https://api.mojang.com");
-        schedules.schedule(() -> {
-            testReachability("https://ipinfo.io");
-        }, 1, TimeUnit.SECONDS);
+    public static void test() {
+        if (System.currentTimeMillis() - testTime <= 5000L) {
+            SocksProxyClientConfig.LOGGER.warn("NO TEST SPAMMING");
+            return;
+        }
+        testTime = System.currentTimeMillis();
+        for (String url : new String[]{
+                "https://api.mojang.com",
+                "https://ipinfo.io",
+                "http://connectivitycheck.gstatic.com/generate_204"
+        }) {
+            scheduler.submit(() -> {
+                testHTTP(url);
+            });
+        }
+        for (String domain : new String[]{
+            "mc.hypixel.net",
+            "play.cubecraft.net"
+        }) {
+            scheduler.submit(() -> {
+                testMinecraftPing(domain);
+            });
+        }
     }
 
-    public static void testReachability(final String target) {
+    public static void testMinecraftPing(final String target) {
+        try {
+            showTestStart(target);
+            ServerInfo entry = new ServerInfo(target, target, ServerInfo.ServerType.OTHER);
+            pinger.add(entry, () -> {}, () -> {
+                showTestResult(new Pair<>(true, null), target);
+                SocksProxyClientConfig.LOGGER.info("Pinged {}. Ping {}ms - Version: {} - Protocol version: {} - Player count: {}",
+                        target, entry.ping, entry.version.getLiteralString(), entry.protocolVersion, entry.playerCountLabel.getString());
+            });
+        } catch (Exception e) {
+            showTestResult(new Pair<>(false, new RuntimeException("Failed to ping!", e)), target);
+        }
+    }
+
+    public static void testHTTP(final String target) {
         final CompletableFuture<Pair<Boolean, Throwable>> test = CompletableFuture.supplyAsync(() -> {
             try {
                 URL url = URI.create(target).toURL();
@@ -76,28 +117,25 @@ public final class SocksUtils {
                 }
 
                 final HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection(httpProxy);
-                SocksProxyClientConfig.LOGGER.info("Testing connection to {}", target);
-                MinecraftClient.getInstance().submit(() -> {
-                    SystemToast.show(MinecraftClient.getInstance().getToastManager(),
-                            new SystemToast.Type(),
-                            Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TESTING),
-                            Text.literal(target));
-                });
                 urlConnection.setConnectTimeout(com.mojang.authlib.minecraft.client.MinecraftClient.CONNECT_TIMEOUT_MS);
                 urlConnection.setReadTimeout(com.mojang.authlib.minecraft.client.MinecraftClient.READ_TIMEOUT_MS);
+                showTestStart(target);
                 int res = urlConnection.getResponseCode();
 
                 if (res != -1) {
-                    if (res == 200) {
+                    if (res == HttpStatus.SC_OK || res == HttpStatus.SC_NO_CONTENT) {
                         SocksProxyClientConfig.LOGGER.info("{} responded with {}", target, res);
                     } else {
-                        SocksProxyClientConfig.LOGGER.warn("{} responded with non-200: {}", target, res);
+                        SocksProxyClientConfig.LOGGER.warn("{} responded with {}", target, res);
                     }
-                    final InputStream inputStream = urlConnection.getInputStream();
-                    final String result = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
-                    final Gson gson = new Gson();
-                    final JsonObject jsonObject = gson.fromJson(result, JsonObject.class);
-                    SocksProxyClientConfig.LOGGER.info("{} response: {}", target, jsonObject.toString());
+                    if (res == HttpStatus.SC_OK) {
+                        final InputStream inputStream = urlConnection.getInputStream();
+                        final String result = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+                        final Gson gson = new Gson();
+                        final JsonObject jsonObject = gson.fromJson(result, JsonObject.class);
+                        SocksProxyClientConfig.LOGGER.info("{} response: {}", target, jsonObject.toString());
+                    }
+
                     urlConnection.disconnect();
                 } else {
                     SocksProxyClientConfig.LOGGER.warn("{} is not responding.", target);
@@ -109,23 +147,43 @@ public final class SocksUtils {
             }
             return new Pair<>(true, null);
         });
-        final CompletableFuture<Void> res = test.thenApplyAsync(v -> {
-            MinecraftClient.getInstance().submit(() -> {
-                MinecraftClient.getInstance().getToastManager().add(
-                        new SystemToast(new SystemToast.Type(3000L),
-                                Text.translatable(v.getLeft()
-                                        ? TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST_SUCCESS
-                                        : TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST_FAILURE
-                                ), Text.literal(target)));
-            });
-            if (v.getLeft()) {
-                return null;
-            }
-            Throwable t = v.getRight();
-            SocksProxyClientConfig.LOGGER.error("", t);
-            if (Objects.nonNull(t) && !(t instanceof JsonSyntaxException)) {
-                SocksProxyClientConfig.LOGGER.error("Test not successful.", t);
-            }
+        showTestResult(test, target);
+    }
+
+    private static void showTestStart(final String target) {
+        scheduler.submit((() -> {
+            SocksProxyClientConfig.LOGGER.info("Testing connection to {}", target);
+            MinecraftClient.getInstance().getToastManager().add(
+                    new SystemToast(new SystemToast.Type(1000L),
+                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TESTING),
+                    Text.literal(target)));
+        }));
+    }
+
+    private static void showTestResult(Pair<Boolean, Throwable> res, final String target) {
+        scheduler.submit((() -> {
+            MinecraftClient.getInstance().getToastManager().add(
+                    new SystemToast(new SystemToast.Type(),
+                            Text.translatable(res.getLeft()
+                                    ? TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST_SUCCESS
+                                    : TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST_FAILURE
+                            ), Text.literal(target)));
+        }));
+
+        if (res.getLeft()) {
+            return;
+        }
+
+        Throwable t = res.getRight();
+        SocksProxyClientConfig.LOGGER.error("", t);
+        if (Objects.nonNull(t) && !(t instanceof JsonSyntaxException)) {
+            SocksProxyClientConfig.LOGGER.error("Test not successful.", t);
+        }
+    }
+
+    private static void showTestResult(final CompletableFuture<Pair<Boolean, Throwable>> test, final String target) {
+        test.thenApplyAsync(v -> {
+            showTestResult(v, target);
             return null;
         });
     }

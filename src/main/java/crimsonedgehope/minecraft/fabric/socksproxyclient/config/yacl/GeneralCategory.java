@@ -69,7 +69,7 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
                 .name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST))
                 .description(OptionDescription.of(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST_TOOLTIP)))
                 .available(true)
-                .action((screen, opt) -> SocksUtils.testReachability())
+                .action((screen, opt) -> SocksUtils.test())
                 .available(useProxy.getValue())
                 .build();
 
