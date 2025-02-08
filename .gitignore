@@ -40,15 +40,4 @@ replay_*.log
 *.jfr
 
 TranslateKeys.java
-.fabric/
-config/
-crash-reports/
-data/
-downloads/
-logs/
-mods/
-resourcepacks/
-resources/
-saves/
-options.txt
-*.dat*
+runtest/
