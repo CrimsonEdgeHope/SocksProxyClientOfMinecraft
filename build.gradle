@@ -39,25 +39,20 @@ base {
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+
 	modImplementation "net.fabricmc:fabric-loader:${project.fabricloader_version}"
-	modApi("com.terraformersmc:modmenu:${project.modmenu_version}") {
-		exclude(group: "net.fabricmc")
-		exclude(group: "net.fabricmc.fabric-api")
-	}
-	modApi("dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.yacl_fabric}") {
-		exclude(group: "net.fabricmc")
-		exclude(group: "net.fabricmc.fabric-api")
-	}
+
+	modApi("com.terraformersmc:modmenu:${project.modmenu_version}")
+	modApi("dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.yacl_fabric}")
+
 	shadow(implementation("io.netty:netty-handler-proxy:${project.ext.netty_version}"))
 	shadow(implementation("dnsjava:dnsjava:${project.ext.dnsjava_version}") {
 		exclude(group: "org.slf4j")
 	})
 
-	testImplementation "net.fabricmc:fabric-loader-junit:${project.fabricloader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	annotationProcessor(compileOnly("org.projectlombok:lombok:${project.ext.lombok_version}"))
 
-	compileOnly "org.projectlombok:lombok:${project.ext.lombok_version}"
-	annotationProcessor "org.projectlombok:lombok:${project.ext.lombok_version}"
+	testImplementation "net.fabricmc:fabric-loader-junit:${project.fabricloader_version}"
 }
 
 tasks.register("generateTranslateKeys", GenerateTranslateKeysTask) {
@@ -114,6 +109,11 @@ changelog {
 }
 
 test {
+	workingDir = project.file("runtest")
+	doFirst {
+		workingDir.deleteDir()
+		workingDir.mkdirs()
+	}
 	useJUnitPlatform()
 }
 
