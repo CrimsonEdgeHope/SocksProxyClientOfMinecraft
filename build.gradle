@@ -115,6 +115,15 @@ changelog {
 }
 
 test {
+	reports {
+		html {
+			required = false
+		}
+		junitXml {
+			required = true
+			outputPerTestCase = true
+		}
+	}
 	workingDir = project.file("runtest")
 	doFirst {
 		workingDir.deleteDir()
