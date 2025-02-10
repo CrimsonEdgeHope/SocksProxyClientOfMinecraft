@@ -4,7 +4,6 @@ import com.terraformersmc.modmenu.api.UpdateChannel;
 import com.terraformersmc.modmenu.api.UpdateInfo;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.modmenu.SocksProxyClientUpdateChecker;
 import net.fabricmc.loader.api.Version;
-import net.minecraft.SharedConstants;
 import net.minecraft.util.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,7 +14,7 @@ class TestUpdateCheckerVersionCompare {
     
     @BeforeAll
     static void prepare() {
-        SharedConstants.createGameVersion();
+        Utils.preBootstrap();
     }
     
     private void compareAssertAvailable(Pair<String, String>[] items, String releaseChannel, UpdateChannel updateChannel) throws Exception {

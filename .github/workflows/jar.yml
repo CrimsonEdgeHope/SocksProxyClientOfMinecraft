@@ -15,6 +15,10 @@ on:
       - "!CHANGELOG.md"
   workflow_dispatch:
 
+permissions:
+  contents: read
+  checks: write
+
 jobs:
   buildJar:
     name: Build jar 1.21.4
