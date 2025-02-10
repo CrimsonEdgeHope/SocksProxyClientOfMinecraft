@@ -6,8 +6,6 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.config.MiscellaneousCon
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.SocksProxyClientConfigEntry;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.doh.DOHProvider;
-import net.minecraft.Bootstrap;
-import net.minecraft.SharedConstants;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -21,8 +19,7 @@ class TestConfig {
 
     @BeforeAll
     static void prepare() {
-        SharedConstants.createGameVersion();
-        Bootstrap.initialize();
+        Utils.preBootstrap();
     }
 
     GeneralConfig generalConfig;
