@@ -14,6 +14,10 @@ on:
         required: false
         default: "oracle"
 
+permissions:
+  contents: read
+  checks: write
+
 jobs:
   buildJar:
     name: Build jar (${{ inputs.build-ref }})
@@ -31,10 +35,23 @@ jobs:
           cache: "gradle"
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
-      - name: Gradle build
+      - name: Build
         run: ./gradlew build
+      - name: Test
+        run: ./gradlew test
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v5
+        if: ${{ success() || failure() }}
+        with:
+          report_paths: './build/test-results/test/TEST-*.xml'
+          include_passed: true
+          detailed_summary: true
+          fail_on_failure: true
+          require_tests: true
+          check_title_template: '{{SUITE_NAME}} | {{TEST_NAME}}'
       - name: Upload jar artifact
         uses: actions/upload-artifact@v4
+        if: ${{ always() }}
         with:
           name: buildJar-${{ inputs.build-ref }}-${{ github.run_id }}
           path: './build/libs/*.jar'
