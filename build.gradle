@@ -45,7 +45,13 @@ dependencies {
 	modApi("com.terraformersmc:modmenu:${project.modmenu_version}")
 	modApi("dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.yacl_fabric}")
 
-	shadow(implementation("io.netty:netty-handler-proxy:${project.ext.netty_version}"))
+	shadow(implementation("io.netty:netty-handler-proxy:${project.ext.netty_version}") {
+		exclude(group: "io.netty", module: "netty-common")
+		exclude(group: "io.netty", module: "netty-buffer")
+		exclude(group: "io.netty", module: "netty-transport")
+		exclude(group: "io.netty", module: "netty-codec")
+		exclude(group: "io.netty", module: "netty-handler")
+	})
 	shadow(implementation("dnsjava:dnsjava:${project.ext.dnsjava_version}") {
 		exclude(group: "org.slf4j")
 	})
